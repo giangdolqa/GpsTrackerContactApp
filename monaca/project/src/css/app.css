@@ -1,0 +1,32 @@
+/* Your app custom styles here */
+.mx{
+  margin-left: 16px;
+  margin-right: 16px;
+}
+.d-inline-block{
+  display: inline-block;
+}
+.text-center{
+  text-align: center;
+}
+#viewDiv{
+  width: 100%;
+  height: 100%;
+}
+
+
+html, body, #map {
+  height: 100%;
+}
+.add_button {
+  position: absolute;
+  right: 10%;
+  bottom: 10%;
+  font-size: 2em;
+  border-radius: 1.5em;    
+  border: 1px solid blue;
+  background-color: blue;
+  color: white;
+  width: 1.2em;
+  text-align: center;
+}

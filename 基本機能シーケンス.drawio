@@ -1,0 +1,230 @@
+<mxfile host="65bd71144e" modified="2020-12-05T09:19:16.395Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.51.1 Chrome/83.0.4103.122 Electron/9.3.3 Safari/537.36" etag="d1hYqRUZExhtZWxNnjcT" version="13.10.0" type="embed">
+    <diagram id="gWgZ1VXOxSpSqPL8LduL" name="ページ1">
+        <mxGraphModel dx="1118" dy="790" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="3" value="" style="shape=umlLifeline;participant=umlActor;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;verticalAlign=top;spacingTop=36;outlineConnect=0;flipH=0;fontStyle=4" parent="1" vertex="1">
+                    <mxGeometry x="34" y="10" width="20" height="650" as="geometry"/>
+                </mxCell>
+                <mxCell id="40" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;align=center;" parent="3" vertex="1">
+                    <mxGeometry x="5" y="420" width="10" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="デバイス" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;flipH=0;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="10" width="100" height="650" as="geometry"/>
+                </mxCell>
+                <mxCell id="47" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;align=center;" parent="5" vertex="1">
+                    <mxGeometry x="45" y="430" width="10" height="200" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="" style="shape=umlLifeline;participant=umlActor;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;verticalAlign=top;spacingTop=36;outlineConnect=0;flipH=0;" parent="1" vertex="1">
+                    <mxGeometry x="371" y="10" width="20" height="650" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="利用者" style="text;whiteSpace=wrap;html=1;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="20" y="45" width="50" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="管理者" style="text;whiteSpace=wrap;html=1;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="357" y="45" width="50" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="アプリ" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;flipH=0;" parent="1" vertex="1">
+                    <mxGeometry x="227" y="10" width="100" height="650" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;align=center;" parent="10" vertex="1">
+                    <mxGeometry x="45" y="64" width="10" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;align=center;" parent="10" vertex="1">
+                    <mxGeometry x="45" y="111" width="10" height="139" as="geometry"/>
+                </mxCell>
+                <mxCell id="30" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;align=center;" parent="10" vertex="1">
+                    <mxGeometry x="45" y="270" width="10" height="250" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="376" y="70" width="10" height="460" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="インストール" style="html=1;verticalAlign=bottom;endArrow=block;" parent="1" target="11" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="376" y="75" as="sourcePoint"/>
+                        <mxPoint x="287" y="75" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="18" value="同意要求" style="html=1;verticalAlign=bottom;endArrow=block;" parent="1" edge="1">
+                    <mxGeometry width="80" relative="1" as="geometry">
+                        <mxPoint x="282" y="150" as="sourcePoint"/>
+                        <mxPoint x="375" y="150" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="24" value="アプリ同意" style="edgeStyle=orthogonalEdgeStyle;html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="386" y="160" as="sourcePoint"/>
+                        <Array as="points">
+                            <mxPoint x="411" y="160"/>
+                            <mxPoint x="411" y="181"/>
+                        </Array>
+                        <mxPoint x="387" y="181" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="25" value="Bluetooth同意" style="edgeStyle=orthogonalEdgeStyle;html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;entryX=1.1;entryY=0.505;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="386" y="190" as="sourcePoint"/>
+                        <Array as="points">
+                            <mxPoint x="411" y="190"/>
+                            <mxPoint x="411" y="211"/>
+                        </Array>
+                        <mxPoint x="387" y="211.10000000000002" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="28" value="通知同意" style="edgeStyle=orthogonalEdgeStyle;html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;entryX=1.1;entryY=0.505;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="386" y="220" as="sourcePoint"/>
+                        <Array as="points">
+                            <mxPoint x="411" y="220"/>
+                            <mxPoint x="411" y="241"/>
+                        </Array>
+                        <mxPoint x="387" y="241.10000000000002" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="29" value="同意" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;entryX=1;entryY=0.944;entryDx=0;entryDy=0;entryPerimeter=0;exitX=-0.172;exitY=0.438;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="374.28" y="251.48000000000002" as="sourcePoint"/>
+                        <mxPoint x="282" y="252.03999999999996" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="31" value="ユーザ登録" style="html=1;verticalAlign=bottom;endArrow=block;entryX=1.1;entryY=0.017;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" edge="1">
+                    <mxGeometry width="80" relative="1" as="geometry">
+                        <mxPoint x="376" y="280.09" as="sourcePoint"/>
+                        <mxPoint x="283" y="279.99999999999994" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="32" value="二段階認証" style="html=1;verticalAlign=bottom;endArrow=block;entryX=1.055;entryY=0.194;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" edge="1">
+                    <mxGeometry width="80" relative="1" as="geometry">
+                        <mxPoint x="375" y="335" as="sourcePoint"/>
+                        <mxPoint x="282.54999999999995" y="334.5" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="34" value="ログイン" style="html=1;verticalAlign=bottom;endArrow=block;exitX=-0.034;exitY=0.636;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" edge="1">
+                    <mxGeometry width="80" relative="1" as="geometry">
+                        <mxPoint x="376.00000000000006" y="360.2800000000001" as="sourcePoint"/>
+                        <mxPoint x="282.34" y="360.0000000000001" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="38" value="ホーム移動" style="edgeStyle=orthogonalEdgeStyle;html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;entryX=1.1;entryY=0.505;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="283" y="396" as="sourcePoint"/>
+                        <Array as="points">
+                            <mxPoint x="308" y="396"/>
+                            <mxPoint x="308" y="417"/>
+                        </Array>
+                        <mxPoint x="284" y="417.0999999999999" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="39" value="設定移動&lt;br&gt;（Bluetooth有効）" style="edgeStyle=orthogonalEdgeStyle;html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;entryX=1.1;entryY=0.505;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="282" y="428" as="sourcePoint"/>
+                        <Array as="points">
+                            <mxPoint x="307" y="428"/>
+                            <mxPoint x="307" y="449"/>
+                        </Array>
+                        <mxPoint x="283" y="449.0999999999999" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="44" value="電源ON" style="html=1;verticalAlign=bottom;endArrow=block;entryX=-0.1;entryY=0;exitX=1.134;exitY=0.351;exitDx=0;exitDy=0;exitPerimeter=0;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="40" target="47" edge="1">
+                    <mxGeometry x="0.1969" relative="1" as="geometry">
+                        <mxPoint x="40" y="440" as="sourcePoint"/>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="51" value="接続要請&lt;br&gt;（ペアリング）" style="html=1;verticalAlign=bottom;endArrow=block;exitX=-0.081;exitY=0.702;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="30" target="47" edge="1">
+                    <mxGeometry width="80" relative="1" as="geometry">
+                        <mxPoint x="267" y="455" as="sourcePoint"/>
+                        <mxPoint x="177" y="430" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="52" value="接続確立" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="156" y="477" as="sourcePoint"/>
+                        <mxPoint x="270" y="477" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="53" value="設定書込み" style="html=1;verticalAlign=bottom;endArrow=block;exitX=-0.067;exitY=0.861;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="30" edge="1">
+                    <mxGeometry width="80" relative="1" as="geometry">
+                        <mxPoint x="250" y="495" as="sourcePoint"/>
+                        <mxPoint x="155" y="495" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="54" value="接続切断" style="html=1;verticalAlign=bottom;endArrow=block;" parent="1" target="47" edge="1">
+                    <mxGeometry width="80" relative="1" as="geometry">
+                        <mxPoint x="271" y="519" as="sourcePoint"/>
+                        <mxPoint x="143.93000000000006" y="520.0000000000001" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="55" value="有効期限確認" style="edgeStyle=orthogonalEdgeStyle;html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;entryX=1.1;entryY=0.505;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="156" y="538.9" as="sourcePoint"/>
+                        <Array as="points">
+                            <mxPoint x="181" y="538.9"/>
+                            <mxPoint x="181" y="559.9"/>
+                        </Array>
+                        <mxPoint x="157" y="559.9999999999999" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="56" value="接触確認機能起動（スレッド）" style="edgeStyle=orthogonalEdgeStyle;html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;entryX=1.1;entryY=0.505;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="156" y="574.0000000000001" as="sourcePoint"/>
+                        <Array as="points">
+                            <mxPoint x="181" y="574"/>
+                            <mxPoint x="181" y="595"/>
+                        </Array>
+                        <mxPoint x="157" y="595.1" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="16" value="起動" style="html=1;verticalAlign=bottom;endArrow=block;entryX=1.055;entryY=0.01;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" target="15" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="376" y="123" as="sourcePoint"/>
+                        <mxPoint x="287" y="123" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="62" value="サーバ" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;flipH=0;" parent="1" vertex="1">
+                    <mxGeometry x="497" y="10" width="100" height="650" as="geometry"/>
+                </mxCell>
+                <mxCell id="63" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;align=center;" parent="62" vertex="1">
+                    <mxGeometry x="45" y="50" width="10" height="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="66" value="ユーザ登録" style="html=1;verticalAlign=bottom;endArrow=block;entryX=0.055;entryY=0.465;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" edge="1">
+                    <mxGeometry x="0.3408" width="80" relative="1" as="geometry">
+                        <mxPoint x="283" y="299.62" as="sourcePoint"/>
+                        <mxPoint x="542.55" y="300.3700000000001" as="targetPoint"/>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="70" value="認証コード通知" style="html=1;verticalAlign=bottom;endArrow=block;exitX=-0.083;exitY=0.501;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" edge="1">
+                    <mxGeometry width="80" relative="1" as="geometry">
+                        <mxPoint x="541.1700000000001" y="320.55000000000007" as="sourcePoint"/>
+                        <mxPoint x="386" y="320.55000000000007" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="72" value="ユーザ認証" style="html=1;verticalAlign=bottom;endArrow=block;entryX=0.055;entryY=0.465;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" edge="1">
+                    <mxGeometry x="0.3408" width="80" relative="1" as="geometry">
+                        <mxPoint x="283" y="380" as="sourcePoint"/>
+                        <mxPoint x="542.55" y="380.7500000000001" as="targetPoint"/>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="73" value="GPSトラッカー機能起動（スレッド）" style="edgeStyle=orthogonalEdgeStyle;html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;entryX=1.1;entryY=0.505;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="157" y="610" as="sourcePoint"/>
+                        <Array as="points">
+                            <mxPoint x="182" y="610"/>
+                            <mxPoint x="182" y="631"/>
+                        </Array>
+                        <mxPoint x="158" y="631.0999999999999" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="74" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;direction=west;" vertex="1" parent="1">
+                    <mxGeometry x="387" y="540" width="20" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="75" value="電源ON時、&lt;br&gt;設定変更時、&lt;br&gt;日付変わった時に動作" style="text;whiteSpace=wrap;html=1;verticalAlign=middle;" vertex="1" parent="1">
+                    <mxGeometry x="414" y="569.5" width="130" height="41" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
