@@ -1,271 +1,292 @@
-<mxfile host="65bd71144e" modified="2020-12-06T15:20:35.643Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.51.1 Chrome/83.0.4103.122 Electron/9.3.3 Safari/537.36" version="13.10.0" etag="pZr64S2sB4j7OYn2wUFk" type="embed">
+<mxfile host="65bd71144e" modified="2020-12-16T07:29:28.897Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.52.0 Chrome/83.0.4103.122 Electron/9.3.5 Safari/537.36" etag="3pwQbjLF001wA1sHx7xO" version="13.10.0" type="embed">
     <diagram id="QHVtiO9V_2khdi5roGe5" name="ページ1">
-        <mxGraphModel dx="1118" dy="790" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+        <mxGraphModel dx="1165" dy="779" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
-                <mxCell id="2" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shadow=0;dashed=0;strokeWidth=1;shape=mxgraph.ios.iPad;bgStyle=bgGreen;fillColor=#aaaaaa;" vertex="1" parent="1">
+                <mxCell id="2" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shadow=0;dashed=0;strokeWidth=1;shape=mxgraph.ios.iPad;bgStyle=bgGreen;fillColor=#aaaaaa;" parent="1" vertex="1">
                     <mxGeometry x="40" y="30" width="484.99999999999994" height="625" as="geometry"/>
                 </mxCell>
-                <mxCell id="9" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shadow=0;dashed=0;strokeWidth=1;shape=mxgraph.ios.iBgFlat;strokeColor=#18211b;fillColor=#dddddd;" vertex="1" parent="1">
+                <mxCell id="9" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shadow=0;dashed=0;strokeWidth=1;shape=mxgraph.ios.iBgFlat;strokeColor=#18211b;fillColor=#dddddd;" parent="1" vertex="1">
                     <mxGeometry x="80" y="80" width="400" height="510" as="geometry"/>
                 </mxCell>
-                <mxCell id="4" value="&lt;span style=&quot;color: rgb(0 , 0 , 0)&quot;&gt;&lt;font style=&quot;font-size: 13px&quot;&gt;１年１組　　 　濃厚接触なし　 　　2020/11/12&lt;/font&gt;&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" vertex="1" parent="1">
+                <mxCell id="4" value="&lt;span style=&quot;color: rgb(0 , 0 , 0)&quot;&gt;&lt;font style=&quot;font-size: 13px&quot;&gt;１年１組　　 　濃厚接触なし　 　　2020/11/12&lt;/font&gt;&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="1" vertex="1">
                     <mxGeometry x="140" y="140" width="310" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="5" value="" style="shape=line;strokeColor=#ddeeff;strokeWidth=2;html=1;resizeWidth=1;" vertex="1" parent="1">
+                <mxCell id="5" value="" style="shape=line;strokeColor=#ddeeff;strokeWidth=2;html=1;resizeWidth=1;" parent="1" vertex="1">
                     <mxGeometry x="130" y="120" width="330" height="10" as="geometry"/>
                 </mxCell>
-                <mxCell id="6" value="クラス　　　　　　　状態　　　　　　最終報告日" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;spacingLeft=0;resizeWidth=1;" vertex="1" parent="1">
+                <mxCell id="6" value="クラス　　　　　　　状態　　　　　　最終報告日" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;spacingLeft=0;resizeWidth=1;" parent="1" vertex="1">
                     <mxGeometry x="140" y="100" width="310" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="10" value="&lt;span style=&quot;color: rgb(0 , 0 , 0)&quot;&gt;&lt;font style=&quot;font-size: 13px&quot;&gt;１年２組　　 　濃厚接触なし　 　　2020/11/12&lt;/font&gt;&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" vertex="1" parent="1">
+                <mxCell id="10" value="&lt;span style=&quot;color: rgb(0 , 0 , 0)&quot;&gt;&lt;font style=&quot;font-size: 13px&quot;&gt;１年２組　　 　濃厚接触なし　 　　2020/11/12&lt;/font&gt;&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="1" vertex="1">
                     <mxGeometry x="140" y="170" width="310" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="11" value="&lt;span style=&quot;color: rgb(0 , 0 , 0)&quot;&gt;&lt;font style=&quot;font-size: 13px&quot;&gt;２年１組　　 　濃厚接触なし　 　　2020/11/12&lt;/font&gt;&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" vertex="1" parent="1">
+                <mxCell id="11" value="&lt;span style=&quot;color: rgb(0 , 0 , 0)&quot;&gt;&lt;font style=&quot;font-size: 13px&quot;&gt;２年１組　　 　濃厚接触なし　 　　2020/11/12&lt;/font&gt;&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="1" vertex="1">
                     <mxGeometry x="140" y="200" width="310" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="12" value="&lt;font style=&quot;font-size: 13px&quot;&gt;&lt;font color=&quot;#000000&quot;&gt;３年２組　　 　&lt;/font&gt;&lt;font color=&quot;#ff0000&quot;&gt;濃厚接触１人&lt;/font&gt;&lt;font color=&quot;#000000&quot;&gt;　 　　2020/11/12&lt;/font&gt;&lt;/font&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" vertex="1" parent="1">
+                <mxCell id="12" value="&lt;font style=&quot;font-size: 13px&quot;&gt;&lt;font color=&quot;#000000&quot;&gt;３年２組　　 　&lt;/font&gt;&lt;font color=&quot;#ff0000&quot;&gt;濃厚接触１人&lt;/font&gt;&lt;font color=&quot;#000000&quot;&gt;　 　　2020/11/12&lt;/font&gt;&lt;/font&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="1" vertex="1">
                     <mxGeometry x="140" y="290" width="310" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="13" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shadow=0;dashed=0;strokeWidth=1;shape=mxgraph.ios.iPad;bgStyle=bgGreen;fillColor=#aaaaaa;" vertex="1" parent="1">
+                <mxCell id="13" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shadow=0;dashed=0;strokeWidth=1;shape=mxgraph.ios.iPad;bgStyle=bgGreen;fillColor=#aaaaaa;" parent="1" vertex="1">
                     <mxGeometry x="560" y="30" width="484.99999999999994" height="625" as="geometry"/>
                 </mxCell>
-                <mxCell id="14" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shadow=0;dashed=0;strokeWidth=1;shape=mxgraph.ios.iBgFlat;strokeColor=#18211b;fillColor=#dddddd;" vertex="1" parent="1">
+                <mxCell id="14" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shadow=0;dashed=0;strokeWidth=1;shape=mxgraph.ios.iBgFlat;strokeColor=#18211b;fillColor=#dddddd;" parent="1" vertex="1">
                     <mxGeometry x="600" y="80" width="400" height="510" as="geometry"/>
                 </mxCell>
-                <mxCell id="15" value="&lt;span style=&quot;color: rgb(0 , 0 , 0)&quot;&gt;&lt;font style=&quot;font-size: 13px&quot;&gt;阿部 健一　　 　　濃厚接触なし　 　　　　2020/11/12&lt;/font&gt;&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" vertex="1" parent="1">
+                <mxCell id="15" value="&lt;span style=&quot;color: rgb(0 , 0 , 0)&quot;&gt;&lt;font style=&quot;font-size: 13px&quot;&gt;阿部 健一　　 　　濃厚接触なし　 　　　　2020/11/12&lt;/font&gt;&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="1" vertex="1">
                     <mxGeometry x="624.8199999999999" y="160" width="345.18" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="16" value="" style="shape=line;strokeColor=#ddeeff;strokeWidth=2;html=1;resizeWidth=1;" vertex="1" parent="1">
+                <mxCell id="16" value="" style="shape=line;strokeColor=#ddeeff;strokeWidth=2;html=1;resizeWidth=1;" parent="1" vertex="1">
                     <mxGeometry x="620" y="120" width="360" height="10" as="geometry"/>
                 </mxCell>
-                <mxCell id="17" value="3年２組" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;spacingLeft=0;resizeWidth=1;" vertex="1" parent="1">
+                <mxCell id="17" value="3年２組" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;spacingLeft=0;resizeWidth=1;" parent="1" vertex="1">
                     <mxGeometry x="620" y="100" width="50" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="18" value="&lt;span style=&quot;color: rgb(0 , 0 , 0)&quot;&gt;&lt;font style=&quot;font-size: 13px&quot;&gt;新井 加奈　　 　　濃厚接触なし　 　　　　2020/11/12&lt;/font&gt;&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" vertex="1" parent="1">
+                <mxCell id="18" value="&lt;span style=&quot;color: rgb(0 , 0 , 0)&quot;&gt;&lt;font style=&quot;font-size: 13px&quot;&gt;新井 加奈　　 　　濃厚接触なし　 　　　　2020/11/12&lt;/font&gt;&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="1" vertex="1">
                     <mxGeometry x="624.8199999999999" y="190" width="345.18" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="19" value="&lt;span style=&quot;color: rgb(0 , 0 , 0)&quot;&gt;&lt;font style=&quot;font-size: 13px&quot;&gt;梅川 三郎　　 　　濃厚接触なし　 　　　　2020/11/12&lt;/font&gt;&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" vertex="1" parent="1">
+                <mxCell id="19" value="&lt;span style=&quot;color: rgb(0 , 0 , 0)&quot;&gt;&lt;font style=&quot;font-size: 13px&quot;&gt;梅川 三郎　　 　　濃厚接触なし　 　　　　2020/11/12&lt;/font&gt;&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="1" vertex="1">
                     <mxGeometry x="624.8199999999999" y="220" width="345.18" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="20" value="&lt;font style=&quot;font-size: 13px&quot;&gt;&lt;font color=&quot;#000000&quot;&gt;榎本 史郎　　 　　&lt;/font&gt;&lt;font color=&quot;#ff0000&quot;&gt;濃厚接触３件&lt;/font&gt;&lt;font color=&quot;#000000&quot;&gt;　 　　　　2020/11/12&lt;/font&gt;&lt;/font&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" vertex="1" parent="1">
+                <mxCell id="20" value="&lt;font style=&quot;font-size: 13px&quot;&gt;&lt;font color=&quot;#000000&quot;&gt;榎本 史郎　　 　　&lt;/font&gt;&lt;font color=&quot;#ff0000&quot;&gt;濃厚接触６件&lt;/font&gt;&lt;font color=&quot;#000000&quot;&gt;　 　　　　2020/11/12&lt;/font&gt;&lt;/font&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="1" vertex="1">
                     <mxGeometry x="624.8199999999999" y="250" width="345.18" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="21" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.left;strokeColor=#0080f0;fillColor=#FF0000;gradientColor=none;" vertex="1" parent="1">
+                <mxCell id="21" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.left;strokeColor=#0080f0;fillColor=#FF0000;gradientColor=none;" parent="1" vertex="1">
                     <mxGeometry x="609.9999999999998" y="100" width="10" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="26" value="" style="shape=line;strokeColor=#ddeeff;strokeWidth=2;html=1;resizeWidth=1;" vertex="1" parent="1">
+                <mxCell id="26" value="" style="shape=line;strokeColor=#ddeeff;strokeWidth=2;html=1;resizeWidth=1;" parent="1" vertex="1">
                     <mxGeometry x="620" y="150" width="360" height="10" as="geometry"/>
                 </mxCell>
-                <mxCell id="27" value="氏名　　　　　　　　状態　　　　　　　　　最終報告日" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;spacingLeft=0;resizeWidth=1;" vertex="1" parent="1">
+                <mxCell id="27" value="氏名　　　　　　　　状態　　　　　　　　　最終報告日" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;spacingLeft=0;resizeWidth=1;" parent="1" vertex="1">
                     <mxGeometry x="630" y="130" width="340" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="28" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.right;strokeColor=#0080f0;align=center;flipV=1;" vertex="1" parent="1">
+                <mxCell id="28" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.right;strokeColor=#0080f0;align=center;flipV=1;" parent="1" vertex="1">
                     <mxGeometry x="450" y="140" width="10" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="29" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.right;strokeColor=#0080f0;align=center;flipV=1;" vertex="1" parent="1">
+                <mxCell id="29" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.right;strokeColor=#0080f0;align=center;flipV=1;" parent="1" vertex="1">
                     <mxGeometry x="450" y="170" width="10" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="30" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.right;strokeColor=#0080f0;align=center;flipV=1;" vertex="1" parent="1">
+                <mxCell id="30" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.right;strokeColor=#0080f0;align=center;flipV=1;" parent="1" vertex="1">
                     <mxGeometry x="450" y="200" width="10" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="34" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.right;strokeColor=#0080f0;align=center;flipV=1;" vertex="1" parent="1">
+                <mxCell id="34" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.right;strokeColor=#0080f0;align=center;flipV=1;" parent="1" vertex="1">
                     <mxGeometry x="450" y="290" width="10" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="35" value="&lt;span style=&quot;color: rgb(0 , 0 , 0)&quot;&gt;&lt;font style=&quot;font-size: 13px&quot;&gt;２年２組　　 　濃厚接触なし　 　　2020/11/12&lt;/font&gt;&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" vertex="1" parent="1">
+                <mxCell id="35" value="&lt;span style=&quot;color: rgb(0 , 0 , 0)&quot;&gt;&lt;font style=&quot;font-size: 13px&quot;&gt;２年２組　　 　濃厚接触なし　 　　2020/11/12&lt;/font&gt;&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="1" vertex="1">
                     <mxGeometry x="140" y="230" width="310" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="36" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.right;strokeColor=#0080f0;align=center;flipV=1;" vertex="1" parent="1">
+                <mxCell id="36" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.right;strokeColor=#0080f0;align=center;flipV=1;" parent="1" vertex="1">
                     <mxGeometry x="450" y="230" width="10" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="37" value="&lt;span style=&quot;color: rgb(0 , 0 , 0)&quot;&gt;&lt;font style=&quot;font-size: 13px&quot;&gt;３年１組　　 　濃厚接触なし　 　　2020/11/12&lt;/font&gt;&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" vertex="1" parent="1">
+                <mxCell id="37" value="&lt;span style=&quot;color: rgb(0 , 0 , 0)&quot;&gt;&lt;font style=&quot;font-size: 13px&quot;&gt;３年１組　　 　濃厚接触なし　 　　2020/11/12&lt;/font&gt;&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="1" vertex="1">
                     <mxGeometry x="140" y="260" width="310" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="38" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.right;strokeColor=#0080f0;align=center;flipV=1;" vertex="1" parent="1">
+                <mxCell id="38" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.right;strokeColor=#0080f0;align=center;flipV=1;" parent="1" vertex="1">
                     <mxGeometry x="450" y="260" width="10" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="40" value="&lt;span style=&quot;color: rgb(0 , 0 , 0)&quot;&gt;&lt;font style=&quot;font-size: 13px&quot;&gt;４年１組　　 　濃厚接触なし　 　　2020/11/12&lt;/font&gt;&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" vertex="1" parent="1">
+                <mxCell id="40" value="&lt;span style=&quot;color: rgb(0 , 0 , 0)&quot;&gt;&lt;font style=&quot;font-size: 13px&quot;&gt;４年１組　　 　濃厚接触なし　 　　2020/11/12&lt;/font&gt;&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="1" vertex="1">
                     <mxGeometry x="140" y="320" width="310" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="41" value="&lt;span style=&quot;color: rgb(0 , 0 , 0)&quot;&gt;&lt;font style=&quot;font-size: 13px&quot;&gt;４年２組　　 　濃厚接触なし　 　　2020/11/12&lt;/font&gt;&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" vertex="1" parent="1">
+                <mxCell id="41" value="&lt;span style=&quot;color: rgb(0 , 0 , 0)&quot;&gt;&lt;font style=&quot;font-size: 13px&quot;&gt;４年２組　　 　濃厚接触なし　 　　2020/11/12&lt;/font&gt;&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="1" vertex="1">
                     <mxGeometry x="140" y="350" width="310" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="42" value="&lt;span style=&quot;color: rgb(0 , 0 , 0)&quot;&gt;&lt;font style=&quot;font-size: 13px&quot;&gt;５年１組　　 　濃厚接触なし　 　　2020/11/12&lt;/font&gt;&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" vertex="1" parent="1">
+                <mxCell id="42" value="&lt;span style=&quot;color: rgb(0 , 0 , 0)&quot;&gt;&lt;font style=&quot;font-size: 13px&quot;&gt;５年１組　　 　濃厚接触なし　 　　2020/11/12&lt;/font&gt;&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="1" vertex="1">
                     <mxGeometry x="140" y="380" width="310" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="43" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.right;strokeColor=#0080f0;align=center;flipV=1;" vertex="1" parent="1">
+                <mxCell id="43" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.right;strokeColor=#0080f0;align=center;flipV=1;" parent="1" vertex="1">
                     <mxGeometry x="450" y="320" width="10" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="44" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.right;strokeColor=#0080f0;align=center;flipV=1;" vertex="1" parent="1">
+                <mxCell id="44" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.right;strokeColor=#0080f0;align=center;flipV=1;" parent="1" vertex="1">
                     <mxGeometry x="450" y="350" width="10" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="45" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.right;strokeColor=#0080f0;align=center;flipV=1;" vertex="1" parent="1">
+                <mxCell id="45" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.right;strokeColor=#0080f0;align=center;flipV=1;" parent="1" vertex="1">
                     <mxGeometry x="450" y="380" width="10" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="46" value="&lt;span style=&quot;color: rgb(0 , 0 , 0)&quot;&gt;&lt;font style=&quot;font-size: 13px&quot;&gt;５年２組　　 　濃厚接触なし　 　　2020/11/12&lt;/font&gt;&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" vertex="1" parent="1">
+                <mxCell id="46" value="&lt;span style=&quot;color: rgb(0 , 0 , 0)&quot;&gt;&lt;font style=&quot;font-size: 13px&quot;&gt;５年２組　　 　濃厚接触なし　 　　2020/11/12&lt;/font&gt;&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="1" vertex="1">
                     <mxGeometry x="140" y="410" width="310" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="47" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.right;strokeColor=#0080f0;align=center;flipV=1;" vertex="1" parent="1">
+                <mxCell id="47" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.right;strokeColor=#0080f0;align=center;flipV=1;" parent="1" vertex="1">
                     <mxGeometry x="450" y="410" width="10" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="48" value="&lt;span style=&quot;color: rgb(0 , 0 , 0)&quot;&gt;&lt;font style=&quot;font-size: 13px&quot;&gt;６年１組　　 　濃厚接触なし　 　　2020/11/12&lt;/font&gt;&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" vertex="1" parent="1">
+                <mxCell id="48" value="&lt;span style=&quot;color: rgb(0 , 0 , 0)&quot;&gt;&lt;font style=&quot;font-size: 13px&quot;&gt;６年１組　　 　濃厚接触なし　 　　2020/11/12&lt;/font&gt;&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="1" vertex="1">
                     <mxGeometry x="140" y="440" width="310" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="49" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.right;strokeColor=#0080f0;align=center;flipV=1;" vertex="1" parent="1">
+                <mxCell id="49" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.right;strokeColor=#0080f0;align=center;flipV=1;" parent="1" vertex="1">
                     <mxGeometry x="450" y="440" width="10" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="50" value="&lt;span style=&quot;color: rgb(0 , 0 , 0)&quot;&gt;&lt;font style=&quot;font-size: 13px&quot;&gt;６年２組　　 　濃厚接触なし　 　　2020/11/11&lt;/font&gt;&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" vertex="1" parent="1">
+                <mxCell id="50" value="&lt;span style=&quot;color: rgb(0 , 0 , 0)&quot;&gt;&lt;font style=&quot;font-size: 13px&quot;&gt;６年２組　　 　濃厚接触なし　 　　2020/11/11&lt;/font&gt;&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="1" vertex="1">
                     <mxGeometry x="140" y="470" width="310" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="51" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.right;strokeColor=#0080f0;align=center;flipV=1;" vertex="1" parent="1">
+                <mxCell id="51" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.right;strokeColor=#0080f0;align=center;flipV=1;" parent="1" vertex="1">
                     <mxGeometry x="450" y="470" width="10" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="52" value="" style="dashed=0;align=center;fontSize=12;shape=rect;fillColor=#ffffff;strokeColor=#eeeeee;shadow=1;" vertex="1" parent="1">
+                <mxCell id="52" value="" style="dashed=0;align=center;fontSize=12;shape=rect;fillColor=#ffffff;strokeColor=#eeeeee;shadow=1;" parent="1" vertex="1">
                     <mxGeometry x="50" y="720" width="140" height="90" as="geometry"/>
                 </mxCell>
-                <mxCell id="55" value="　　設定" style="text;fontColor=#000000;verticalAlign=middle;spacingLeft=13;fontSize=14;fillColor=#eeeeee;resizeWidth=1;" vertex="1" parent="52">
+                <mxCell id="55" value="　　設定" style="text;fontColor=#000000;verticalAlign=middle;spacingLeft=13;fontSize=14;fillColor=#eeeeee;resizeWidth=1;" parent="52" vertex="1">
                     <mxGeometry width="140" height="45" relative="1" as="geometry">
                         <mxPoint y="47" as="offset"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="56" value="　　ホーム" style="text;verticalAlign=middle;spacingLeft=13;fontSize=14;resizeWidth=1;fontColor=#000000;" vertex="1" parent="52">
+                <mxCell id="56" value="　　ホーム" style="text;verticalAlign=middle;spacingLeft=13;fontSize=14;resizeWidth=1;fontColor=#000000;" parent="52" vertex="1">
                     <mxGeometry width="140" height="45" relative="1" as="geometry">
                         <mxPoint as="offset"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="57" value="" style="html=1;strokeWidth=1;shadow=0;dashed=0;shape=mxgraph.ios7.misc.settings;fillColor=#8F8E94;strokeColor=none;buttonText=;strokeColor2=#222222;fontColor=#222222;fontSize=8;verticalLabelPosition=bottom;verticalAlign=top;align=center;labelBackgroundColor=none;" vertex="1" parent="52">
+                <mxCell id="57" value="" style="html=1;strokeWidth=1;shadow=0;dashed=0;shape=mxgraph.ios7.misc.settings;fillColor=#8F8E94;strokeColor=none;buttonText=;strokeColor2=#222222;fontColor=#222222;fontSize=8;verticalLabelPosition=bottom;verticalAlign=top;align=center;labelBackgroundColor=none;" parent="52" vertex="1">
                     <mxGeometry x="5" y="54" width="30" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="59" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/png,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;" vertex="1" parent="52">
+                <mxCell id="59" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/png,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;" parent="52" vertex="1">
                     <mxGeometry x="5" y="10" width="30" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="61" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/png,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;" vertex="1" parent="1">
+                <mxCell id="61" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/png,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;" parent="1" vertex="1">
                     <mxGeometry x="50" y="680" width="40" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="62" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/png,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;" vertex="1" parent="1">
+                <mxCell id="62" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/png,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;" parent="1" vertex="1">
                     <mxGeometry x="90" y="90" width="40" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="63" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shadow=0;dashed=0;strokeWidth=1;shape=mxgraph.ios.iPad;bgStyle=bgGreen;fillColor=#aaaaaa;" vertex="1" parent="1">
+                <mxCell id="63" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shadow=0;dashed=0;strokeWidth=1;shape=mxgraph.ios.iPad;bgStyle=bgGreen;fillColor=#aaaaaa;" parent="1" vertex="1">
                     <mxGeometry x="200" y="680" width="484.99999999999994" height="625" as="geometry"/>
                 </mxCell>
-                <mxCell id="64" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shadow=0;dashed=0;strokeWidth=1;shape=mxgraph.ios.iBgFlat;strokeColor=#18211b;fillColor=#dddddd;" vertex="1" parent="1">
+                <mxCell id="64" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shadow=0;dashed=0;strokeWidth=1;shape=mxgraph.ios.iBgFlat;strokeColor=#18211b;fillColor=#dddddd;" parent="1" vertex="1">
                     <mxGeometry x="240" y="730" width="400" height="510" as="geometry"/>
                 </mxCell>
-                <mxCell id="65" value="" style="shape=line;strokeColor=#ddeeff;strokeWidth=2;html=1;resizeWidth=1;" vertex="1" parent="1">
+                <mxCell id="65" value="" style="shape=line;strokeColor=#ddeeff;strokeWidth=2;html=1;resizeWidth=1;" parent="1" vertex="1">
                     <mxGeometry x="260" y="770" width="360" height="10" as="geometry"/>
                 </mxCell>
-                <mxCell id="66" value="設定" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;spacingLeft=0;resizeWidth=1;" vertex="1" parent="1">
+                <mxCell id="66" value="設定" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;spacingLeft=0;resizeWidth=1;" parent="1" vertex="1">
                     <mxGeometry x="260" y="750" width="50" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="67" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.left;strokeColor=#0080f0;fillColor=#FF0000;gradientColor=none;" vertex="1" parent="1">
+                <mxCell id="67" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.left;strokeColor=#0080f0;fillColor=#FF0000;gradientColor=none;" parent="1" vertex="1">
                     <mxGeometry x="249.99999999999977" y="750" width="10" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="68" value="学校ID" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" vertex="1" parent="1">
-                    <mxGeometry x="260" y="785.75" width="30" height="8.61" as="geometry"/>
+                <mxCell id="68" value="学校ID" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="1" vertex="1">
+                    <mxGeometry x="260" y="820" width="30" height="8.61" as="geometry"/>
                 </mxCell>
-                <mxCell id="69" value="&lt;font color=&quot;#000000&quot;&gt;&lt;span style=&quot;font-size: 18px&quot;&gt;TRACKER.CO&lt;/span&gt;&lt;/font&gt;" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iTextInput;strokeColor=#444444;align=left;buttonText=;fontSize=8;labelBackgroundColor=none;opacity=30;fillColor=none;" vertex="1" parent="1">
-                    <mxGeometry x="260" y="802.67" width="360" height="27.94" as="geometry"/>
+                <mxCell id="69" value="&lt;font color=&quot;#000000&quot;&gt;&lt;span style=&quot;font-size: 18px&quot;&gt;TRACKER.CO&lt;/span&gt;&lt;/font&gt;" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iTextInput;strokeColor=#444444;align=left;buttonText=;fontSize=8;labelBackgroundColor=none;opacity=30;fillColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="260" y="836.92" width="360" height="27.94" as="geometry"/>
                 </mxCell>
-                <mxCell id="70" value="&lt;font color=&quot;#000000&quot; style=&quot;font-size: 18px&quot;&gt;********&lt;/font&gt;" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iTextInput;strokeColor=#444444;align=left;buttonText=;fontSize=8;labelBackgroundColor=none;opacity=30;fillColor=none;" vertex="1" parent="1">
-                    <mxGeometry x="260" y="852.67" width="360" height="27.94" as="geometry"/>
+                <mxCell id="70" value="&lt;font color=&quot;#000000&quot; style=&quot;font-size: 18px&quot;&gt;********&lt;/font&gt;" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iTextInput;strokeColor=#444444;align=left;buttonText=;fontSize=8;labelBackgroundColor=none;opacity=30;fillColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="260" y="886.92" width="360" height="27.94" as="geometry"/>
                 </mxCell>
-                <mxCell id="71" value="&lt;font style=&quot;font-size: 14px&quot;&gt;キーを表示&lt;/font&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=0;fillColor=#eeeeee;strokeColor=#999999;gradientColor=#cccccc;align=left;spacingLeft=4;fontSize=17;fontColor=#666666;labelPosition=right;" vertex="1" parent="1">
-                    <mxGeometry x="260.0045" y="888.7547204968942" width="25.01175" height="25.5" as="geometry"/>
+                <mxCell id="71" value="&lt;font style=&quot;font-size: 14px&quot;&gt;キーを表示&lt;/font&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=0;fillColor=#eeeeee;strokeColor=#999999;gradientColor=#cccccc;align=left;spacingLeft=4;fontSize=17;fontColor=#666666;labelPosition=right;" parent="1" vertex="1">
+                    <mxGeometry x="260.0045" y="923.0047204968942" width="25.01175" height="25.5" as="geometry"/>
                 </mxCell>
-                <mxCell id="72" value="キー" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" vertex="1" parent="1">
-                    <mxGeometry x="260" y="835.75" width="30" height="8.61" as="geometry"/>
+                <mxCell id="72" value="キー" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="1" vertex="1">
+                    <mxGeometry x="260" y="870" width="30" height="8.61" as="geometry"/>
                 </mxCell>
-                <mxCell id="73" value="" style="shape=line;strokeColor=#ddeeff;strokeWidth=2;html=1;resizeWidth=1;" vertex="1" parent="1">
-                    <mxGeometry x="250" y="920" width="380" height="10" as="geometry"/>
+                <mxCell id="73" value="" style="shape=line;strokeColor=#ddeeff;strokeWidth=2;html=1;resizeWidth=1;" parent="1" vertex="1">
+                    <mxGeometry x="250" y="954.25" width="380" height="10" as="geometry"/>
                 </mxCell>
-                <mxCell id="74" value="デバイスID" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" vertex="1" parent="1">
-                    <mxGeometry x="253.67000000000007" y="1020" width="165" height="20" as="geometry"/>
+                <mxCell id="74" value="デバイスID" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="1" vertex="1">
+                    <mxGeometry x="253.67000000000007" y="1054.25" width="165" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="75" value="&lt;span style=&quot;font-size: 18px&quot;&gt;GPS00002&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=0;strokeColor=#999999;fontColor=#666666;align=left;spacingLeft=5;resizeWidth=1;fillColor=none;" vertex="1" parent="1">
-                    <mxGeometry x="253.67000000000007" y="1040" width="366.33" height="25" as="geometry"/>
+                <mxCell id="75" value="&lt;span style=&quot;font-size: 18px&quot;&gt;GPS00002&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=0;strokeColor=#999999;fontColor=#666666;align=left;spacingLeft=5;resizeWidth=1;fillColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="253.67000000000007" y="1074.25" width="366.33" height="25" as="geometry"/>
                 </mxCell>
-                <mxCell id="76" value="氏名" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" vertex="1" parent="1">
-                    <mxGeometry x="253.67000000000007" y="970" width="165" height="20" as="geometry"/>
+                <mxCell id="76" value="氏名" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="1" vertex="1">
+                    <mxGeometry x="253.67000000000007" y="1004.25" width="165" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="77" value="&lt;font style=&quot;font-size: 18px&quot;&gt;鈴木 愛&lt;/font&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=0;strokeColor=#999999;fontColor=#666666;align=left;spacingLeft=5;resizeWidth=1;fillColor=none;" vertex="1" parent="1">
-                    <mxGeometry x="253.67000000000007" y="990" width="366.33" height="25" as="geometry"/>
+                <mxCell id="77" value="&lt;font style=&quot;font-size: 18px&quot;&gt;鈴木 愛&lt;/font&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=0;strokeColor=#999999;fontColor=#666666;align=left;spacingLeft=5;resizeWidth=1;fillColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="253.67000000000007" y="1024.25" width="366.33" height="25" as="geometry"/>
                 </mxCell>
-                <mxCell id="78" value="クラス" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" vertex="1" parent="1">
-                    <mxGeometry x="253.67000000000007" y="932.19" width="70" height="8.61" as="geometry"/>
+                <mxCell id="78" value="クラス" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="1" vertex="1">
+                    <mxGeometry x="253.67000000000007" y="966.44" width="70" height="8.61" as="geometry"/>
                 </mxCell>
-                <mxCell id="79" value="&lt;span style=&quot;font-size: 14px&quot;&gt;１年１組&lt;/span&gt;" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iComboBox;spacingTop=2;spacingLeft=2;align=left;strokeColor=#444444;fontColor=#666666;buttonText=;fontSize=8;fillColor=#dddddd;fillColor2=#3D5565;" vertex="1" parent="1">
-                    <mxGeometry x="253.67000000000007" y="946.5" width="126.33" height="23.5" as="geometry"/>
+                <mxCell id="79" value="&lt;span style=&quot;font-size: 14px&quot;&gt;１年１組&lt;/span&gt;" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iComboBox;spacingTop=2;spacingLeft=2;align=left;strokeColor=#444444;fontColor=#666666;buttonText=;fontSize=8;fillColor=#dddddd;fillColor2=#3D5565;" parent="1" vertex="1">
+                    <mxGeometry x="253.67000000000007" y="980.75" width="126.33" height="23.5" as="geometry"/>
                 </mxCell>
-                <mxCell id="82" value="追加" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=5;strokeColor=none;fontColor=#ffffff;fontSize=16;fontStyle=1;fillColor=#007FFF;" vertex="1" parent="1">
-                    <mxGeometry x="253.67000000000007" y="1080" width="80" height="30" as="geometry"/>
+                <mxCell id="82" value="追加" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=5;strokeColor=none;fontColor=#ffffff;fontSize=16;fontStyle=1;fillColor=#007FFF;" parent="1" vertex="1">
+                    <mxGeometry x="253.67000000000007" y="1114.25" width="80" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="83" value="OK" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=5;strokeColor=none;fontColor=#ffffff;fontSize=16;fontStyle=1;fillColor=#007FFF;" vertex="1" parent="1">
+                <mxCell id="83" value="OK" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=5;strokeColor=none;fontColor=#ffffff;fontSize=16;fontStyle=1;fillColor=#007FFF;" parent="1" vertex="1">
                     <mxGeometry x="402.5" y="1190" width="80" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="84" value="クラス追加" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=5;strokeColor=none;fontColor=#ffffff;fontSize=16;fontStyle=1;fillColor=#007FFF;" vertex="1" parent="1">
-                    <mxGeometry x="400" y="943.25" width="100" height="30" as="geometry"/>
+                <mxCell id="84" value="クラス追加" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=5;strokeColor=none;fontColor=#ffffff;fontSize=16;fontStyle=1;fillColor=#007FFF;" parent="1" vertex="1">
+                    <mxGeometry x="400" y="977.5" width="100" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="85" value="" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=0;strokeColor=#999999;fillColor=#ffffff;" vertex="1" parent="1">
+                <mxCell id="85" value="" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=0;strokeColor=#999999;fillColor=#ffffff;" parent="1" vertex="1">
                     <mxGeometry x="710" y="880.61" width="200" height="150" as="geometry"/>
                 </mxCell>
-                <mxCell id="86" value="クラス追加" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" vertex="1" parent="85">
+                <mxCell id="86" value="クラス追加" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="85" vertex="1">
                     <mxGeometry width="100" height="20" relative="1" as="geometry">
                         <mxPoint x="10" y="10" as="offset"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="87" value="" style="shape=line;strokeColor=#ddeeff;strokeWidth=2;html=1;resizeWidth=1;" vertex="1" parent="85">
+                <mxCell id="87" value="" style="shape=line;strokeColor=#ddeeff;strokeWidth=2;html=1;resizeWidth=1;" parent="85" vertex="1">
                     <mxGeometry width="180" height="10" relative="1" as="geometry">
                         <mxPoint x="10" y="30" as="offset"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="88" value="クラス名" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" vertex="1" parent="85">
+                <mxCell id="88" value="クラス名" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="85" vertex="1">
                     <mxGeometry width="100" height="20" relative="1" as="geometry">
                         <mxPoint x="10" y="40" as="offset"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="89" value="&lt;font color=&quot;#ffffff&quot;&gt;１年２組&lt;/font&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=0;strokeColor=#999999;fontColor=#666666;align=left;spacingLeft=5;resizeWidth=1;" vertex="1" parent="85">
+                <mxCell id="89" value="&lt;font color=&quot;#ffffff&quot;&gt;１年２組&lt;/font&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=0;strokeColor=#999999;fontColor=#666666;align=left;spacingLeft=5;resizeWidth=1;" parent="85" vertex="1">
                     <mxGeometry width="150" height="25" relative="1" as="geometry">
                         <mxPoint x="10" y="60" as="offset"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="92" value="追加" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=5;strokeColor=none;fontColor=#ffffff;fillColor=#66bbff;fontSize=16;fontStyle=1;" vertex="1" parent="85">
+                <mxCell id="92" value="追加" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=5;strokeColor=none;fontColor=#ffffff;fillColor=#66bbff;fontSize=16;fontStyle=1;" parent="85" vertex="1">
                     <mxGeometry y="1" width="80" height="30" relative="1" as="geometry">
                         <mxPoint x="50" y="-50" as="offset"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="99" value="クラス削除" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=5;strokeColor=none;fontColor=#ffffff;fontSize=16;fontStyle=1;fillColor=#007FFF;" vertex="1" parent="1">
-                    <mxGeometry x="510" y="943.25" width="100" height="30" as="geometry"/>
+                <mxCell id="99" value="クラス削除" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=5;strokeColor=none;fontColor=#ffffff;fontSize=16;fontStyle=1;fillColor=#007FFF;" parent="1" vertex="1">
+                    <mxGeometry x="510" y="977.5" width="100" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="98" value="" style="endArrow=classic;html=1;strokeColor=#3333FF;" edge="1" parent="1" source="84" target="85">
+                <mxCell id="98" value="" style="endArrow=classic;html=1;strokeColor=#3333FF;" parent="1" source="84" target="85" edge="1">
                     <mxGeometry width="50" height="50" relative="1" as="geometry">
                         <mxPoint x="470" y="930" as="sourcePoint"/>
                         <mxPoint x="709" y="954" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="100" value="クラス削除確認" style="shape=rect;rounded=1;strokeColor=none;fillColor=#F6F6F8;gradientColor=none;shadow=0;glass=0;dashed=1;fontFamily=Helvetica;fontSize=16;fontColor=#333333;align=center;html=0;verticalAlign=top;whiteSpace=wrap;spacing=8;spacingTop=0;" vertex="1" parent="1">
+                <mxCell id="100" value="クラス削除確認" style="shape=rect;rounded=1;strokeColor=none;fillColor=#F6F6F8;gradientColor=none;shadow=0;glass=0;dashed=1;fontFamily=Helvetica;fontSize=16;fontColor=#333333;align=center;html=0;verticalAlign=top;whiteSpace=wrap;spacing=8;spacingTop=0;" parent="1" vertex="1">
                     <mxGeometry x="710" y="1050" width="200" height="120" as="geometry"/>
                 </mxCell>
-                <mxCell id="101" value="クラスを削除しても&#10;よろしいですか？" style="shape=text;align=center;verticalAlign=middle;fontSize=16;fontColor=#333333;strokeColor=none;fillColor=none;spacingTop=-8;resizeWidth=1;whiteSpace=wrap;" vertex="1" parent="100">
+                <mxCell id="101" value="クラスを削除しても&#10;よろしいですか？" style="shape=text;align=center;verticalAlign=middle;fontSize=16;fontColor=#333333;strokeColor=none;fillColor=none;spacingTop=-8;resizeWidth=1;whiteSpace=wrap;" parent="100" vertex="1">
                     <mxGeometry width="200" height="30" relative="1" as="geometry">
                         <mxPoint y="60" as="offset"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="102" value="はい" style="shape=text;align=center;verticalAlign=middle;fontSize=14;fontColor=#0680FF;strokeColor=none;fillColor=none;spacingTop=3;resizeWidth=1;" vertex="1" parent="100">
+                <mxCell id="102" value="はい" style="shape=text;align=center;verticalAlign=middle;fontSize=14;fontColor=#0680FF;strokeColor=none;fillColor=none;spacingTop=3;resizeWidth=1;" parent="100" vertex="1">
                     <mxGeometry y="1" width="100" height="20" relative="1" as="geometry">
                         <mxPoint y="-24" as="offset"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="103" value="いいえ" style="shape=text;align=center;verticalAlign=middle;fontSize=14;fontColor=#0680FF;strokeColor=none;fillColor=none;spacingTop=3;resizeWidth=1;" vertex="1" parent="100">
+                <mxCell id="103" value="いいえ" style="shape=text;align=center;verticalAlign=middle;fontSize=14;fontColor=#0680FF;strokeColor=none;fillColor=none;spacingTop=3;resizeWidth=1;" parent="100" vertex="1">
                     <mxGeometry x="0.5" y="1" width="100" height="20" relative="1" as="geometry">
                         <mxPoint y="-24" as="offset"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="105" value="" style="endArrow=classic;html=1;strokeColor=#3333FF;entryX=0;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="99" target="100">
+                <mxCell id="105" value="" style="endArrow=classic;html=1;strokeColor=#3333FF;entryX=0;entryY=0;entryDx=0;entryDy=0;" parent="1" source="99" target="100" edge="1">
                     <mxGeometry width="50" height="50" relative="1" as="geometry">
                         <mxPoint x="610" y="960" as="sourcePoint"/>
                         <mxPoint x="720" y="966.3433333333335" as="targetPoint"/>
                     </mxGeometry>
+                </mxCell>
+                <mxCell id="117" value="&lt;font style=&quot;font-size: 13px&quot;&gt;&lt;font color=&quot;#000000&quot;&gt;&amp;nbsp;&lt;/font&gt;&lt;font color=&quot;#ff0000&quot;&gt;陽性者３件&lt;/font&gt;&lt;/font&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="1" vertex="1">
+                    <mxGeometry x="746" y="270" width="82" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="119" value="&lt;font style=&quot;font-size: 13px&quot;&gt;&lt;font color=&quot;#ff0000&quot;&gt;濃厚接触者３件&lt;/font&gt;&lt;/font&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="1" vertex="1">
+                    <mxGeometry x="725" y="290" width="82" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="135" value="学校" style="shape=ellipse;fillColor=#ffffff;strokeColor=#0057D8;strokeWidth=4;fontColor=#000000;align=left;verticalAlign=middle;fontStyle=0;fontSize=16;labelPosition=right;verticalLabelPosition=middle;spacingLeft=10" vertex="1" parent="1">
+                    <mxGeometry x="263" y="792" width="10" height="10" as="geometry"/>
+                </mxCell>
+                <mxCell id="136" value="&lt;font style=&quot;font-size: 16px&quot;&gt;会社&lt;/font&gt;" style="shape=ellipse;rounded=1;fillColor=#F0F2F5;strokeColor=#D8DCE3;fontColor=#000000;align=left;verticalAlign=middle;fontStyle=0;fontSize=12;labelPosition=right;verticalLabelPosition=middle;spacingLeft=10;html=1;shadow=0;dashed=0" vertex="1" parent="1">
+                    <mxGeometry x="330.17" y="791" width="12" height="12" as="geometry"/>
+                </mxCell>
+                <mxCell id="140" value="会社を選択した場合は、以下の文字を入れ替える。&lt;br&gt;「学校」→「会社」&lt;br&gt;「クラス」→「部署」" style="shape=note;strokeWidth=2;fontSize=14;size=20;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#666600;verticalAlign=top;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="711" y="730" width="349" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="142" value="一括追加" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=5;strokeColor=none;fontColor=#ffffff;fontSize=16;fontStyle=1;fillColor=#007FFF;" vertex="1" parent="1">
+                    <mxGeometry x="540" y="1114.25" width="80" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="144" value="一括追加はCSVを選択して読み込む。" style="shape=note;strokeWidth=2;fontSize=14;size=20;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#666600;verticalAlign=top;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="711" y="1200" width="269" height="40" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
