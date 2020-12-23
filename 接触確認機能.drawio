@@ -1,4 +1,4 @@
-<mxfile host="65bd71144e" modified="2020-12-16T07:14:27.619Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.52.0 Chrome/83.0.4103.122 Electron/9.3.5 Safari/537.36" etag="XP2E_SfRGXLNOiVKuloF" version="13.10.0" type="embed">
+<mxfile host="65bd71144e" modified="2020-12-23T01:00:15.859Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.52.1 Chrome/83.0.4103.122 Electron/9.3.5 Safari/537.36" etag="yBjicPsyGGS3WEZWyM_E" version="13.10.0" type="embed">
     <diagram id="J0KxcsYykmodnCqyUs6D" name="ページ1">
         <mxGraphModel dx="338" dy="779" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
@@ -756,8 +756,8 @@
                         <mxPoint x="20" y="350" as="offset"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="547" value="2020/11/13　　　　2件" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=20;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;whiteSpace=wrap;" parent="415" vertex="1">
-                    <mxGeometry width="290" height="50" relative="1" as="geometry">
+                <mxCell id="547" value="2020/11/13　　　　2件&lt;br&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;9:05&lt;br&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;18:28" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=20;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;whiteSpace=wrap;" parent="415" vertex="1">
+                    <mxGeometry width="290" height="90" relative="1" as="geometry">
                         <mxPoint x="20" y="347" as="offset"/>
                     </mxGeometry>
                 </mxCell>
@@ -768,8 +768,20 @@
                 </mxCell>
                 <mxCell id="549" value="" style="shape=line;strokeColor=#ddeeff;strokeWidth=2;html=1;resizeWidth=1;" parent="415" vertex="1">
                     <mxGeometry width="297" height="10" relative="1" as="geometry">
-                        <mxPoint x="14.93" y="390" as="offset"/>
+                        <mxPoint x="14.93" y="430" as="offset"/>
                     </mxGeometry>
+                </mxCell>
+                <mxCell id="573" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.down;strokeColor=#0080f0;" vertex="1" parent="415">
+                    <mxGeometry x="280" y="138" width="17" height="8.5" as="geometry"/>
+                </mxCell>
+                <mxCell id="574" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.down;strokeColor=#0080f0;" vertex="1" parent="415">
+                    <mxGeometry x="280" y="190" width="17" height="8.5" as="geometry"/>
+                </mxCell>
+                <mxCell id="575" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.down;strokeColor=#0080f0;" vertex="1" parent="415">
+                    <mxGeometry x="280" y="315" width="17" height="8.5" as="geometry"/>
+                </mxCell>
+                <mxCell id="576" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.up;strokeColor=#0080f0;" vertex="1" parent="415">
+                    <mxGeometry x="280" y="368" width="20" height="10" as="geometry"/>
                 </mxCell>
                 <mxCell id="427" value="⑦接触一覧" style="shape=note;strokeWidth=2;fontSize=14;size=20;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#666600;" parent="1" vertex="1">
                     <mxGeometry x="2055" y="1000" width="110" height="40" as="geometry"/>
