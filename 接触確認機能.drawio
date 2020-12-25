@@ -1,4 +1,4 @@
-<mxfile host="65bd71144e" modified="2020-12-24T23:43:40.671Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.52.1 Chrome/83.0.4103.122 Electron/9.3.5 Safari/537.36" etag="uFxPv5J8L8830bH2cI-e" version="13.10.0" type="embed">
+<mxfile host="65bd71144e" modified="2020-12-25T06:58:59.906Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.52.1 Chrome/83.0.4103.122 Electron/9.3.5 Safari/537.36" etag="3ulz-PEYRATGJG4-t06Z" version="13.10.0" type="embed">
     <diagram id="J0KxcsYykmodnCqyUs6D" name="ページ1">
         <mxGraphModel dx="338" dy="779" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
@@ -661,6 +661,15 @@
                 <mxCell id="509" value="陽性情報の登録" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.buttons.button;strokeColor=#666666;fontColor=#ffffff;mainText=;buttonStyle=round;fontSize=17;fontStyle=1;fillColor=#008cff;whiteSpace=wrap;" parent="390" vertex="1">
                     <mxGeometry x="68.5" y="681" width="230" height="50" as="geometry"/>
                 </mxCell>
+                <mxCell id="594" value="陰性として再登録" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.buttons.button;strokeColor=#666666;fontColor=#ffffff;mainText=;buttonStyle=round;fontSize=14;fontStyle=1;fillColor=#008cff;whiteSpace=wrap;" vertex="1" parent="390">
+                    <mxGeometry x="-97.78999999999996" y="531" width="130" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="595" value="陽性の登録をした場合" style="whiteSpace=wrap;html=1;shape=mxgraph.basic.document;fontSize=14;" vertex="1" parent="390">
+                    <mxGeometry x="-109" y="570" width="152.43" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="596" value="" style="html=1;shadow=0;dashed=0;align=center;verticalAlign=middle;shape=mxgraph.arrows2.arrow;dy=0.7;dx=21;notch=0;rotation=30;" vertex="1" parent="390">
+                    <mxGeometry x="-137.51999999999998" y="511" width="43.3" height="30" as="geometry"/>
+                </mxCell>
                 <mxCell id="407" value="⑥陽性者と接触あり" style="shape=note;strokeWidth=2;fontSize=14;size=20;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#666600;" parent="389" vertex="1">
                     <mxGeometry width="140" height="40" as="geometry"/>
                 </mxCell>
@@ -783,6 +792,15 @@
                 <mxCell id="576" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.up;strokeColor=#0080f0;" parent="415" vertex="1">
                     <mxGeometry x="280" y="368.00000000000006" width="20" height="10.000000000000002" as="geometry"/>
                 </mxCell>
+                <mxCell id="591" value="濃厚接触の更新" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.buttons.button;strokeColor=#666666;fontColor=#ffffff;mainText=;buttonStyle=round;fontSize=14;fontStyle=1;fillColor=#008cff;whiteSpace=wrap;" vertex="1" parent="409">
+                    <mxGeometry x="-61" y="630" width="130" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="592" value="濃厚接触の登録をした場合" style="whiteSpace=wrap;html=1;shape=mxgraph.basic.document;fontSize=14;" vertex="1" parent="409">
+                    <mxGeometry x="-84.60000000000014" y="669" width="177.21" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="593" value="" style="html=1;shadow=0;dashed=0;align=center;verticalAlign=middle;shape=mxgraph.arrows2.arrow;dy=0.7;dx=21;notch=0;rotation=30;" vertex="1" parent="409">
+                    <mxGeometry x="-100.73000000000002" y="610" width="43.3" height="30" as="geometry"/>
+                </mxCell>
                 <mxCell id="427" value="⑦接触一覧" style="shape=note;strokeWidth=2;fontSize=14;size=20;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#666600;" parent="1" vertex="1">
                     <mxGeometry x="2055" y="1000" width="110" height="40" as="geometry"/>
                 </mxCell>
@@ -862,7 +880,7 @@
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="450" value="" style="group;labelBackgroundColor=none;" parent="1" vertex="1" connectable="0">
-                    <mxGeometry x="1241" y="1050" width="387" height="750" as="geometry"/>
+                    <mxGeometry x="1241" y="1050" width="456.43" height="750" as="geometry"/>
                 </mxCell>
                 <mxCell id="451" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shadow=0;dashed=0;strokeWidth=1;shape=mxgraph.ios.iPhone;bgStyle=bgGreen;fillColor=#aaaaaa;" parent="450" vertex="1">
                     <mxGeometry width="375" height="750" as="geometry"/>
@@ -917,6 +935,15 @@
                 </mxCell>
                 <mxCell id="476" value="" style="shape=line;strokeColor=#ddeeff;strokeWidth=2;html=1;resizeWidth=1;" parent="456" vertex="1">
                     <mxGeometry x="22.859999999999836" y="279.99999999999955" width="300.141" height="10" as="geometry"/>
+                </mxCell>
+                <mxCell id="600" value="陰性として再登録" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.buttons.button;strokeColor=#666666;fontColor=#ffffff;mainText=;buttonStyle=round;fontSize=14;fontStyle=1;fillColor=#008cff;whiteSpace=wrap;" vertex="1" parent="450">
+                    <mxGeometry x="315.21000000000004" y="510" width="130" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="601" value="陽性の登録をした場合" style="whiteSpace=wrap;html=1;shape=mxgraph.basic.document;fontSize=14;" vertex="1" parent="450">
+                    <mxGeometry x="304" y="549" width="152.43" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="602" value="" style="html=1;shadow=0;dashed=0;align=center;verticalAlign=middle;shape=mxgraph.arrows2.arrow;dy=0.7;dx=21;notch=0;rotation=30;" vertex="1" parent="450">
+                    <mxGeometry x="275.48" y="490" width="43.3" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="464" value="最初は学校名（学校から通知）を&lt;br&gt;入力する" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.text.stickyNote2;fontColor=#666666;mainText=;fontSize=17;whiteSpace=wrap;fillColor=#ffffcc;strokeColor=#F62E00;labelBackgroundColor=none;" parent="1" vertex="1">
                     <mxGeometry x="1261" y="1800" width="350" height="80" as="geometry"/>
@@ -1032,23 +1059,50 @@
                 <mxCell id="523" value="⑨濃厚接触情報の登録" style="shape=note;strokeWidth=2;fontSize=14;size=20;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#666600;" parent="1" vertex="1">
                     <mxGeometry x="2060" y="1950" width="180" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="578" value="陰性として再登録" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.buttons.button;strokeColor=#666666;fontColor=#ffffff;mainText=;buttonStyle=round;fontSize=14;fontStyle=1;fillColor=#008cff;whiteSpace=wrap;" vertex="1" parent="1">
+                <mxCell id="578" value="陰性として再登録" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.buttons.button;strokeColor=#666666;fontColor=#ffffff;mainText=;buttonStyle=round;fontSize=14;fontStyle=1;fillColor=#008cff;whiteSpace=wrap;" parent="1" vertex="1">
                     <mxGeometry x="1994" y="1790" width="130" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="577" value="" style="html=1;shadow=0;dashed=0;align=center;verticalAlign=middle;shape=mxgraph.arrows2.arrow;dy=0.7;dx=21;notch=0;rotation=30;" vertex="1" parent="1">
+                <mxCell id="577" value="" style="html=1;shadow=0;dashed=0;align=center;verticalAlign=middle;shape=mxgraph.arrows2.arrow;dy=0.7;dx=21;notch=0;rotation=30;" parent="1" vertex="1">
                     <mxGeometry x="1954.27" y="1770" width="43.3" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="581" value="陽性の登録をした場合" style="whiteSpace=wrap;html=1;shape=mxgraph.basic.document;fontSize=14;" vertex="1" parent="1">
+                <mxCell id="581" value="陽性の登録をした場合" style="whiteSpace=wrap;html=1;shape=mxgraph.basic.document;fontSize=14;" parent="1" vertex="1">
                     <mxGeometry x="1982.79" y="1829" width="152.43" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="582" value="" style="html=1;shadow=0;dashed=0;align=center;verticalAlign=middle;shape=mxgraph.arrows2.arrow;dy=0.7;dx=21;notch=0;rotation=30;" vertex="1" parent="1">
+                <mxCell id="582" value="" style="html=1;shadow=0;dashed=0;align=center;verticalAlign=middle;shape=mxgraph.arrows2.arrow;dy=0.7;dx=21;notch=0;rotation=30;" parent="1" vertex="1">
                     <mxGeometry x="1954.27" y="2725" width="43.3" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="583" value="陰性として再登録" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.buttons.button;strokeColor=#666666;fontColor=#ffffff;mainText=;buttonStyle=round;fontSize=14;fontStyle=1;fillColor=#008cff;whiteSpace=wrap;" vertex="1" parent="1">
+                <mxCell id="583" value="陰性として再登録" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.buttons.button;strokeColor=#666666;fontColor=#ffffff;mainText=;buttonStyle=round;fontSize=14;fontStyle=1;fillColor=#008cff;whiteSpace=wrap;" parent="1" vertex="1">
                     <mxGeometry x="1994" y="2745" width="130" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="584" value="陽性の登録をした場合" style="whiteSpace=wrap;html=1;shape=mxgraph.basic.document;fontSize=14;" vertex="1" parent="1">
+                <mxCell id="584" value="陽性の登録をした場合" style="whiteSpace=wrap;html=1;shape=mxgraph.basic.document;fontSize=14;" parent="1" vertex="1">
                     <mxGeometry x="1982.79" y="2784" width="152.43" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="585" value="" style="html=1;shadow=0;dashed=0;align=center;verticalAlign=middle;shape=mxgraph.arrows2.arrow;dy=0.7;dx=21;notch=0;rotation=30;" vertex="1" parent="1">
+                    <mxGeometry x="1954.27" y="2610" width="43.3" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="586" value="濃厚接触の更新" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.buttons.button;strokeColor=#666666;fontColor=#ffffff;mainText=;buttonStyle=round;fontSize=14;fontStyle=1;fillColor=#008cff;whiteSpace=wrap;" vertex="1" parent="1">
+                    <mxGeometry x="1994" y="2630" width="130" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="587" value="濃厚接触の登録をした場合" style="whiteSpace=wrap;html=1;shape=mxgraph.basic.document;fontSize=14;" vertex="1" parent="1">
+                    <mxGeometry x="1970.3999999999999" y="2669" width="177.21" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="588" value="濃厚接触の更新" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.buttons.button;strokeColor=#666666;fontColor=#ffffff;mainText=;buttonStyle=round;fontSize=14;fontStyle=1;fillColor=#008cff;whiteSpace=wrap;" vertex="1" parent="1">
+                    <mxGeometry x="1994" y="2230" width="130" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="589" value="濃厚接触の登録をした場合" style="whiteSpace=wrap;html=1;shape=mxgraph.basic.document;fontSize=14;" vertex="1" parent="1">
+                    <mxGeometry x="1970.3999999999999" y="2269" width="177.21" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="590" value="" style="html=1;shadow=0;dashed=0;align=center;verticalAlign=middle;shape=mxgraph.arrows2.arrow;dy=0.7;dx=21;notch=0;rotation=30;" vertex="1" parent="1">
+                    <mxGeometry x="1954.27" y="2210" width="43.3" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="597" value="陰性として再登録" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.buttons.button;strokeColor=#666666;fontColor=#ffffff;mainText=;buttonStyle=round;fontSize=14;fontStyle=1;fillColor=#008cff;whiteSpace=wrap;" vertex="1" parent="1">
+                    <mxGeometry x="1556.21" y="2140" width="130" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="598" value="陽性の登録をした場合" style="whiteSpace=wrap;html=1;shape=mxgraph.basic.document;fontSize=14;" vertex="1" parent="1">
+                    <mxGeometry x="1545" y="2179" width="152.43" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="599" value="" style="html=1;shadow=0;dashed=0;align=center;verticalAlign=middle;shape=mxgraph.arrows2.arrow;dy=0.7;dx=21;notch=0;rotation=30;" vertex="1" parent="1">
+                    <mxGeometry x="1516.48" y="2120" width="43.3" height="30" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
