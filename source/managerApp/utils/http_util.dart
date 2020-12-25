@@ -9,12 +9,6 @@ import 'package:path_provider/path_provider.dart';
 import 'position_util.dart';
 import 'shared_pre_util.dart';
 
-/*
- *  Restful Api
- * GET、POST、DELETE、PATCH
- * - unified prefix
- * - log & error
- */
 
 class HttpUtil {
   /// global dio object

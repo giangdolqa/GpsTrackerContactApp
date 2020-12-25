@@ -4,15 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:gps_tracker/views/home_view.dart';
-//
-//void main() => runApp(MaterialApp(
-//      home: AnimatedSplash(
-//        imagePath: 'assets/images/splash.png',
-//        home: TrackerApp(),
-//        duration: 2000,
-//        type: AnimatedSplashType.StaticDuration,
-//      ),
-//    ));
 
 void main() => runApp(
     TrackerApp());
@@ -59,12 +50,7 @@ class TrackerAppState extends State<TrackerApp> {
   @override
   void initState() {
     super.initState();
-    // _checkLoactionPermission();
-
   }
-  // void _checkLoactionPermission() async {
-  //   positionUtil.CheckLocationPermission();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -73,13 +59,13 @@ class TrackerAppState extends State<TrackerApp> {
       DeviceOrientation.portraitDown,
     ]);
     return MaterialApp(
-      title: 'Driver',
-      debugShowCheckedModeBanner: false,
+      title: 'GPSTracker',
+      debugShowCheckedModeBanner: true,
       // home: LoginView(),
       home: HomeView(),
       theme: ThemeData(
         brightness: Brightness.light,
-        primarySwatch: Colors.amber,
+        primarySwatch: Colors.blue,
       ),
       routes: <String, WidgetBuilder>{
         // 'Login': (BuildContext context) => LoginView(),  // ログインはここに追加

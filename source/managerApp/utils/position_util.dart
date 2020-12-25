@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:geolocator/geolocator.dart';
-//import 'package:location/location.dart' as lc;
+import 'package:popup_menu/popup_menu.dart';
 
 PositionUtil positionUtil = new PositionUtil();
 Position globalTempPos;
@@ -22,10 +22,16 @@ class PositionUtil {
     posTimer = Timer.periodic(timerLength, callback);
 
     // geolocator stream
-    var locationOptions = LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 3, forceAndroidLocationManager: true, timeInterval: 2000);
-    positionStream = geolocator.getPositionStream(locationOptions).listen((Position position) {
+    var locationOptions = LocationOptions(
+        accuracy: LocationAccuracy.high,
+        distanceFilter: 3,
+        forceAndroidLocationManager: true,
+        timeInterval: 2000);
+    positionStream = geolocator
+        .getPositionStream(locationOptions)
+        .listen((Position position) {
       if (position != null) {
-        if (globalTempPos != null){
+        if (globalTempPos != null) {
           double xVal = position.latitude - globalTempPos.latitude;
           double yVal = position.longitude - globalTempPos.longitude;
           globalDirection = atan2(xVal, yVal) / pi * 180.00;
@@ -33,25 +39,6 @@ class PositionUtil {
         globalTempPos = position;
       }
     });
-
-//    // Location Stream
-//    geolocator.onLocationChanged().listen((lc.LocationData position) {
-//      // Use current location
-//      if (position != null) {
-//        print(position.toString());
-//        if (globalTempPos != null) {
-//          double xVal = position.latitude - globalTempPos.latitude;
-//          double yVal = position.longitude - globalTempPos.longitude;
-//          globalDirection = atan2(xVal, yVal) / pi * 180.00;
-//        }
-//        globalTempPos = Position(
-//          latitude: position.latitude,
-//          longitude: position.longitude,
-//          speed: position.speed,
-//          heading: position.heading,
-//        );
-//      }
-//    });
   }
 
   void _timeOut() async {
@@ -63,7 +50,6 @@ class PositionUtil {
     posTimer.cancel();
     positionStream.cancel();
   }
-
 
   // With Geolocator
   void CheckLocationPermission() async {
@@ -80,10 +66,12 @@ class PositionUtil {
     if (globalTempPos != null) {
       return globalTempPos;
     } else {
-      Position rsltPos = await geolocator.getLastKnownPosition(desiredAccuracy: LocationAccuracy.high);
+      Position rsltPos = await geolocator.getLastKnownPosition(
+          desiredAccuracy: LocationAccuracy.high);
       if (rsltPos == null) {
         print("GetCurrentPos Failed: getCurrentPosition");
-        rsltPos = await geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+        rsltPos = await geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high);
 //          rsltPos = await geolocator.getLastKnownPosition(desiredAccuracy: LocationAccuracy.high);
         if (rsltPos == null) {
           print("GetCurrentPos Failed: getLastKnownPosition");
@@ -96,40 +84,4 @@ class PositionUtil {
     }
     return null;
   }
-
-//  //  With Location
-//  void CheckLocationPermission() async {
-//    var isPerms = await geolocator.hasPermission();
-//    if (isPerms != lc.PermissionStatus.GRANTED) {
-//      geolocator.requestPermission();
-////      print("-----------------------------------------------------GetCurrentPos requestPermission ");
-//    } else {
-////      print("-----------------------------------------------------GetCurrentPos secceeded requestPermission ");
-//    }
-//    var isService = await geolocator.serviceEnabled();
-//    if (isService != true) {
-//      geolocator.requestService();
-////      print("-----------------------------------------------------GetCurrentPos requestService ");
-//    } else {
-////      print("-----------------------------------------------------GetCurrentPos secceeded requestService ");
-//    }
-//  }
-//
-//  Future<Position> GetCurrentPos() async {
-//    if (globalTempPos != null) {
-//      return globalTempPos;
-//    }
-//    try {
-////      Position rsltPos = await geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-//      lc.LocationData rsltLD = await geolocator.getLocation();
-//      if (rsltLD != null) {
-//        Position rsltPos = Position(longitude: rsltLD.longitude, latitude: rsltLD.latitude, speed: rsltLD.speed, heading: rsltLD.heading);
-//        globalTempPos = rsltPos;
-//        return rsltPos;
-//      }
-//    } catch (e) {
-//      print("GetCurrentPos Failed: Exception " + e.toString());
-//    }
-//    return null;
-//  }
 }
