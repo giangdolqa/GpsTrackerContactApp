@@ -1,6 +1,8 @@
+// バックグランド位置通知
 import 'dart:async';
 import 'dart:math';
 
+import 'package:background_location/background_location.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:popup_menu/popup_menu.dart';
 
@@ -17,7 +19,7 @@ StreamSubscription<Position> positionStream;
 
 class PositionUtil {
   PositionUtil() {
-    const timerLength = const Duration(seconds: 5);
+    const timerLength = const Duration(seconds: 60); // 分毎に位置通知
     var callback = (timer) => {_timeOut()};
     posTimer = Timer.periodic(timerLength, callback);
 
@@ -40,6 +42,46 @@ class PositionUtil {
       }
     });
   }
+
+   _initLocation() async {
+    await BackgroundLocation.setAndroidNotification(
+      title: "Background service is running",
+      message: "Background location in progress",
+      icon: "@mipmap/ic_launcher",
+    );
+    await BackgroundLocation.setAndroidConfiguration();
+    await BackgroundLocation.startLocationService();
+    BackgroundLocation.getLocationUpdates((location) {
+      // setState(() {
+      //   this.latitude = location.latitude.toString();
+      //   this.longitude = location.longitude.toString();
+      //   this.accuracy = location.accuracy.toString();
+      //   this.altitude = location.altitude.toString();
+      //   this.bearing = location.bearing.toString();
+      //   this.speed = location.speed.toString();
+      //   this.time = DateTime.fromMillisecondsSinceEpoch(
+      //       location.time.toInt())
+      //       .toString();
+      // });
+      // print("""\n
+      //                   Latitude:  $latitude
+      //                   Longitude: $longitude
+      //                   Altitude: $altitude
+      //                   Accuracy: $accuracy
+      //                   Bearing:  $bearing
+      //                   Speed: $speed
+      //                   Time: $time
+      //                 """);
+    });
+  }
+
+
+  getCurrentLocation() {
+    BackgroundLocation().getCurrentLocation().then((location) {
+      print("This is current Location" + location.longitude.toString());
+    });
+  }
+
 
   void _timeOut() async {
     PosFlag = false;
@@ -72,7 +114,6 @@ class PositionUtil {
         print("GetCurrentPos Failed: getCurrentPosition");
         rsltPos = await geolocator.getCurrentPosition(
             desiredAccuracy: LocationAccuracy.high);
-//          rsltPos = await geolocator.getLastKnownPosition(desiredAccuracy: LocationAccuracy.high);
         if (rsltPos == null) {
           print("GetCurrentPos Failed: getLastKnownPosition");
         }

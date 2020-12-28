@@ -188,30 +188,87 @@ class HomeViewState extends State<HomeView>
                           ],
                         ),
                       ),
+                      value: "home",
+                    ),
+                    new mypopup.PopupMenuItem<String>(
+                      child: Container(
+                        height: double.infinity,
+                        width: double.infinity,
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.settings,
+                              size: 32,
+                            ),
+                            Expanded(
+                              child: Container(
+                                child: Text(
+                                  "設定",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                // alignment: Alignment.center,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                       color: Color(0x55c4c4c4),
                       value: "home",
                     ),
                     new mypopup.PopupMenuItem<String>(
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.home_filled,
-                            size: 32,
-                          ),
-                          Expanded(
-                            child: Container(
-                              child: Text(
-                                "設定",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                ),
-                              ),
-                              // alignment: Alignment.center,
+                      child: Container(
+                        height: double.infinity,
+                        width: double.infinity,
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.autorenew,
+                              size: 32,
                             ),
-                          ),
-                        ],
+                            Expanded(
+                              child: Container(
+                                child: Text(
+                                  "読込",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                // alignment: Alignment.center,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      value: "setting",
+                      value: "home",
+                    ),
+                    new mypopup.PopupMenuItem<String>(
+                      child: Container(
+                        height: double.infinity,
+                        width: double.infinity,
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.check_circle_outline,
+                              size: 32,
+                            ),
+                            Expanded(
+                              child: Container(
+                                child: Text(
+                                  "接触確認",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                // alignment: Alignment.center,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      color: Color(0x55c4c4c4),
+                      value: "home",
                     ),
                   ],
                   onSelected: _onActionMenuSelect,
