@@ -4,12 +4,15 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:background_location/background_location.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:marquee/marquee.dart';
 import 'package:toast/toast.dart';
 
 import 'package:gps_tracker/components/my_popup_menu.dart' as mypopup;
+import 'package:gps_tracker/utils/position_util.dart';
 
 class HomeView extends StatefulWidget {
   HomeView();
@@ -52,6 +55,7 @@ class HomeViewState extends State<HomeView>
   void dispose() {
     // tabController.dispose();
 
+    positionUtil.stopListening(context);
     if (myTimer != null) {
       myTimer.cancel();
     }
@@ -110,6 +114,8 @@ class HomeViewState extends State<HomeView>
   void _onActionMenuSelect(String selectedVal) {
     switch (selectedVal) {
       case "home":
+        positionUtil.getPermissions(context);
+        positionUtil.startListen(context);
         Toast.show("ホーム", context);
         break;
       case "setting":
@@ -141,13 +147,40 @@ class HomeViewState extends State<HomeView>
         child: SafeArea(
 //          maintainBottomViewPadding: true,
           child: new Scaffold(
-            body: GoogleMap(
-              mapType: MapType.normal,
-              zoomControlsEnabled: false,
-              initialCameraPosition: _kGooglePlex,
-              onMapCreated: (GoogleMapController controller) {
-                _controller.complete(controller);
-              },
+            body: Column(
+              children: [
+                Expanded(
+                  child: GoogleMap(
+                    mapType: MapType.normal,
+                    zoomControlsEnabled: false,
+                    initialCameraPosition: _kGooglePlex,
+                    onMapCreated: (GoogleMapController controller) {
+                      _controller.complete(controller);
+                    },
+                  ),
+                ),
+                Container(
+                    height: 36,
+                    color: Colors.red,
+                    padding: EdgeInsets.only(top: 5, bottom: 5),
+                    child: Marquee(
+                      text: '近くで10歳の男の子が助けを求めています、早く助けに行け！！',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Colors.white),
+                      scrollAxis: Axis.horizontal,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      blankSpace: 20.0,
+                      velocity: 50.0,
+                      pauseAfterRound: Duration(seconds: 5),
+                      startPadding: 10.0,
+                      accelerationDuration: Duration(seconds: 2),
+                      accelerationCurve: Curves.easeIn,
+                      decelerationDuration: Duration(milliseconds: 500),
+                      decelerationCurve: Curves.easeOut,
+                    )),
+              ],
             ),
             floatingActionButton: Padding(
               // アクションボタン
@@ -162,20 +195,24 @@ class HomeViewState extends State<HomeView>
                     color: Colors.white,
                     size: 32,
                   ),
-                  offset: Offset(0, 110),
+                  offset: Offset(0, 80),
                   itemBuilder: (_) => <mypopup.PopupMenuItem<String>>[
                     new mypopup.PopupMenuItem<String>(
                       child: Container(
                         height: double.infinity,
-                        width: double.infinity,
+                        width: 120,
                         child: Row(
                           children: [
-                            Icon(
-                              Icons.home_filled,
-                              size: 32,
+                            Container(
+                              padding: EdgeInsets.only(left: 5, top: 5),
+                              child: Icon(
+                                Icons.home_filled,
+                                size: 30,
+                              ),
                             ),
                             Expanded(
                               child: Container(
+                                padding: EdgeInsets.only(left: 5, top: 5),
                                 child: Text(
                                   "ホーム",
                                   style: TextStyle(
@@ -193,15 +230,19 @@ class HomeViewState extends State<HomeView>
                     new mypopup.PopupMenuItem<String>(
                       child: Container(
                         height: double.infinity,
-                        width: double.infinity,
+                        width: 120,
                         child: Row(
                           children: [
-                            Icon(
-                              Icons.settings,
-                              size: 32,
+                            Container(
+                              padding: EdgeInsets.only(left: 5, top: 5),
+                              child: Icon(
+                                Icons.settings,
+                                size: 30,
+                              ),
                             ),
                             Expanded(
                               child: Container(
+                                padding: EdgeInsets.only(left: 5, top: 5),
                                 child: Text(
                                   "設定",
                                   style: TextStyle(
@@ -215,20 +256,24 @@ class HomeViewState extends State<HomeView>
                         ),
                       ),
                       color: Color(0x55c4c4c4),
-                      value: "home",
+                      value: "setting",
                     ),
                     new mypopup.PopupMenuItem<String>(
                       child: Container(
                         height: double.infinity,
-                        width: double.infinity,
+                        width: 120,
                         child: Row(
                           children: [
-                            Icon(
-                              Icons.autorenew,
-                              size: 32,
+                            Container(
+                              padding: EdgeInsets.only(left: 5, top: 5),
+                              child: Icon(
+                                Icons.autorenew,
+                                size: 30,
+                              ),
                             ),
                             Expanded(
                               child: Container(
+                                padding: EdgeInsets.only(left: 5, top: 5),
                                 child: Text(
                                   "読込",
                                   style: TextStyle(
@@ -241,20 +286,24 @@ class HomeViewState extends State<HomeView>
                           ],
                         ),
                       ),
-                      value: "home",
+                      value: "read",
                     ),
                     new mypopup.PopupMenuItem<String>(
                       child: Container(
                         height: double.infinity,
-                        width: double.infinity,
+                        width: 120,
                         child: Row(
                           children: [
-                            Icon(
-                              Icons.check_circle_outline,
-                              size: 32,
+                            Container(
+                              padding: EdgeInsets.only(left: 5, top: 5),
+                              child: Icon(
+                                Icons.check_circle_outline,
+                                size: 30,
+                              ),
                             ),
                             Expanded(
                               child: Container(
+                                padding: EdgeInsets.only(left: 5, top: 5),
                                 child: Text(
                                   "接触確認",
                                   style: TextStyle(
@@ -268,7 +317,7 @@ class HomeViewState extends State<HomeView>
                         ),
                       ),
                       color: Color(0x55c4c4c4),
-                      value: "home",
+                      value: "contact",
                     ),
                   ],
                   onSelected: _onActionMenuSelect,

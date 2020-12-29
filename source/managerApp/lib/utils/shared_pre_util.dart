@@ -1,3 +1,4 @@
+// ローカル保存
 import 'package:shared_preferences/shared_preferences.dart';
 
 SharedPreUtil spUtil = new SharedPreUtil();
