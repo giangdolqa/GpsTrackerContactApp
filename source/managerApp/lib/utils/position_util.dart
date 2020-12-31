@@ -5,6 +5,8 @@ import 'dart:math';
 import 'package:background_location/background_location.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:gps_tracker/utils/http_util.dart';
+import 'package:gps_tracker/utils/shared_pre_util.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:popup_menu/popup_menu.dart';
 import 'package:toast/toast.dart';
@@ -62,7 +64,8 @@ class PositionUtil {
           "   speed: " + location.speed.toString();
       Toast.show(locString , context);
       print(locString);
-      // setState(() {
+      globalTempPos = Position(latitude:location.longitude, longitude:location.longitude);
+           // setState(() {
       //   this.latitude = location.latitude.toString();
       //   this.longitude = location.longitude.toString();
       //   this.accuracy = location.accuracy.toString();
