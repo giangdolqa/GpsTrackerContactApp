@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'dart:io';
 
 class RegisterView extends StatefulWidget {
-  RegisterView({Key key, this.title}) : super(key: key);
-
-  final String title;
+  final String checkView;
+  RegisterView() : checkView = "";
+  RegisterView.nextViewPath(this.checkView);
 
   @override
-  _Register createState() => _Register();
+  _Register createState() => _Register(checkView);
+
 }
 
 class _Register extends State<RegisterView> {
@@ -19,8 +19,9 @@ class _Register extends State<RegisterView> {
   final loginIdController = TextEditingController();
   final passwordController = TextEditingController();
   final passwordConfirmController = TextEditingController();
+  final String checkView;
 
-
+  _Register(this.checkView);
   _registerUserInfo(String iUsername, String iEmail, String iPhone, String iLoginId, String iPassword, String iRePassword)  {
     if (iUsername.trim().isEmpty) {
       _outputEmptyInfo("お名前を入力してください。");
@@ -56,7 +57,17 @@ class _Register extends State<RegisterView> {
       _outputEmptyInfo("2回入力したパスワードが不一致です。");
       return;
     }else{}
-    // 2段階認証関連処理、ここに追加
+    if(checkView != ""){
+      var checkViewArgs = {"UserName": iUsername.trim(), "Email": iEmail.trim(),
+                           "Phone": iPhone.trim(), "LoginId": iLoginId.trim(),
+                           "Password": iPassword.trim()};
+
+      Navigator.pushNamed(context, checkView, arguments: checkViewArgs);
+    }else{
+      // ここに入らない
+      _outputEmptyInfo("内部異常");
+    }
+
   }
 
   _outputEmptyInfo(String iErrInfo){
