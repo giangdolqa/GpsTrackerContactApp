@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:gps_tracker/views/login_view.dart';
+import 'package:gps_tracker/views/register_view.dart';
 import 'package:gps_tracker/views/home_view.dart';
 
 void main() => runApp(
@@ -61,14 +63,14 @@ class TrackerAppState extends State<TrackerApp> {
     return MaterialApp(
       title: 'GPSTracker',
       debugShowCheckedModeBanner: true,
-      // home: LoginView(),
-      home: HomeView(),
+      home: LoginView(),
       theme: ThemeData(
         brightness: Brightness.light,
         primarySwatch: Colors.blue,
       ),
       routes: <String, WidgetBuilder>{
-        // 'Login': (BuildContext context) => LoginView(),  // ログインはここに追加
+        'Login': (BuildContext context) => LoginView(),
+        'Register': (BuildContext context) => RegisterView(),
         'Home': (BuildContext context) => HomeView(),
       },
     );

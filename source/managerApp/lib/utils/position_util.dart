@@ -3,8 +3,11 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:background_location/background_location.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:popup_menu/popup_menu.dart';
+import 'package:toast/toast.dart';
 
 PositionUtil positionUtil = new PositionUtil();
 Position globalTempPos;
@@ -43,15 +46,22 @@ class PositionUtil {
     });
   }
 
-   _initLocation() async {
+  // 位置通知サービス開始
+  startListen(BuildContext context) async {
     await BackgroundLocation.setAndroidNotification(
       title: "Background service is running",
       message: "Background location in progress",
       icon: "@mipmap/ic_launcher",
     );
-    await BackgroundLocation.setAndroidConfiguration();
+    // await BackgroundLocation.setAndroidConfiguration(interval: 1000);
     await BackgroundLocation.startLocationService();
     BackgroundLocation.getLocationUpdates((location) {
+      String locString = "latitude: " + location.latitude.toString() +
+          "   longitude: " +  location.longitude.toString()  +
+          "   accuracy: " + location.accuracy.toString() +
+          "   speed: " + location.speed.toString();
+      Toast.show(locString , context);
+      print(locString);
       // setState(() {
       //   this.latitude = location.latitude.toString();
       //   this.longitude = location.longitude.toString();
@@ -75,13 +85,37 @@ class PositionUtil {
     });
   }
 
+  // 位置通知サービス停止
+  stopListening(BuildContext context) async {
+    BackgroundLocation.stopLocationService();
+  }
+
+  // 権限要求
+  void getPermissions(BuildContext context) {
+    BackgroundLocation.checkPermissions().then((status){
+      if (status == PermissionStatus.granted){
+        Toast.show(status.toString(), context);
+      }
+      else {
+        BackgroundLocation.getPermissions(
+          onGranted: () {
+            // Start location service here or do something else
+            Toast.show("権限付与成功しました。", context);
+          },
+          onDenied: () {
+            Toast.show("権限取得しました。", context);
+          },
+        );
+      }
+    });
+
+  }
 
   getCurrentLocation() {
     BackgroundLocation().getCurrentLocation().then((location) {
       print("This is current Location" + location.longitude.toString());
     });
   }
-
 
   void _timeOut() async {
     PosFlag = false;
