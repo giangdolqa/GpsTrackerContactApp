@@ -70,7 +70,8 @@ class TrackerAppState extends State<TrackerApp> {
       ),
       routes: <String, WidgetBuilder>{
         'Login': (BuildContext context) => LoginView(),
-        'Register': (BuildContext context) => RegisterView(),
+        'Register': (BuildContext context) => RegisterView.nextViewPath("TwiceCheck"),  // 2段階認証に値渡し
+        //'TwiceCheck': (BuildContext context) => TwiceCheckView(),  // 2段階認証
         'Home': (BuildContext context) => HomeView(),
       },
     );

@@ -1,6 +1,6 @@
-<mxfile host="65bd71144e" modified="2020-12-16T03:50:38.485Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.51.1 Chrome/83.0.4103.122 Electron/9.3.3 Safari/537.36" etag="6oMqcJf-5Jc6DDVY00Ku" version="13.10.0" type="embed">
+<mxfile host="65bd71144e" modified="2020-12-30T13:55:52.470Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.52.1 Chrome/83.0.4103.122 Electron/9.3.5 Safari/537.36" etag="HBW49dh-DVHpSfF5p6HY" version="13.10.0" type="embed">
     <diagram id="0ZzhSemCFJwRc41ak4Dr" name="ページ1">
-        <mxGraphModel dx="1405" dy="779" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+        <mxGraphModel dx="1165" dy="779" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -441,59 +441,82 @@
                 </mxCell>
                 <mxCell id="695" value="ログインID" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="692" vertex="1">
                     <mxGeometry width="166.745" height="20" relative="1" as="geometry">
-                        <mxPoint x="13" y="197" as="offset"/>
+                        <mxPoint x="13" y="290" as="offset"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="696" value="ai_suzuki" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=0;strokeColor=#999999;fontColor=#666666;align=left;spacingLeft=5;resizeWidth=1;fillColor=none;" parent="692" vertex="1">
                     <mxGeometry width="300.141" height="25" relative="1" as="geometry">
-                        <mxPoint x="13" y="217" as="offset"/>
+                        <mxPoint x="13" y="310" as="offset"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="697" value="パスワード" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="692" vertex="1">
                     <mxGeometry width="166.745" height="20" relative="1" as="geometry">
-                        <mxPoint x="13" y="252" as="offset"/>
+                        <mxPoint x="13" y="340" as="offset"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="698" value="********" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=0;strokeColor=#999999;fontColor=#666666;align=left;spacingLeft=5;resizeWidth=1;fillColor=none;" parent="692" vertex="1">
                     <mxGeometry width="300.141" height="25" relative="1" as="geometry">
-                        <mxPoint x="13" y="272" as="offset"/>
+                        <mxPoint x="13" y="360" as="offset"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="699" value="登録" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=5;strokeColor=none;fontColor=#ffffff;fillColor=#66bbff;fontSize=16;fontStyle=1;" parent="692" vertex="1">
                     <mxGeometry y="1" width="80" height="30" relative="1" as="geometry">
-                        <mxPoint x="122.16999999999999" y="-91" as="offset"/>
+                        <mxPoint x="122.16999999999999" y="-36" as="offset"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="700" value="&lt;font style=&quot;font-size: 14px&quot;&gt;パスワードを表示&lt;/font&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=0;fillColor=#eeeeee;strokeColor=#999999;gradientColor=#cccccc;align=left;spacingLeft=4;fontSize=17;fontColor=#666666;labelPosition=right;" parent="692" vertex="1">
-                    <mxGeometry x="16.674500000000002" y="367.0047204968944" width="25.01175" height="25.5" as="geometry"/>
+                    <mxGeometry x="16.674500000000002" y="440.0047204968944" width="25.01175" height="25.5" as="geometry"/>
                 </mxCell>
                 <mxCell id="701" value="********" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=0;strokeColor=#999999;fontColor=#666666;align=left;spacingLeft=5;resizeWidth=1;fillColor=none;" parent="692" vertex="1">
                     <mxGeometry width="300.141" height="25" relative="1" as="geometry">
-                        <mxPoint x="13" y="327" as="offset"/>
+                        <mxPoint x="13" y="408" as="offset"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="702" value="パスワードの確認" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="692" vertex="1">
                     <mxGeometry width="166.745" height="20" relative="1" as="geometry">
-                        <mxPoint x="13" y="307" as="offset"/>
+                        <mxPoint x="13" y="388" as="offset"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="703" value="メールアドレス" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="692" vertex="1">
-                    <mxGeometry x="13.670000000000016" y="90" width="165" height="20" as="geometry"/>
+                <mxCell id="705" value="住所" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="692" vertex="1">
+                    <mxGeometry x="13.670000000000016" y="140" width="165" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="704" value="ai_suzuki@example.co.jp" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=0;strokeColor=#999999;fontColor=#666666;align=left;spacingLeft=5;resizeWidth=1;fillColor=none;" parent="692" vertex="1">
-                    <mxGeometry x="13.670000000000016" y="110" width="297.00000000000006" height="25" as="geometry"/>
+                <mxCell id="706" value="名古屋市千種区000-000" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=0;strokeColor=#999999;fontColor=#666666;align=left;spacingLeft=5;resizeWidth=1;fillColor=none;" parent="692" vertex="1">
+                    <mxGeometry x="13.670000000000016" y="160" width="297.00000000000006" height="25" as="geometry"/>
                 </mxCell>
-                <mxCell id="705" value="電話番号" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="692" vertex="1">
-                    <mxGeometry x="13.670000000000016" y="144" width="165" height="20" as="geometry"/>
-                </mxCell>
-                <mxCell id="706" value="090-000-0000" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=0;strokeColor=#999999;fontColor=#666666;align=left;spacingLeft=5;resizeWidth=1;fillColor=none;" parent="692" vertex="1">
-                    <mxGeometry x="13.670000000000016" y="164" width="297.00000000000006" height="25" as="geometry"/>
-                </mxCell>
-                <mxCell id="707" value="お名前" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="692" vertex="1">
+                <mxCell id="707" value="名前" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="692" vertex="1">
                     <mxGeometry x="13.670000000000016" y="40" width="165" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="708" value="鈴木 愛" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=0;strokeColor=#999999;fontColor=#666666;align=left;spacingLeft=5;resizeWidth=1;fillColor=none;" parent="692" vertex="1">
                     <mxGeometry x="13.670000000000016" y="60" width="297.00000000000006" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="846" value="メールアドレス" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="692" vertex="1">
+                    <mxGeometry x="13.670000000000016" y="240" width="165" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="847" value="ai_suzuki@example.co.jp" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=0;strokeColor=#999999;fontColor=#666666;align=left;spacingLeft=5;resizeWidth=1;fillColor=none;" parent="692" vertex="1">
+                    <mxGeometry x="13.670000000000016" y="260" width="297.00000000000006" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="848" value="電話番号" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="692" vertex="1">
+                    <mxGeometry x="13.670000000000016" y="190" width="165" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="849" value="090-000-0000" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=0;strokeColor=#999999;fontColor=#666666;align=left;spacingLeft=5;resizeWidth=1;fillColor=none;" parent="692" vertex="1">
+                    <mxGeometry x="13.670000000000016" y="210" width="297.00000000000006" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="850" value="郵便番号" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="692" vertex="1">
+                    <mxGeometry x="13.67" y="90" width="96.33" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="851" value="464-0000" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=0;strokeColor=#999999;fontColor=#666666;align=left;spacingLeft=5;resizeWidth=1;fillColor=none;" parent="692" vertex="1">
+                    <mxGeometry x="13.67" y="110" width="96.33" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="852" value="都道府県" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="692" vertex="1">
+                    <mxGeometry x="130" y="90" width="96.33" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="856" value="愛知県" style="rounded=1;html=1;fontColor=#596780;align=left;fontSize=12;spacingLeft=10;fillColor=#FFFFFF;" parent="692" vertex="1">
+                    <mxGeometry x="130" y="109" width="120" height="31" as="geometry"/>
+                </mxCell>
+                <mxCell id="857" value="" style="shape=triangle;direction=south;fillColor=#596780;strokeColor=none;html=1" parent="856" vertex="1">
+                    <mxGeometry x="1" y="0.5" width="12" height="6" relative="1" as="geometry">
+                        <mxPoint x="-20" y="-3" as="offset"/>
+                    </mxGeometry>
                 </mxCell>
                 <mxCell id="709" value="新規登録&lt;br&gt;SMSによる２段認証" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.text.stickyNote2;fontColor=#666666;mainText=;fontSize=17;whiteSpace=wrap;fillColor=#ffffcc;strokeColor=#F62E00;labelBackgroundColor=none;" parent="686" vertex="1">
                     <mxGeometry x="50" y="750" width="300" height="80" as="geometry"/>
@@ -552,7 +575,7 @@
                 <mxCell id="725" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.number_pad;strokeWidth=1;align=center;" parent="717" vertex="1">
                     <mxGeometry x="96.75" y="350" width="140" height="160" as="geometry"/>
                 </mxCell>
-                <mxCell id="845" value="再発行" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=5;strokeColor=none;fontColor=#ffffff;fillColor=#66bbff;fontSize=16;fontStyle=1;" vertex="1" parent="717">
+                <mxCell id="845" value="再発行" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=5;strokeColor=none;fontColor=#ffffff;fillColor=#66bbff;fontSize=16;fontStyle=1;" parent="717" vertex="1">
                     <mxGeometry y="1" width="80" height="30" relative="1" as="geometry">
                         <mxPoint x="79.99999999999999" y="-350" as="offset"/>
                     </mxGeometry>
