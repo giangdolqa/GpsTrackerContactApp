@@ -8,6 +8,7 @@ import 'package:background_location/background_location.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:flutter_volume_slider/flutter_volume_slider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -72,6 +73,7 @@ class HomeViewState extends State<HomeView>
   List<MarkerId> alarmMarkerIds = [];
   List<MarkerId> normalMarkerIds = [];
   Set<Marker> markersSet = Set();
+  bool sliderVisible = false;
 
   // 緊急マーカ作成＆表示
   _createAlarmMarkers(List<Position> positions) async {
@@ -254,10 +256,24 @@ class HomeViewState extends State<HomeView>
     _createNormalMarkers([
       Position(latitude: 38.8495259, longitude: 121.5033732),
       Position(latitude: 38.8348459, longitude: 121.5043432)
-    ]);
+    ]).then(() {
+      normalMarkerIds.forEach((markerId) {
+        googleMapController.showMarkerInfoWindow(markerId);
+      });
+    });
 
-    normalMarkerIds.forEach((markerId) {
-      googleMapController.showMarkerInfoWindow(markerId);
+    // sleep(Duration(seconds: 1));
+    // normalMarkerIds.forEach((markerId) {
+    //   googleMapController.showMarkerInfoWindow(markerId);
+    // });
+  }
+
+  _showVolumeSlider() {
+    setState(() {
+      normalMarkerIds.forEach((markerId) {
+        googleMapController.showMarkerInfoWindow(markerId);
+      });
+      sliderVisible = !sliderVisible;
     });
   }
 
@@ -320,145 +336,189 @@ class HomeViewState extends State<HomeView>
               ],
             ),
             floatingActionButton: Padding(
-              // アクションボタン
-              child: Container(
-                decoration: new BoxDecoration(
-                  color: Color(0xFFC4C4C4),
-                  borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                ),
-                child: mypopup.PopupMenuButton(
-                  icon: Icon(
-                    Icons.list,
-                    color: Colors.white,
-                    size: 32,
+              child: Row(
+                children: [
+                  // アクションボタン
+                  Container(
+                    decoration: new BoxDecoration(
+                      color: Color(0xFFC4C4C4),
+                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                    ),
+                    child: mypopup.PopupMenuButton(
+                      icon: Icon(
+                        Icons.list,
+                        color: Colors.white,
+                        size: 32,
+                      ),
+                      offset: Offset(0, 80),
+                      itemBuilder: (_) => <mypopup.PopupMenuItem<String>>[
+                        new mypopup.PopupMenuItem<String>(
+                          child: Container(
+                            height: double.infinity,
+                            width: 120,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Container(
+                                    padding: EdgeInsets.only(left: 5, top: 5),
+                                    child: Image.asset(
+                                      "assets/icon/home.png",
+                                      width: 30,
+                                      height: 30,
+                                    )),
+                                Expanded(
+                                  child: Container(
+                                    padding: EdgeInsets.only(left: 5, top: 5),
+                                    child: Text(
+                                      "ホーム",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                    // alignment: Alignment.center,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          value: "home",
+                        ),
+                        new mypopup.PopupMenuItem<String>(
+                          child: Container(
+                            height: double.infinity,
+                            width: 120,
+                            child: Row(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.only(left: 5, top: 5),
+                                  child: Icon(
+                                    Icons.settings,
+                                    size: 30,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    padding: EdgeInsets.only(left: 5, top: 5),
+                                    child: Text(
+                                      "設定",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                    // alignment: Alignment.center,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          color: Color(0x55c4c4c4),
+                          value: "setting",
+                        ),
+                        new mypopup.PopupMenuItem<String>(
+                          child: Container(
+                            height: double.infinity,
+                            width: 120,
+                            child: Row(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.only(left: 5, top: 5),
+                                  child: Icon(
+                                    Icons.autorenew,
+                                    size: 30,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    padding: EdgeInsets.only(left: 5, top: 5),
+                                    child: Text(
+                                      "読込",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                    // alignment: Alignment.center,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          value: "read",
+                        ),
+                        new mypopup.PopupMenuItem<String>(
+                          child: Container(
+                            height: double.infinity,
+                            width: 120,
+                            child: Row(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.only(left: 5, top: 5),
+                                  child: Image.asset(
+                                    "assets/icon/check.png",
+                                    width: 30,
+                                    height: 30,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    padding: EdgeInsets.only(left: 5, top: 5),
+                                    child: Text(
+                                      "接触確認",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                    // alignment: Alignment.center,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          color: Color(0x55c4c4c4),
+                          value: "contact",
+                        ),
+                      ],
+                      onSelected: _onActionMenuSelect,
+                    ),
                   ),
-                  offset: Offset(0, 80),
-                  itemBuilder: (_) => <mypopup.PopupMenuItem<String>>[
-                    new mypopup.PopupMenuItem<String>(
-                      child: Container(
-                        height: double.infinity,
-                        width: 120,
-                        child: Row(
-                          children: [
-                            Container(
-                              padding: EdgeInsets.only(left: 5, top: 5),
-                              child: Icon(
-                                Icons.home_filled,
-                                size: 30,
-                              ),
-                            ),
-                            Expanded(
-                              child: Container(
-                                padding: EdgeInsets.only(left: 5, top: 5),
-                                child: Text(
-                                  "ホーム",
-                                  style: TextStyle(
-                                    fontSize: 18,
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        sliderVisible
+                            ? Container(
+                                height: 50,
+                                child: Center(
+                                  child: FlutterVolumeSlider(
+                                    display: Display.HORIZONTAL,
+                                    sliderActiveColor: Colors.blue,
+                                    sliderInActiveColor: Colors.grey,
                                   ),
                                 ),
-                                // alignment: Alignment.center,
+                              )
+                            : Container(
+                                height: 50,
+                                color: Colors.blue,
                               ),
+                        Container(
+                          // color: Colors.amber,
+                          padding: EdgeInsets.only(
+                            right: 20,
+                          ),
+                          height: 50,
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.volume_up,
+                              color: Colors.blue,
+                              size: 26,
                             ),
-                          ],
+                            onPressed: _showVolumeSlider,
+                          ),
+                          alignment: Alignment.centerRight,
                         ),
-                      ),
-                      value: "home",
+                      ],
                     ),
-                    new mypopup.PopupMenuItem<String>(
-                      child: Container(
-                        height: double.infinity,
-                        width: 120,
-                        child: Row(
-                          children: [
-                            Container(
-                              padding: EdgeInsets.only(left: 5, top: 5),
-                              child: Icon(
-                                Icons.settings,
-                                size: 30,
-                              ),
-                            ),
-                            Expanded(
-                              child: Container(
-                                padding: EdgeInsets.only(left: 5, top: 5),
-                                child: Text(
-                                  "設定",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                // alignment: Alignment.center,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      color: Color(0x55c4c4c4),
-                      value: "setting",
-                    ),
-                    new mypopup.PopupMenuItem<String>(
-                      child: Container(
-                        height: double.infinity,
-                        width: 120,
-                        child: Row(
-                          children: [
-                            Container(
-                              padding: EdgeInsets.only(left: 5, top: 5),
-                              child: Icon(
-                                Icons.autorenew,
-                                size: 30,
-                              ),
-                            ),
-                            Expanded(
-                              child: Container(
-                                padding: EdgeInsets.only(left: 5, top: 5),
-                                child: Text(
-                                  "読込",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                // alignment: Alignment.center,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      value: "read",
-                    ),
-                    new mypopup.PopupMenuItem<String>(
-                      child: Container(
-                        height: double.infinity,
-                        width: 120,
-                        child: Row(
-                          children: [
-                            Container(
-                              padding: EdgeInsets.only(left: 5, top: 5),
-                              child: Icon(
-                                Icons.check_circle_outline,
-                                size: 30,
-                              ),
-                            ),
-                            Expanded(
-                              child: Container(
-                                padding: EdgeInsets.only(left: 5, top: 5),
-                                child: Text(
-                                  "接触確認",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                // alignment: Alignment.center,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      color: Color(0x55c4c4c4),
-                      value: "contact",
-                    ),
-                  ],
-                  onSelected: _onActionMenuSelect,
-                ),
+                  ),
+                ],
               ),
               padding: EdgeInsets.only(top: 10),
             ),

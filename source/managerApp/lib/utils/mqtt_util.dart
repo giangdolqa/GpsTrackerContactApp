@@ -30,6 +30,8 @@ class MqttUtil {
 
     /// Add the successful connection callback
     client.onConnected = onConnected;
+    // client.port = 8883; // 実装用
+    client.port = 1883; // 試験用
 
     /// Add a subscribed callback, there is also an unsubscribed callback if you need it.
     /// You can add these before connection or change them dynamically after connection if
@@ -46,7 +48,7 @@ class MqttUtil {
     /// client identifier, any supplied username/password, the default keepalive interval(60s)
     /// and clean session, an example of a specific one below.
     final connMess = MqttConnectMessage()
-        .withClientIdentifier('Mqtt_MyClientUniqueId')
+        .withClientIdentifier("UniqueId")
         .keepAliveFor(20) // Must agree with the keep alive set above or not set
         .withWillTopic(
             'willtopic') // If you set this you must set a will message
@@ -108,91 +110,66 @@ class MqttUtil {
     // 	+/emg/10秒単位の緯度/10秒単位の経度-1
     latitude = latitudeIn10Secs.toString();
     longitude = (longitudeIn10Secs - 1).toString();
-    String topic2 = deviceName +
-        "/emg/" +
-        latitude.toString() +
-        "/" +
-        longitude;
+    String topic2 =
+        deviceName + "/emg/" + latitude.toString() + "/" + longitude;
     client.subscribe(topic2, MqttQos.exactlyOnce);
 
     // 	+/emg/10秒単位の緯度/10秒単位の経度+1
     latitude = latitudeIn10Secs.toString();
     longitude = (longitudeIn10Secs + 1).toString();
-    String topic3 = deviceName +
-        "/emg/" +
-        latitude.toString() +
-        "/" +
-        longitude;
+    String topic3 =
+        deviceName + "/emg/" + latitude.toString() + "/" + longitude;
     client.subscribe(topic3, MqttQos.exactlyOnce);
 
     // 	+/emg/10秒単位の緯度-1/10秒単位の経度
     latitude = latitudeIn10Secs.toString();
     longitude = (longitudeIn10Secs - 1).toString();
-    String topic4 = deviceName +
-        "/emg/" +
-        latitude.toString() +
-        "/" +
-        longitude;
+    String topic4 =
+        deviceName + "/emg/" + latitude.toString() + "/" + longitude;
     client.subscribe(topic4, MqttQos.exactlyOnce);
 
     // 	+/emg/10秒単位の緯度-1/10秒単位の経度-1
     latitude = (latitudeIn10Secs - 1).toString();
     longitude = (longitudeIn10Secs - 1).toString();
-    String topic5 = deviceName +
-        "/emg/" +
-        latitude.toString() +
-        "/" +
-        longitude;
+    String topic5 =
+        deviceName + "/emg/" + latitude.toString() + "/" + longitude;
     client.subscribe(topic5, MqttQos.exactlyOnce);
 
     // 	+/emg/10秒単位の緯度-1/10秒単位の経度+1
     latitude = (latitudeIn10Secs - 1).toString();
     longitude = (longitudeIn10Secs + 1).toString();
-    String topic6 = deviceName +
-        "/emg/" +
-        latitude.toString() +
-        "/" +
-        longitude;
+    String topic6 =
+        deviceName + "/emg/" + latitude.toString() + "/" + longitude;
     client.subscribe(topic6, MqttQos.exactlyOnce);
 
     // 	+/emg/10秒単位の緯度+1/10秒単位の経度
     latitude = (latitudeIn10Secs + 1).toString();
     longitude = (longitudeIn10Secs).toString();
-    String topic7 = deviceName +
-        "/emg/" +
-        latitude.toString() +
-        "/" +
-        longitude;
+    String topic7 =
+        deviceName + "/emg/" + latitude.toString() + "/" + longitude;
     client.subscribe(topic7, MqttQos.exactlyOnce);
 
     // 	+/emg/10秒単位の緯度+1/10秒単位の経度-1
     latitude = (latitudeIn10Secs + 1).toString();
     longitude = (longitudeIn10Secs - 1).toString();
-    String topic8 = deviceName +
-        "/emg/" +
-        latitude.toString() +
-        "/" +
-        longitude;
+    String topic8 =
+        deviceName + "/emg/" + latitude.toString() + "/" + longitude;
     client.subscribe(topic8, MqttQos.exactlyOnce);
 
     // 	+/emg/10秒単位の緯度+1/10秒単位の経度+1
     latitude = (latitudeIn10Secs + 1).toString();
     longitude = (longitudeIn10Secs + 1).toString();
-    String topic9 = deviceName +
-        "/emg/" +
-        latitude.toString() +
-        "/" +
-        longitude;
+    String topic9 =
+        deviceName + "/emg/" + latitude.toString() + "/" + longitude;
     client.subscribe(topic9, MqttQos.exactlyOnce);
 
     client.updates.listen((dynamic c) {
       final MqttPublishMessage recMess = c[0].payload;
       final pt =
-      MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+          MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
       print(
           'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
       print('');
     });
-
   }
 }

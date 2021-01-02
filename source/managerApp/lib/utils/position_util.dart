@@ -1,11 +1,14 @@
 // バックグランド位置通知
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:background_location/background_location.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:gps_tracker/utils/http_util.dart';
+import 'package:gps_tracker/utils/mqtt_util.dart';
 import 'package:gps_tracker/utils/shared_pre_util.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:popup_menu/popup_menu.dart';
@@ -23,6 +26,8 @@ var geolocator = Geolocator()..forceAndroidLocationManager = true;
 StreamSubscription<Position> positionStream;
 
 class PositionUtil {
+  static const MethodChannel _channel =
+  const MethodChannel('almoullim.com/background_location');
   PositionUtil() {
     const timerLength = const Duration(seconds: 60); // 分毎に位置通知
     var callback = (timer) => {_timeOut()};
@@ -50,12 +55,20 @@ class PositionUtil {
 
   // 位置通知サービス開始
   startListen(BuildContext context) async {
+    mqttUtil.client.connect("username", "password");
     await BackgroundLocation.setAndroidNotification(
       title: "Background service is running",
       message: "Background location in progress",
       icon: "@mipmap/ic_launcher",
     );
-    // await BackgroundLocation.setAndroidConfiguration(interval: 1000);
+    // if (Platform.isAndroid) {
+    //   return await _channel.invokeMethod("set_configuration", <String, dynamic>{
+    //     "interval": 1000,
+    //   });
+    // } else {
+    //   //return Promise.resolve();
+    // }
+    await BackgroundLocation.setAndroidConfiguration(interval: 1000);
     await BackgroundLocation.startLocationService();
     BackgroundLocation.getLocationUpdates((location) {
       String locString = "latitude: " + location.latitude.toString() +
@@ -65,6 +78,7 @@ class PositionUtil {
       Toast.show(locString , context);
       print(locString);
       globalTempPos = Position(latitude:location.longitude, longitude:location.longitude);
+      mqttUtil.getSurroundingUserInfo("testdeviceName");
            // setState(() {
       //   this.latitude = location.latitude.toString();
       //   this.longitude = location.longitude.toString();
