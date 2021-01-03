@@ -45,8 +45,6 @@
     <string>This app needs access to location.</string>
     <key>NSLocationWhenInUseUsageDescription</key>
     <string>This app needs access to location.</string>
-    <key>io.flutter.embedded_views_preview</key>
-    <string>YES</string>
     <key>UIBackgroundModes</key>
     <array>
     	<string>fetch</string>
