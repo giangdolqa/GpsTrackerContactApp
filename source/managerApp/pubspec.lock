@@ -79,7 +79,7 @@ packages:
     source: hosted
     version: "2.1.1"
   crypto:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: crypto
       url: "https://pub.flutter-io.cn"
@@ -92,6 +92,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.1.3"
+  date_format:
+    dependency: "direct main"
+    description:
+      name: date_format
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.9"
   dio:
     dependency: "direct main"
     description:
@@ -160,11 +167,25 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.11"
+  flutter_polyline_points:
+    dependency: "direct main"
+    description:
+      name: flutter_polyline_points
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.2.4"
   flutter_test:
     dependency: "direct dev"
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_volume_slider:
+    dependency: "direct main"
+    description:
+      name: flutter_volume_slider
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.6"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -191,6 +212,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.4"
+  google_maps_controller:
+    dependency: "direct main"
+    description:
+      name: google_maps_controller
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.1.0"
   google_maps_flutter:
     dependency: "direct main"
     description:
@@ -205,6 +233,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.5"
+  http:
+    dependency: "direct main"
+    description:
+      name: http
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.12.2"
   http_parser:
     dependency: transitive
     description:
@@ -261,6 +296,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "8.1.0"
+  nested:
+    dependency: transitive
+    description:
+      name: nested
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.0.4"
   path:
     dependency: transitive
     description:
@@ -303,6 +345,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.0.4+3"
+  pedantic:
+    dependency: transitive
+    description:
+      name: pedantic
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.9.2"
   permission_handler:
     dependency: "direct main"
     description:
@@ -352,6 +401,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.0.13"
+  provider:
+    dependency: transitive
+    description:
+      name: provider
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "4.3.2+3"
   shared_preferences:
     dependency: "direct main"
     description:

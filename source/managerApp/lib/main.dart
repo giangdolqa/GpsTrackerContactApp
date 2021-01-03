@@ -63,14 +63,15 @@ class TrackerAppState extends State<TrackerApp> {
     return MaterialApp(
       title: 'GPSTracker',
       debugShowCheckedModeBanner: true,
-      home: LoginView(),
+      home: HomeView(),
       theme: ThemeData(
         brightness: Brightness.light,
         primarySwatch: Colors.blue,
       ),
       routes: <String, WidgetBuilder>{
         'Login': (BuildContext context) => LoginView(),
-        'Register': (BuildContext context) => RegisterView(),
+        'Register': (BuildContext context) => RegisterView.nextViewPath("TwiceCheck"),  // 2段階認証に値渡し
+        //'TwiceCheck': (BuildContext context) => TwiceCheckView(),  // 2段階認証
         'Home': (BuildContext context) => HomeView(),
       },
     );
