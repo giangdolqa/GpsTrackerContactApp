@@ -59,4 +59,23 @@ class SharedPreUtil {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     return sharedPreferences.getString("ServerFCMToken");
   }
+
+  Future SaveUsername(String inputPhoneNum) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    bool bRslt = await sharedPreferences.setString("UserName", inputPhoneNum);
+  }
+
+  Future GetUsername() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    return sharedPreferences.getString("UserName");
+  }
+  Future SavePassword(String inputPhoneNum) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    bool bRslt = await sharedPreferences.setString("Password", inputPhoneNum);
+  }
+
+  Future GetPassword() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    return sharedPreferences.getString("Password");
+  }
 }

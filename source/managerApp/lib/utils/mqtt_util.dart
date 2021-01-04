@@ -47,6 +47,14 @@ class MqttUtil {
     /// from the broker.
     client.pongCallback = pong;
 
+    _initConn(); // 接続初期化(非同期
+  }
+
+  // 接続初期化(非同期
+  void _initConn() async {
+    String username = await spUtil.GetUsername();
+    String password = await spUtil.GetPassword();
+
     /// Create a connection message to use or use the default one. The default one sets the
     /// client identifier, any supplied username/password, the default keepalive interval(60s)
     /// and clean session, an example of a specific one below.
@@ -56,6 +64,7 @@ class MqttUtil {
         .withWillTopic(
             'willtopic') // If you set this you must set a will message
         .withWillMessage('My Will message')
+        .authenticateAs(username, password)
         .startClean() // Non persistent session for testing
         .withWillQos(MqttQos.atLeastOnce);
     print('EXAMPLE::Mosquitto client connecting....');
@@ -97,14 +106,13 @@ class MqttUtil {
 
   // 緯度経度がデバイスから配信
   getPosistionByDeviceName(String deviceName) {
-
     String topic1 = deviceName + "/#";
     client.subscribe(topic1, MqttQos.exactlyOnce);
 
     client.updates.listen((dynamic c) {
       final MqttPublishMessage recMess = c[0].payload;
       final pt =
-      MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+          MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
       NormalInfo pi;
       pi.jsonToUserinfo(pt, null);
       eventBus.fire(pi);
@@ -120,67 +128,98 @@ class MqttUtil {
 
     // スマートフォンでは、自分の緯度経度から前後10秒の緯度経度の配信を購読できるようにする。
     // 	+/emg/10秒単位の緯度/10秒単位の経度
+    // TopicList作成
+    List<Map> latlngList = [];
 
     String latitude = latitudeIn10Secs.toString();
     String longitude = longitudeIn10Secs.toString();
-    String topic1 = deviceName + "/emg/" + latitude + "/" + longitude;
-    client.subscribe(topic1, MqttQos.exactlyOnce);
+    Map latlngMap = {
+      "latitude": latitude,
+      "longitude": longitude,
+    };
+    latlngList.add(latlngMap);
 
     // 	+/emg/10秒単位の緯度/10秒単位の経度-1
     latitude = latitudeIn10Secs.toString();
     longitude = (longitudeIn10Secs - 1).toString();
-    String topic2 =
-        deviceName + "/emg/" + latitude.toString() + "/" + longitude;
-    client.subscribe(topic2, MqttQos.exactlyOnce);
+    latlngMap = {
+      "latitude": latitude,
+      "longitude": longitude,
+    };
+    latlngList.add(latlngMap);
 
     // 	+/emg/10秒単位の緯度/10秒単位の経度+1
     latitude = latitudeIn10Secs.toString();
     longitude = (longitudeIn10Secs + 1).toString();
-    String topic3 =
-        deviceName + "/emg/" + latitude.toString() + "/" + longitude;
-    client.subscribe(topic3, MqttQos.exactlyOnce);
+    latlngMap = {
+      "latitude": latitude,
+      "longitude": longitude,
+    };
+    latlngList.add(latlngMap);
 
     // 	+/emg/10秒単位の緯度-1/10秒単位の経度
     latitude = latitudeIn10Secs.toString();
     longitude = (longitudeIn10Secs - 1).toString();
-    String topic4 =
-        deviceName + "/emg/" + latitude.toString() + "/" + longitude;
-    client.subscribe(topic4, MqttQos.exactlyOnce);
+    latlngMap = {
+      "latitude": latitude,
+      "longitude": longitude,
+    };
+    latlngList.add(latlngMap);
 
     // 	+/emg/10秒単位の緯度-1/10秒単位の経度-1
     latitude = (latitudeIn10Secs - 1).toString();
     longitude = (longitudeIn10Secs - 1).toString();
-    String topic5 =
-        deviceName + "/emg/" + latitude.toString() + "/" + longitude;
-    client.subscribe(topic5, MqttQos.exactlyOnce);
+    latlngMap = {
+      "latitude": latitude,
+      "longitude": longitude,
+    };
+    latlngList.add(latlngMap);
 
     // 	+/emg/10秒単位の緯度-1/10秒単位の経度+1
     latitude = (latitudeIn10Secs - 1).toString();
     longitude = (longitudeIn10Secs + 1).toString();
-    String topic6 =
-        deviceName + "/emg/" + latitude.toString() + "/" + longitude;
-    client.subscribe(topic6, MqttQos.exactlyOnce);
+    latlngMap = {
+      "latitude": latitude,
+      "longitude": longitude,
+    };
+    latlngList.add(latlngMap);
 
     // 	+/emg/10秒単位の緯度+1/10秒単位の経度
     latitude = (latitudeIn10Secs + 1).toString();
     longitude = (longitudeIn10Secs).toString();
-    String topic7 =
-        deviceName + "/emg/" + latitude.toString() + "/" + longitude;
-    client.subscribe(topic7, MqttQos.exactlyOnce);
+    latlngMap = {
+      "latitude": latitude,
+      "longitude": longitude,
+    };
+    latlngList.add(latlngMap);
 
     // 	+/emg/10秒単位の緯度+1/10秒単位の経度-1
     latitude = (latitudeIn10Secs + 1).toString();
     longitude = (longitudeIn10Secs - 1).toString();
-    String topic8 =
-        deviceName + "/emg/" + latitude.toString() + "/" + longitude;
-    client.subscribe(topic8, MqttQos.exactlyOnce);
+    latlngMap = {
+      "latitude": latitude,
+      "longitude": longitude,
+    };
+    latlngList.add(latlngMap);
 
     // 	+/emg/10秒単位の緯度+1/10秒単位の経度+1
     latitude = (latitudeIn10Secs + 1).toString();
     longitude = (longitudeIn10Secs + 1).toString();
-    String topic9 =
-        deviceName + "/emg/" + latitude.toString() + "/" + longitude;
-    client.subscribe(topic9, MqttQos.exactlyOnce);
+    latlngMap = {
+      "latitude": latitude,
+      "longitude": longitude,
+    };
+    latlngList.add(latlngMap);
+
+    // 購読実行
+    latlngList.forEach((latlngMapItem) {
+      String topic = deviceName +
+          "/emg/" +
+          latlngMapItem["latitude"] +
+          "/" +
+          latlngMapItem["longitude"];
+      client.subscribe(topic, MqttQos.exactlyOnce);
+    });
 
     client.updates.listen((dynamic c) {
       final MqttPublishMessage recMess = c[0].payload;
