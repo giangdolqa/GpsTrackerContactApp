@@ -11,8 +11,9 @@
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <!--        android:name="io.flutter.app.FlutterApplication"-->
     <application
-        android:name="io.flutter.app.FlutterApplication"
+        android:name="android.support.multidex.MultiDexApplication"
         android:label="gps_tracker"
         android:icon="@mipmap/launcher_icon">
         <activity
