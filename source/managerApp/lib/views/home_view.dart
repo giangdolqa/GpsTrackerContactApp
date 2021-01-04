@@ -259,13 +259,9 @@ class HomeViewState extends State<HomeView>
     switch (selectedVal) {
       case "home":
       // ホーム画面へ遷移
-        NormalInfo ni = new NormalInfo();
-        ni.latitude = 35.69;
-        ni.longitude = 139.69;
-        _addNormalMarkers([ni]);
         break;
       case "setting":
-        mqttUtil.getSurroundingUserInfo("deviceName");
+        Navigator.of(context).pushNamed('Setting');
         // 設定画面へ遷移
         break;
       case "read":

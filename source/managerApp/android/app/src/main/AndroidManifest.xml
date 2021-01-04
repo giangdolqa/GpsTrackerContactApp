@@ -13,7 +13,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <!--        android:name="io.flutter.app.FlutterApplication"-->
     <application
-        android:name="android.support.multidex.MultiDexApplication"
+        android:name="io.flutter.app.FlutterApplication"
         android:label="gps_tracker"
         android:icon="@mipmap/launcher_icon">
         <activity

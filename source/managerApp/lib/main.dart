@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:gps_tracker/views/login_view.dart';
 import 'package:gps_tracker/views/register_view.dart';
 import 'package:gps_tracker/views/home_view.dart';
+import 'package:gps_tracker/views/gpstracker_setting_view.dart';
 
 void main() => runApp(
     TrackerApp());
@@ -63,7 +64,7 @@ class TrackerAppState extends State<TrackerApp> {
     return MaterialApp(
       title: 'GPSTracker',
       debugShowCheckedModeBanner: true,
-      home: HomeView(),
+      home: LoginView(),
       theme: ThemeData(
         brightness: Brightness.light,
         primarySwatch: Colors.blue,
@@ -73,6 +74,7 @@ class TrackerAppState extends State<TrackerApp> {
         'Register': (BuildContext context) => RegisterView.nextViewPath("TwiceCheck"),  // 2段階認証に値渡し
         //'TwiceCheck': (BuildContext context) => TwiceCheckView(),  // 2段階認証
         'Home': (BuildContext context) => HomeView(),
+        'Setting' : (BuildContext context) => GpsTrackerSettingView(),
       },
     );
   }
