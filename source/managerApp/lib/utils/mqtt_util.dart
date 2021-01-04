@@ -6,10 +6,13 @@ import 'dart:io';
 import 'package:date_format/date_format.dart';
 import 'package:dio/dio.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:gps_tracker/beans/normal_info.dart';
+import 'package:gps_tracker/beans/alarm_info.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'event_util.dart';
 import 'position_util.dart';
 import 'shared_pre_util.dart';
 
@@ -92,7 +95,23 @@ class MqttUtil {
     client.subscribe(topic, MqttQos.exactlyOnce);
   }
 
-  // 周辺情報を取得
+  // 緯度経度がデバイスから配信
+  getPosistionByDeviceName(String deviceName) {
+
+    String topic1 = deviceName + "/#";
+    client.subscribe(topic1, MqttQos.exactlyOnce);
+
+    client.updates.listen((dynamic c) {
+      final MqttPublishMessage recMess = c[0].payload;
+      final pt =
+      MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+      NormalInfo pi;
+      pi.jsonToUserinfo(pt, null);
+      eventBus.fire(pi);
+    });
+  }
+
+  // 緊急通知取得
   getSurroundingUserInfo(String deviceName) {
     // final builder = MqttClientPayloadBuilder();
     // builder.addString('Hello from mqtt_client');
@@ -167,9 +186,11 @@ class MqttUtil {
       final MqttPublishMessage recMess = c[0].payload;
       final pt =
           MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+      AlarmInfo ui;
+      ui.jsonToUserinfo(pt, null);
+      eventBus.fire(ui);
       print(
           'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
-      print('');
     });
   }
 }
