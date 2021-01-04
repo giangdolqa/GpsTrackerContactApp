@@ -54,5 +54,9 @@
     </array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+    <string>Bluetoothにアクセスし、デバイス接続、データ通信サービスを行います。</string>
+    <key>NSBluetoothPeripheralUsageDescription</key>
+    <string>Bluetoothにアクセスし、デバイス接続、データ通信サービスを行います。</string>
 </dict>
 </plist>
