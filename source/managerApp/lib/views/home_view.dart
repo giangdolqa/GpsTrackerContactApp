@@ -13,6 +13,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_controller/google_maps_controller.dart';
+import 'package:gps_tracker/beans/normal_info.dart';
+import 'package:gps_tracker/beans/alarm_info.dart';
+import 'package:gps_tracker/utils/event_util.dart';
 import 'package:marquee/marquee.dart';
 import 'package:toast/toast.dart';
 
@@ -46,6 +49,33 @@ class HomeViewState extends State<HomeView>
 
   String alarmText = '';
 
+  // 画面初期化
+  @override
+  void initState() {
+    super.initState();
+    // 位置情報取得開始
+    positionUtil.getPermissions(context);
+    positionUtil.startListen(context);
+
+    // 緊急通知処理登録
+    eventBus.on<AlarmInfo>().listen((event) {
+      if (mounted) {
+        List<Position> alarmList =[];
+        alarmList.add(event.position);
+        _addAlarmMarkers(alarmList);
+      }
+    });
+    // 一般通知処理登録
+    eventBus.on<NormalInfo>().listen((event) {
+      if (mounted) {
+        List<NormalInfo> normalInfoList =[];
+        normalInfoList.add(event);
+        _addNormalMarkers(normalInfoList);
+      }
+    });
+  }
+
+  // 画面破棄
   @override
   void dispose() {
     // tabController.dispose();
@@ -76,8 +106,8 @@ class HomeViewState extends State<HomeView>
   bool sliderVisible = false;
 
   // 緊急マーカ作成＆表示
-  _createAlarmMarkers(List<Position> positions) async {
-    alarmMarkerIds.clear();
+  _addAlarmMarkers(List<Position> positions) async {
+    // alarmMarkerIds.clear();
     BitmapDescriptor markerIcon = await BitmapDescriptor.fromAssetImage(
         ImageConfiguration(size: Size(20, 20)), 'assets/icon/help.png');
     Position currentLocation = await geolocator.getCurrentPosition();
@@ -102,8 +132,8 @@ class HomeViewState extends State<HomeView>
   }
 
   // 通常マーカ作成＆表示
-  _createNormalMarkers(List<Position> positions) async {
-    normalMarkerIds.clear();
+  _addNormalMarkers(List<NormalInfo> positions) async {
+    // normalMarkerIds.clear();
     BitmapDescriptor markerIcon = await BitmapDescriptor.fromAssetImage(
         ImageConfiguration(size: Size(20, 20)), 'assets/icon/position.png');
     positions.forEach((position) {
@@ -115,8 +145,8 @@ class HomeViewState extends State<HomeView>
         anchor: Offset(0.5, 0.5),
         position: LatLng(position.latitude, position.longitude),
         infoWindow: InfoWindow(
-          title: '鈴木　太郎',
-          snippet: '36.3°C / 22%',
+          title: position.name,
+          snippet: position.description,
         ),
       );
       normalMarkerIds.add(markerId);
@@ -212,60 +242,22 @@ class HomeViewState extends State<HomeView>
   void _onActionMenuSelect(String selectedVal) {
     switch (selectedVal) {
       case "home":
-        // 単体試験S
-        positionUtil.getPermissions(context);
-        positionUtil.startListen(context);
-        Toast.show("ホーム", context);
-        // 単体試験E
+        // ホーム画面へ遷移
         break;
       case "setting":
-        // 単体試験S
-        Toast.show("設定", context);
-        setState(() {
-          alarmText = '近くで10歳の男性が助けを求めています.';
-        });
-        // 単体試験E
+        // 設定画面へ遷移
         break;
       case "read":
-        // 単体試験S
-        _mapTest();
-        Toast.show("読み込み", context);
-        // 単体試験E
+        // 読み込み処理
         break;
       case "contact":
-        Toast.show("接触確認", context);
+        // 接触確認処理
         break;
       default:
         // do nothing
-        Toast.show("Unexpected action", context);
         break;
     }
     return;
-  }
-
-  // マップ機能試験コード
-  _mapTest() {
-    _createRoute(Position(latitude: 38.8398759, longitude: 121.5053832),
-        Position(latitude: 38.8348559, longitude: 121.5023432));
-
-    _createAlarmMarkers([
-      Position(latitude: 38.8468259, longitude: 121.5073832),
-      Position(latitude: 38.8348559, longitude: 121.5023732)
-    ]);
-
-    _createNormalMarkers([
-      Position(latitude: 38.8495259, longitude: 121.5033732),
-      Position(latitude: 38.8348459, longitude: 121.5043432)
-    ]).then(() {
-      normalMarkerIds.forEach((markerId) {
-        googleMapController.showMarkerInfoWindow(markerId);
-      });
-    });
-
-    // sleep(Duration(seconds: 1));
-    // normalMarkerIds.forEach((markerId) {
-    //   googleMapController.showMarkerInfoWindow(markerId);
-    // });
   }
 
   _showVolumeSlider() {
