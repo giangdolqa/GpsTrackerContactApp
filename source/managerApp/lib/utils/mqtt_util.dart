@@ -106,8 +106,8 @@ class MqttUtil {
 
   // 緯度経度がデバイスから配信
   getPosistionByDeviceName(String deviceName) {
-    String topic1 = deviceName + "/#";
-    client.subscribe(topic1, MqttQos.exactlyOnce);
+    String topic = deviceName + "/#";
+    client.subscribe(topic, MqttQos.exactlyOnce);
 
     client.updates.listen((dynamic c) {
       final MqttPublishMessage recMess = c[0].payload;
@@ -225,9 +225,9 @@ class MqttUtil {
       final MqttPublishMessage recMess = c[0].payload;
       final pt =
           MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
-      AlarmInfo ui;
-      ui.jsonToUserinfo(pt, null);
-      eventBus.fire(ui);
+      AlarmInfo ai = new AlarmInfo();
+      ai.jsonToUserinfo(pt, null);
+      eventBus.fire(ai);
       print(
           'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
     });

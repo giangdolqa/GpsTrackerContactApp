@@ -44,6 +44,8 @@ dependencies:
   crypto: ^2.1.5
   flutter_volume_slider: ^1.0.6
   flutter_blue: ^0.7.2
+  nuid: ^1.1.0
+  app_settings: 4.0.4
 
 
 flutter_icons:
@@ -74,6 +76,8 @@ flutter:
     - assets/icon/position.png
     - assets/icon/home.png
     - assets/icon/check.png
+    - assets/icon/GPS_icon.png
+    - assets/icon/dust.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

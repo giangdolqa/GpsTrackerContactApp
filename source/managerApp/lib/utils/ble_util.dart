@@ -1,4 +1,3 @@
-
 import 'dart:math';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'dart:async';
@@ -7,27 +6,22 @@ class ble_data_model {
   /*
   BLE_para demo
   */
-  FlutterBlue flutterBlue;
+  FlutterBlue flutterBlue = FlutterBlue.instance;
   BluetoothDevice device;
-  Map<String, ScanResult> scanResults;
-  List allBleNameAry;
+  Map<String, ScanResult> scanResults = new Map();
+  List allBleNameAry = new List();
   BluetoothCharacteristic mCharacteristic;
 }
 
 //ble_data_model
 ble_data_model model = new ble_data_model();
 
-void initBle() {
-  BluetoothDevice device;
-  Map<String, ScanResult> scanResults = new Map();
-  List allBleNameAry = [];
-  BluetoothCharacteristic mCharacteristic;
+Future<bool> getBlueToothState() async {
+  return await model.flutterBlue.isOn;
+}
 
-  model.flutterBlue = FlutterBlue.instance;
-  model.device = device;
-  model.scanResults = scanResults;
-  model.allBleNameAry = allBleNameAry;
-  model.mCharacteristic = mCharacteristic;
+Future<List<BluetoothDevice>> getConnectedDevices() async {
+  return await model.flutterBlue.connectedDevices;
 }
 
 void startBle() async {

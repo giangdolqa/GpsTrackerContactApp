@@ -17,6 +17,7 @@ import 'package:google_maps_controller/google_maps_controller.dart';
 import 'package:gps_tracker/beans/normal_info.dart';
 import 'package:gps_tracker/beans/alarm_info.dart';
 import 'package:gps_tracker/utils/event_util.dart';
+import 'package:gps_tracker/utils/nuid_util.dart';
 import 'package:marquee/marquee.dart';
 import 'package:toast/toast.dart';
 
@@ -100,14 +101,98 @@ class HomeViewState extends State<HomeView>
   PolylinePoints polylinePoints;
   List<LatLng> polylineCoordinates = [];
   Map<PolylineId, Polyline> polylines = {};
+  Map<MarkerId, Marker> markers = {};
   List<LatLng> markerCoordinates = [];
-  List<Marker> markers = [];
   List<Circle> circles = [];
   List<MarkerId> alarmMarkerIds = [];
   List<MarkerId> normalMarkerIds = [];
   Set<Marker> markersSet = Set();
   Set<Circle> circleSet = Set();
+  Map<MarkerId, String> messageMap = {};
   bool sliderVisible = false;
+
+  // 緊急メッセージ＆マーカー追加
+  void addAlarm(AlarmInfo ai) async {
+    // マーカー更新
+    MarkerId markerId = new MarkerId(nuid.next());
+    BitmapDescriptor markerIcon = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(size: Size(20, 20)), 'assets/icon/help.png');
+    Position currentLocation = await geolocator.getCurrentPosition();
+    Marker tmpMarker = Marker(
+      markerId: markerId,
+      // icon: Icon(Icons.location_pin),
+      icon: markerIcon,
+      anchor: Offset(0.5, 1),
+      onTap: () {
+        CameraUpdate cameraUpdate = CameraUpdate.newLatLng(LatLng(
+            currentLocation.latitude, currentLocation.longitude));
+        controller.moveCamera(cameraUpdate);
+        controller.zoomIn(animate: true);
+        _onMarkerTapped(markerId);
+      },
+      position: LatLng(ai.position.latitude, ai.position.longitude),
+    );
+    markers[markerId] = tmpMarker;
+
+    // メッセージ更新
+    String alarmMessage = _makeAlarmMessage(ai);
+    messageMap[markerId] = alarmMessage;
+
+
+    setState(() {
+      markersSet = markers.values;
+      alarmText = _concactAlarmMessage(messageMap.values);
+    });
+  }
+
+  String _makeAlarmMessage(AlarmInfo ai) {
+    String rsltString = "";
+    String age = ai.age.toString() + "歳の";
+    String gender = "";
+    switch (ai.sex) {
+      case 0:
+        gender = "人";
+        break;
+      case 1:
+        gender = "男性";
+        break;
+      case 2:
+        gender = "女性";
+        break;
+      default:
+        gender = "人";
+        break;
+    }
+    rsltString = "近くて"
+    + gender;
+    return rsltString;
+  }
+
+  String _concactAlarmMessage(List<String> messageList) {
+    String rsltString = "";
+    messageList.forEach((alarmMessage) {
+      if (rsltString.isEmpty) {
+        rsltString = alarmMessage;
+      }
+      else {
+        rsltString = rsltString + "      " + alarmMessage;
+      }
+    });
+    return rsltString;
+  }
+
+
+  // 緊急メッセージ＆マーカー削除
+  void deleteAlarm(String alarmMessage, Position alarmPosition) async {
+
+  }
+
+
+  // 押下した緊急マーカーを削除
+  _onMarkerTapped(MarkerId markerId) {
+    markers.remove(markerId);
+    messageMap.remove(markerId);
+  }
 
   // 緊急マーカ作成＆表示
   _addAlarmMarkers(List<Position> positions) async {
@@ -123,14 +208,19 @@ class HomeViewState extends State<HomeView>
         icon: markerIcon,
         anchor: Offset(0.5, 1),
         onTap: () {
-          _createRoute(currentLocation, position);
+          CameraUpdate cameraUpdate = CameraUpdate.newLatLng(LatLng(
+              currentLocation.latitude, currentLocation.longitude));
+          controller.moveCamera(cameraUpdate);
+          controller.zoomIn(animate: true);
+
+          _onMarkerTapped(markerId);
         },
         position: LatLng(position.latitude, position.longitude),
       );
       alarmMarkerIds.add(markerId);
-      markers.add(tmpMarker);
+      markers[markerId] = tmpMarker;
       this.setState(() {
-        markersSet = markers.toSet();
+        markersSet = markers.values;
       });
     });
   }
@@ -140,6 +230,7 @@ class HomeViewState extends State<HomeView>
     // normalMarkerIds.clear();
     BitmapDescriptor markerIcon = await BitmapDescriptor.fromAssetImage(
         ImageConfiguration(size: Size(5, 5)), 'assets/icon/position.png');
+    Position currentLocation = await geolocator.getCurrentPosition();
     positions.forEach((position) {
       MarkerId markerId = new MarkerId("n" + normalMarkerIds.length.toString());
       CircleId circleId = new CircleId("p" + normalMarkerIds.length.toString());
@@ -148,25 +239,29 @@ class HomeViewState extends State<HomeView>
         icon: markerIcon,
         anchor: Offset(0.5, 0.5),
         position: LatLng(position.latitude, position.longitude),
+        onTap: () {
+          _createRoute(currentLocation, Position(
+              latitude: position.latitude, longitude: position.longitude));
+        },
         infoWindow: InfoWindow(
           title: position.name,
           snippet: position.description,
         ),
       );
       normalMarkerIds.add(markerId);
-      markers.add(tmpMarker);
+      markers[markerId] = tmpMarker;
       Circle tempCircle = Circle(
         circleId: circleId,
         center: LatLng(position.latitude, position.longitude),
-        radius: 50,
+        radius: 2.5,
         fillColor: Colors.blue.withOpacity(0.3),
         strokeWidth: 0,
       );
       circles.add(tempCircle);
       this.setState(() {
-        markersSet = markers.toSet();
+        markersSet = markers.values;
         circleSet = circles.toSet();
-      });
+        });
     });
   }
 
@@ -514,6 +609,7 @@ class HomeViewState extends State<HomeView>
                           // color: Colors.amber,
                           padding: EdgeInsets.only(
                             right: 20,
+                            top: 3,
                           ),
                           height: 50,
                           child: IconButton(

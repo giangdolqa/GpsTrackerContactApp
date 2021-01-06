@@ -10,6 +10,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:gps_tracker/utils/http_util.dart';
 import 'package:gps_tracker/utils/mqtt_util.dart';
 import 'package:gps_tracker/utils/shared_pre_util.dart';
+import 'package:gps_tracker/utils/sound_util.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:popup_menu/popup_menu.dart';
 import 'package:toast/toast.dart';
@@ -55,19 +56,12 @@ class PositionUtil {
 
   // 位置通知サービス開始
   startListen(BuildContext context) async {
-    mqttUtil.client.connect("username", "password");
+    // mqttUtil.client.connect("username", "password");
     await BackgroundLocation.setAndroidNotification(
       title: "Background service is running",
       message: "Background location in progress",
       icon: "@mipmap/ic_launcher",
     );
-    // if (Platform.isAndroid) {
-    //   return await _channel.invokeMethod("set_configuration", <String, dynamic>{
-    //     "interval": 1000,
-    //   });
-    // } else {
-    //   //return Promise.resolve();
-    // }
     await BackgroundLocation.setAndroidConfiguration(interval: 1000);
     await BackgroundLocation.startLocationService();
     BackgroundLocation.getLocationUpdates((location) {
@@ -75,10 +69,11 @@ class PositionUtil {
           "   longitude: " +  location.longitude.toString()  +
           "   accuracy: " + location.accuracy.toString() +
           "   speed: " + location.speed.toString();
-      Toast.show(locString , context);
+      // Toast.show(locString , context);
       print(locString);
       globalTempPos = Position(latitude:location.longitude, longitude:location.longitude);
-      mqttUtil.getSurroundingUserInfo("testdeviceName");
+      // mqttUtil.getSurroundingUserInfo("testdeviceName");
+      // SoundUtil.playAssetSound(null);
            // setState(() {
       //   this.latitude = location.latitude.toString();
       //   this.longitude = location.longitude.toString();
