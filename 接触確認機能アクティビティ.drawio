@@ -1,6 +1,6 @@
-<mxfile host="65bd71144e" modified="2020-12-25T10:23:10.864Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.52.1 Chrome/83.0.4103.122 Electron/9.3.5 Safari/537.36" etag="KeebNZkNr6pTntr1mCrt" version="13.10.0" type="embed">
+<mxfile host="65bd71144e" modified="2021-01-05T07:47:01.923Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.52.1 Chrome/83.0.4103.122 Electron/9.3.5 Safari/537.36" etag="6f5ncCWINexqLa9bRM7x" version="13.10.0" type="embed">
     <diagram id="DdJUL3M6DKNvmyCcEmsZ" name="ページ1">
-        <mxGraphModel dx="1165" dy="779" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+        <mxGraphModel dx="1165" dy="523" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -66,7 +66,7 @@
                 <mxCell id="21" value="" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#ff0000;labelBackgroundColor=none;fontColor=#FFFFFF;align=left;" parent="1" vertex="1">
                     <mxGeometry x="180" y="1230" width="30" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="22" value="&lt;span style=&quot;vertical-align: sub&quot;&gt;BLE接続、RPI&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;,&lt;i&gt;j-1&lt;/i&gt;&lt;/sub&gt;+AEM&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;,&lt;i&gt;j-1&lt;/i&gt;&lt;/sub&gt;&lt;i style=&quot;font-size: 10px&quot;&gt;&amp;nbsp;or&amp;nbsp;&lt;/i&gt;RPI&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;,&lt;i&gt;j&lt;/i&gt;&lt;/sub&gt;+AEM&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;,&lt;i&gt;j&lt;/i&gt;&lt;/sub&gt;を受信&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" parent="1" vertex="1">
+                <mxCell id="22" value="&lt;span style=&quot;vertical-align: sub&quot;&gt;BLE接続、RPI&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;,&lt;i&gt;j-1&lt;/i&gt;&lt;/sub&gt;+AEM&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;,&lt;i&gt;j-1&lt;/i&gt;&lt;/sub&gt;&lt;i style=&quot;font-size: 10px&quot;&gt;&amp;nbsp;or&amp;nbsp;&lt;/i&gt;RPI&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;,&lt;i&gt;j&lt;/i&gt;&lt;/sub&gt;+AEM&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;,&lt;i&gt;j&lt;/i&gt;&lt;/sub&gt;をBLE広報&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" parent="1" vertex="1">
                     <mxGeometry x="52.5" y="1152" width="287.5" height="40" as="geometry"/>
                 </mxCell>
                 <mxCell id="32" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;verticalAlign=bottom;endArrow=open;endSize=8;strokeColor=#ff0000;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="9" target="13" edge="1">
@@ -146,13 +146,13 @@
                 <mxCell id="66" value="" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#ff0000;" parent="1" vertex="1">
                     <mxGeometry x="115" y="310" width="30" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="69" value="　セントラル&lt;br&gt;　RPI+AEMにつき４回広報する。" style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=25;verticalAlign=middle;align=left;labelBackgroundColor=none;fontColor=#000000;fillColor=none;" parent="1" vertex="1">
-                    <mxGeometry x="340" y="912" width="210" height="40" as="geometry"/>
+                <mxCell id="69" value="　セントラル&lt;br&gt;　RPI+AEMにつき４回スキャンする。" style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=25;verticalAlign=middle;align=left;labelBackgroundColor=none;fontColor=#000000;fillColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="340" y="912" width="230" height="40" as="geometry"/>
                 </mxCell>
                 <mxCell id="70" value="" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;fontColor=#FFFFFF;align=left;fillColor=none;dashed=1;" parent="1" vertex="1">
                     <mxGeometry x="40" y="862" width="280" height="108" as="geometry"/>
                 </mxCell>
-                <mxCell id="71" value="RPI&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;,&lt;i&gt;j-1&lt;/i&gt;&lt;/sub&gt;+AEM&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;,&lt;i&gt;j-1 or&amp;nbsp;&lt;/i&gt;&lt;/sub&gt;RPI&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;,&lt;i&gt;j&lt;/i&gt;&lt;/sub&gt;+AEM&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;,&lt;i&gt;j&lt;/i&gt;&lt;/sub&gt;をBLE広報" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" parent="1" vertex="1">
+                <mxCell id="71" value="RPI&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;,&lt;i&gt;j-1&lt;/i&gt;&lt;/sub&gt;+AEM&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;,&lt;i&gt;j-1 or&amp;nbsp;&lt;/i&gt;&lt;/sub&gt;RPI&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;,&lt;i&gt;j&lt;/i&gt;&lt;/sub&gt;+AEM&lt;sub&gt;&lt;i&gt;i&lt;/i&gt;,&lt;i&gt;j&lt;/i&gt;&lt;/sub&gt;をBLEスキャン" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" parent="1" vertex="1">
                     <mxGeometry x="55" y="912" width="255" height="40" as="geometry"/>
                 </mxCell>
                 <mxCell id="72" value="" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#ff0000;labelBackgroundColor=none;fontColor=#FFFFFF;align=left;" parent="1" vertex="1">
