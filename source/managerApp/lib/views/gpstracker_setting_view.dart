@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:gps_tracker/beans/device_info.dart';
+import 'package:gps_tracker/beans/setting_info.dart';
 import 'package:gps_tracker/utils/ble_util.dart';
 import 'package:gps_tracker/components/my_popup_menu.dart' as mypopup;
+import 'package:gps_tracker/views/device_setting_view.dart';
 
 import 'package:intl/intl.dart';
 
@@ -95,8 +97,8 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
                   height: 35,
                 ),
                 offset: Offset(0, 50),
-                itemBuilder: (_) => <mypopup.PopupMenuItem<String>>[
-                  new mypopup.PopupMenuItem<String>(
+                itemBuilder: (_) => <mypopup.PopupMenuItem<Map<String, DeviceInfo>>>[
+                  new mypopup.PopupMenuItem<Map<String, DeviceInfo>>(
                     child: Container(
                       height: double.infinity,
                       width: 120,
@@ -125,9 +127,9 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
                       ),
                     ),
                     color: Color(0x55c4c4c4),
-                    value: "setting",
+                    value: {"setting":device},
                   ),
-                  new mypopup.PopupMenuItem<String>(
+                  new mypopup.PopupMenuItem<Map<String, DeviceInfo>>(
                     child: Container(
                       height: double.infinity,
                       width: 120,
@@ -156,7 +158,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
                         ],
                       ),
                     ),
-                    value: "read",
+                    value: {"delete": device},
                   ),
                 ],
                 onSelected: _onActionMenuSelect,
@@ -175,20 +177,20 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
     });
   }
 
-  void _onActionMenuSelect(String selectedVal) {
-    switch (selectedVal) {
-      case "home":
-        // ホーム画面へ遷移
-        break;
+  void _onActionMenuSelect(Map<String, DeviceInfo> selectedVal) {
+    switch (selectedVal.keys.first) {
       case "setting":
-        Navigator.of(context).pushNamed('Setting');
+        SettingInfo temp = null;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DeviceSettingView(deviceInfo: selectedVal.values.first, settingInfo: temp),
+          ),
+        ).then((result) {});
         // 設定画面へ遷移
         break;
-      case "read":
-        // 読み込み処理
-        break;
-      case "contact":
-        // 接触確認処理
+      case "delete":
+        // 削除処理
         break;
       default:
         // do nothing
@@ -206,15 +208,79 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
           padding: EdgeInsets.all(5),
           child: Row(
             children: [
-              Container(
-                  width: 35,
-                  height: 35,
-                  // margin: EdgeInsets.fromLTRB(0, 64.0, 0, 0),
-                  child: InkWell(
-                      onTap: () {},
+              mypopup.PopupMenuButton(
                       child: Image(
                           image: AssetImage("assets/icon/GPS_icon.png"),
-                          fit: BoxFit.fill))),
+                  fit: BoxFit.fill,
+                  height: 35,
+                ),
+                offset: Offset(0, 50),
+                itemBuilder: (_) => <mypopup.PopupMenuItem<Map<String, DeviceInfo>>>[
+                  new mypopup.PopupMenuItem<Map<String, DeviceInfo>>(
+                    child: Container(
+                      height: double.infinity,
+                      width: 120,
+                      child: Row(
+                        children: [
+              Container(
+                            padding: EdgeInsets.only(left: 5, top: 5),
+                            child: Icon(
+                              Icons.settings,
+                              size: 30,
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              padding: EdgeInsets.only(left: 5, top: 5),
+                              child: Text(
+                                "設定",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                ),
+                              ),
+                              // alignment: Alignment.center,
+                                ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    color: Color(0x55c4c4c4),
+                    value: {"setting":device},
+                  ),
+                  new mypopup.PopupMenuItem<Map<String, DeviceInfo>>(
+                            child: Container(
+                      height: double.infinity,
+                      width: 120,
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.only(left: 5, top: 5),
+                            child: Image.asset(
+                              "assets/icon/dust.png",
+                              width: 30,
+                              height: 30,
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              padding: EdgeInsets.only(left: 5, top: 5),
+                              child: Text(
+                                "削除",
+                                style: TextStyle(
+                                  fontSize: 18,
+                              ),
+                              ),
+                              // alignment: Alignment.center,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    value: {"delete": device},
+                  ),
+                ],
+                onSelected: _onActionMenuSelect,
+              ),
               Container(
                 padding: EdgeInsets.only(left: 10),
                 child: Text(

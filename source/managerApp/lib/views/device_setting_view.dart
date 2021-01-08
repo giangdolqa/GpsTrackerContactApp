@@ -2,21 +2,29 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gps_tracker/beans/device_info.dart';
+import 'package:gps_tracker/beans/setting_info.dart';
 
 import 'package:intl/intl.dart';
 
 class DeviceSettingView extends StatefulWidget {
-  DeviceSettingView({Key key}) : super(key: key);
+  DeviceInfo deviceInfo;
+  SettingInfo settingInfo;
+
+  DeviceSettingView(
+      {Key key, @required this.deviceInfo, @required this.settingInfo})
+      : super(key: key);
 
   @override
   DeviceSettingViewState createState() => DeviceSettingViewState();
 }
 
 class DeviceSettingViewState extends State<DeviceSettingView> {
-  String deviceId = 'GPS1111';
+  String deviceId;
 
   bool _isCheck = false;
-  bool _flag = false;
+  bool _trackFlag = false;
+  bool _isAdultFlag = false;
   bool _keyVisible = true;
   int _minHumidity = 0;
   int _minInterval = 0;
@@ -27,7 +35,6 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
 
   //Controller
   final nameCtrlr = TextEditingController();
-  final birthdayCtrlr = TextEditingController();
   final humidityCtrlr = TextEditingController();
   final keyCtrlr = TextEditingController();
   final intervalCtrlr = TextEditingController();
@@ -42,25 +49,50 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
 
   // Validators
   bool _nameVld = false;
-  bool _birthdayVld = false;
   bool _humidityVld = false;
   bool _keyVld = false;
   bool _intervalVld = false;
   bool _codeVld = false;
 
+  //countdown
+  Timer _codeTimer;
+  int _countdownTime = 0;
+
   // GenderVal
   String dropdownValue;
+
+  @override
+  void initState() {
+    deviceId = widget.deviceInfo.id.toString();
+    if (widget.settingInfo != null) {
+      nameCtrlr.text = widget.settingInfo.name;
+      humidityCtrlr.text = widget.settingInfo.humidity.toString();
+      keyCtrlr.text = widget.settingInfo.key;
+      intervalCtrlr.text = widget.settingInfo.interval.toString();
+      codeCtrlr.text = widget.settingInfo.code;
+      bool temp = _isAdult(widget.settingInfo.birthday);
+      String gender = _GetGenderString(widget.settingInfo.gender, temp);
+      setState(() {
+        selectedDate = widget.settingInfo.birthday;
+        _trackFlag = widget.settingInfo.trackFlag;
+        _isAdultFlag = temp;
+        dropdownValue = gender;
+      });
+    }
+  }
 
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
     nameCtrlr.dispose();
-    birthdayCtrlr.dispose();
     humidityCtrlr.dispose();
     keyCtrlr.dispose();
     intervalCtrlr.dispose();
     codeCtrlr.dispose();
     super.dispose();
+    if (_codeTimer != null) {
+      _codeTimer.cancel();
+    }
   }
 
   void unfocusAll() {
@@ -71,34 +103,98 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
     _codeFocus.unfocus();
   }
 
+  void startCountdownTimer() {
+    const oneSec = const Duration(seconds: 1);
+    var callback = (timer) => {
+          setState(() {
+            if (_countdownTime < 1) {
+              _codeTimer.cancel();
+            } else {
+              _countdownTime = _countdownTime - 1;
+            }
+          })
+        };
+    _codeTimer = Timer.periodic(oneSec, callback);
+  }
+
+  bool _isAdult(DateTime dateTime) {
+    DateTime nowDate = DateTime.now();
+    var difference = nowDate.difference(dateTime);
+    if (difference.inDays > 4745) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   // Get Gender
   int _GetGender() {
     int rlst = 0;
-    if (dropdownValue == '男の子') {
-      rlst = 1; // Male
-    } else if (dropdownValue == '女の子') {
-      rlst = 2; // Female
-    } else if (dropdownValue == '答えない') {
-      rlst = 3; // Other
-    } else {
-      rlst = 0; // Unknown
+    switch (dropdownValue) {
+      case '男の子':
+      case '男性':
+        rlst = 1;
+        break;
+      case '女の子':
+      case '女性':
+        rlst = 2;
+        break;
+      case '答えない':
+        rlst = 3;
+        break;
+      default:
+        rlst = 0;
+        break;
+    }
+    return rlst;
+  }
+
+  String _GetGenderString(int gender, bool isAdult) {
+    String rlst = "";
+    switch (gender) {
+      case 1:
+        if (isAdult) {
+          rlst = '男性';
+        } else {
+          rlst = '男の子';
+        }
+        break;
+      case 2:
+        if (isAdult) {
+          rlst = '女性';
+        } else {
+          rlst = '女の子';
+        }
+        break;
+      default:
+        rlst = '答えない';
+        break;
     }
     return rlst;
   }
 
   Future<void> _selectDate() async {
     unfocusAll();
+    DateTime nowDate = DateTime.now();
     final DateTime date = await showDatePicker(
       context: context,
       initialDate: selectedDate,
-      firstDate: selectedDate.subtract(new Duration(days: 7300)),
-      lastDate: selectedDate,
+      firstDate: nowDate.subtract(new Duration(days: 7300)),
+      lastDate: nowDate,
     );
 
     if (date == null) return;
 
+    bool temp = _isAdult(date);
+    if (temp) {
+      dropdownValue = dropdownValue.replaceAll('の子', '性');
+    } else {
+      dropdownValue = dropdownValue.replaceAll('性', 'の子');
+    }
+
     setState(() {
       selectedDate = date;
+      _isAdultFlag = temp;
     });
   }
 
@@ -159,236 +255,217 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
   }
 
   Future<void> _getCode(BuildContext context) async {
-    unfocusAll();
+    if (_countdownTime == 0) {
+      unfocusAll();
+      setState(() {
+        _countdownTime = 30;
+      });
+      startCountdownTimer();
+    } else {
+      return null;
+    }
   }
 
-  Future<void> _registerSubmit(BuildContext context) async {
+  void _settingSubmit() {
     unfocusAll();
     setState(() {
       nameCtrlr.text.isEmpty ? _nameVld = true : _nameVld = false;
-      birthdayCtrlr.text.isEmpty ? _birthdayVld = true : _birthdayVld = false;
       humidityCtrlr.text.isEmpty ? _humidityVld = true : _humidityVld = false;
       keyCtrlr.text.isEmpty ? _keyVld = true : _keyVld = false;
       intervalCtrlr.text.isEmpty ? _intervalVld = true : _intervalVld = false;
       codeCtrlr.text.isEmpty ? _codeVld = true : _codeVld = false;
     });
     // Validate
-    if (_nameVld ||
-        _birthdayVld ||
-        _humidityVld ||
-        _keyVld ||
-        _intervalVld ||
-        _codeVld) {
+    if (_nameVld || _humidityVld || _keyVld || _intervalVld || _codeVld) {
       // return if input not validated
       return;
     }
     int _gender = _GetGender();
+
+    SettingInfo result = new SettingInfo();
+    result.name = nameCtrlr.text;
+    result.gender = _gender;
+    result.birthday = selectedDate;
+    result.humidity = int.parse(humidityCtrlr.text);
+    result.key = keyCtrlr.text;
+    result.interval = int.parse(intervalCtrlr.text);
+    result.trackFlag = _trackFlag;
+    result.code = codeCtrlr.text;
+    Navigator.of(context).pop(result);
   }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-//      onWillPop: () async {
-//        return false;
-//      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(deviceId + 'の設定'),
-          elevation: 15,
-        ),
-        body: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 24.0),
-          children: <Widget>[
-            // 名前
-            Container(
-              padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    child: Text(
-                      '名前',
-                      style: TextStyle(
-                        inherit: true,
-                        color: Colors.black,
-                        fontSize: 20.0,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(deviceId + 'の設定'),
+        elevation: 15,
+      ),
+      body: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 24.0),
+        children: <Widget>[
+          // 名前
+          Container(
+            padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  child: Text(
+                    '名前',
+                    style: TextStyle(
+                      inherit: true,
+                      color: Colors.black,
+                      fontSize: 20.0,
 //                        fontWeight: FontWeight.bold,
-                        textBaseline: TextBaseline.alphabetic,
-                      ),
+                      textBaseline: TextBaseline.alphabetic,
                     ),
                   ),
-                  SizedBox(width: 20.0),
-                  Expanded(
-                    child: TextField(
+                ),
+                SizedBox(width: 20.0),
+                Expanded(
+                  child: TextField(
 //                      maxLength: 30,
 //                      inputFormatters: [InputFormatUtil.OnlyEnglishAndNumber, LengthLimitingTextInputFormatter(50)],
-                      controller: nameCtrlr,
-                      focusNode: _nameFocus,
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 0.0, horizontal: 15.0),
-                        border: OutlineInputBorder(),
-                        errorText: _nameVld ? '名前を入力してください' : null,
-                      ),
+                    controller: nameCtrlr,
+                    focusNode: _nameFocus,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 0.0, horizontal: 15.0),
+                      border: OutlineInputBorder(),
+                      errorText: _nameVld ? '名前を入力してください' : null,
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            // 性別
-            Container(
-              padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    child: Text(
-                      '性別',
-                      style: TextStyle(
-                        inherit: true,
+          ),
+          // 性別
+          Container(
+            padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  child: Text(
+                    '性別',
+                    style: TextStyle(
+                      inherit: true,
 //                        fontFamily: 'Arial Black',
 //                        color: Colors.black,
-                        fontSize: 20.0,
+                      fontSize: 20.0,
 //                          wordSpacing: 10,
-                        textBaseline: TextBaseline.alphabetic,
-                      ),
+                      textBaseline: TextBaseline.alphabetic,
                     ),
                   ),
-                  SizedBox(width: 20.0),
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                      padding: EdgeInsets.only(left: 15.0),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black26, width: 1),
-                        borderRadius: BorderRadius.vertical(
-                            top: Radius.elliptical(4, 4),
-                            bottom: Radius.elliptical(4, 4)),
-                      ),
-                      child: DropdownButton<String>(
-                        isExpanded: true,
-                        value: dropdownValue,
-                        icon: Icon(Icons.keyboard_arrow_down),
-                        iconSize: 24,
-                        elevation: 16,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20.0,
-                        ),
-                        onChanged: (newValue) {
-                          unfocusAll();
-                          setState(() {
-                            dropdownValue = newValue;
-                          });
-                        },
-                        underline: Container(color: Colors.transparent),
-                        items: <String>[
-                          '男の子',
-                          '女の子',
-                          '答えない',
-                        ].map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      ),
+                ),
+                SizedBox(width: 20.0),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    padding: EdgeInsets.only(left: 15.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black26, width: 1),
+                      borderRadius: BorderRadius.vertical(
+                          top: Radius.elliptical(4, 4),
+                          bottom: Radius.elliptical(4, 4)),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            // 生年月日
-            Container(
-              padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    child: Text(
-                      '生年月日',
+                    child: DropdownButton<String>(
+                      isExpanded: true,
+                      value: dropdownValue,
+                      icon: Icon(Icons.keyboard_arrow_down),
+                      iconSize: 24,
+                      elevation: 16,
                       style: TextStyle(
-                        inherit: true,
                         color: Colors.black,
                         fontSize: 20.0,
-//                        fontWeight: FontWeight.bold,
-                        textBaseline: TextBaseline.alphabetic,
                       ),
+                      onChanged: (newValue) {
+                        unfocusAll();
+                        setState(() {
+                          dropdownValue = newValue;
+                        });
+                      },
+                      underline: Container(color: Colors.transparent),
+                      items: <String>[
+                        _isAdultFlag ? '男性' : '男の子',
+                        _isAdultFlag ? '女性' : '女の子',
+                        '答えない',
+                      ].map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
                     ),
                   ),
-                  SizedBox(width: 20.0),
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black26, width: 1),
-                        borderRadius: BorderRadius.vertical(
-                            top: Radius.elliptical(4, 4),
-                            bottom: Radius.elliptical(4, 4)),
-                      ),
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 15.0, vertical: 12.0),
-                      child: InkWell(
-                        onTap: _selectDate,
-                        child: Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: Text(
-                                DateFormat('yyyy-MM-dd').format(selectedDate),
-                                style: TextStyle(
-                                  fontSize: 20,
-                                ),
+                ),
+              ],
+            ),
+          ),
+          // 生年月日
+          Container(
+            padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  child: Text(
+                    '生年月日',
+                    style: TextStyle(
+                      inherit: true,
+                      color: Colors.black,
+                      fontSize: 20.0,
+//                        fontWeight: FontWeight.bold,
+                      textBaseline: TextBaseline.alphabetic,
+                    ),
+                  ),
+                ),
+                SizedBox(width: 20.0),
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black26, width: 1),
+                      borderRadius: BorderRadius.vertical(
+                          top: Radius.elliptical(4, 4),
+                          bottom: Radius.elliptical(4, 4)),
+                    ),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 15.0, vertical: 12.0),
+                    child: InkWell(
+                      onTap: _selectDate,
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Text(
+                              DateFormat('yyyy-MM-dd').format(selectedDate),
+                              style: TextStyle(
+                                fontSize: 20,
                               ),
                             ),
-                            Icon(Icons.calendar_today),
-                          ],
-                        ),
+                          ),
+                          Icon(Icons.calendar_today),
+                        ],
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            // アラート湿度
-            Container(
-              padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    child: Text(
-                      'アラート湿度',
-                      style: TextStyle(
-                        inherit: true,
-                        color: Colors.black,
-                        fontSize: 20.0,
-//                        fontWeight: FontWeight.bold,
-                        textBaseline: TextBaseline.alphabetic,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 20.0),
-                  Expanded(
-                    child: TextField(
-//                      maxLength: 30,
-//                      inputFormatters: [InputFormatUtil.OnlyEnglishAndNumber, LengthLimitingTextInputFormatter(50)],
-                      keyboardType: TextInputType.number,
-                      controller: humidityCtrlr,
-                      focusNode: _humidityFocus,
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 0.0, horizontal: 15.0),
-                        border: OutlineInputBorder(),
-                        errorText: _humidityVld ? 'アラート湿度を入力してください' : null,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 20.0),
-                  Text(
-                    '%',
+          ),
+          // アラート湿度
+          Container(
+            padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  child: Text(
+                    'アラート湿度',
                     style: TextStyle(
                       inherit: true,
                       color: Colors.black,
@@ -397,163 +474,141 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
                       textBaseline: TextBaseline.alphabetic,
                     ),
                   ),
-                  SizedBox(width: 20.0),
-                  Container(
-                    width: 40.0,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black, width: 1),
-                      borderRadius: BorderRadius.horizontal(
-                          left: Radius.elliptical(10, 10),
-                          right: Radius.elliptical(0, 0)),
-                      color: Colors.grey[500],
-                    ),
-                    child: IconButton(
-                      onPressed: () {
-                        _addHumidity();
-                      },
-                      color: Colors.white,
-                      icon: Icon(Icons.arrow_drop_up),
-                    ),
-                  ),
-                  Container(
-                    width: 40.0,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black, width: 1),
-                      borderRadius: BorderRadius.horizontal(
-                          left: Radius.elliptical(0, 0),
-                          right: Radius.elliptical(10, 10)),
-                      color: Colors.grey[500],
-                    ),
-                    child: IconButton(
-                      onPressed: () {
-                        _subtractHumidity();
-                      },
-                      color: Colors.white,
-                      icon: Icon(Icons.arrow_drop_down),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            // キーラベル
-            Container(
-              padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    child: Text(
-                      'キー',
-                      style: TextStyle(
-                        inherit: true,
-                        color: Colors.black,
-                        fontSize: 20.0,
-//                        fontWeight: FontWeight.bold,
-                        textBaseline: TextBaseline.alphabetic,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            // キー入力
-            Container(
-              padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Expanded(
-                    child: TextField(
+                ),
+                SizedBox(width: 20.0),
+                Expanded(
+                  child: TextField(
 //                      maxLength: 30,
 //                      inputFormatters: [InputFormatUtil.OnlyEnglishAndNumber, LengthLimitingTextInputFormatter(50)],
-                      controller: keyCtrlr,
-                      focusNode: _keyFocus,
-                      obscureText: _keyVisible,
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 0.0, horizontal: 15.0),
-                        border: OutlineInputBorder(),
-                        errorText: _nameVld ? '名前を入力してください' : null,
-                      ),
+                    keyboardType: TextInputType.number,
+                    controller: humidityCtrlr,
+                    focusNode: _humidityFocus,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 0.0, horizontal: 15.0),
+                      border: OutlineInputBorder(),
+                      errorText: _humidityVld ? 'アラート湿度を入力してください' : null,
                     ),
                   ),
-                ],
-              ),
-            ),
-            // キーを表示チェックボックス
-            Container(
-              padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Checkbox(
-                    materialTapTargetSize: MaterialTapTargetSize.padded,
-                    value: _isCheck,
-                    onChanged: (bool value) {
-                      unfocusAll();
-                      setState(() {
-                        _isCheck = value;
-                        _keyVisible = !value;
-                      });
-                    },
+                ),
+                SizedBox(width: 20.0),
+                Text(
+                  '%',
+                  style: TextStyle(
+                    inherit: true,
+                    color: Colors.black,
+                    fontSize: 20.0,
+//                        fontWeight: FontWeight.bold,
+                    textBaseline: TextBaseline.alphabetic,
                   ),
+                ),
+                SizedBox(width: 20.0),
+                Container(
+                  width: 40.0,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black, width: 1),
+                    borderRadius: BorderRadius.horizontal(
+                        left: Radius.elliptical(10, 10),
+                        right: Radius.elliptical(0, 0)),
+                    color: Colors.grey[500],
+                  ),
+                  child: IconButton(
+                    onPressed: () {
+                      _addHumidity();
+                    },
+                    color: Colors.white,
+                    icon: Icon(Icons.arrow_drop_up),
+                  ),
+                ),
+                Container(
+                  width: 40.0,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black, width: 1),
+                    borderRadius: BorderRadius.horizontal(
+                        left: Radius.elliptical(0, 0),
+                        right: Radius.elliptical(10, 10)),
+                    color: Colors.grey[500],
+                  ),
+                  child: IconButton(
+                    onPressed: () {
+                      _subtractHumidity();
+                    },
+                    color: Colors.white,
+                    icon: Icon(Icons.arrow_drop_down),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // キーラベル
+          Container(
+            padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  child: Text(
+                    'キー',
+                    style: TextStyle(
+                      inherit: true,
+                      color: Colors.black,
+                      fontSize: 20.0,
+//                        fontWeight: FontWeight.bold,
+                      textBaseline: TextBaseline.alphabetic,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // キー入力
+          Container(
+            padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                  child: TextField(
+//                      maxLength: 30,
+//                      inputFormatters: [InputFormatUtil.OnlyEnglishAndNumber, LengthLimitingTextInputFormatter(50)],
+                    controller: keyCtrlr,
+                    focusNode: _keyFocus,
+                    obscureText: _keyVisible,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 0.0, horizontal: 15.0),
+                      border: OutlineInputBorder(),
+                      errorText: _nameVld ? '名前を入力してください' : null,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // キーを表示チェックボックス
+          Container(
+            padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Checkbox(
+                  materialTapTargetSize: MaterialTapTargetSize.padded,
+                  value: _isCheck,
+                  onChanged: (bool value) {
+                    unfocusAll();
+                    setState(() {
+                      _isCheck = value;
+                      _keyVisible = !value;
+                    });
+                  },
+                ),
 //                  SizedBox(width: 20.0),
-                  Container(
-                    child: Text(
-                      'キーを表示',
-                      style: TextStyle(
-                        inherit: true,
-                        color: Colors.black,
-                        fontSize: 20.0,
-//                        fontWeight: FontWeight.bold,
-                        textBaseline: TextBaseline.alphabetic,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            // 送信の間隔
-            Container(
-              padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    child: Text(
-                      '送信の間隔',
-                      style: TextStyle(
-                        inherit: true,
-                        color: Colors.black,
-                        fontSize: 20.0,
-//                        fontWeight: FontWeight.bold,
-                        textBaseline: TextBaseline.alphabetic,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 20.0),
-                  Expanded(
-                    child: TextField(
-//                      maxLength: 30,
-//                      inputFormatters: [InputFormatUtil.OnlyEnglishAndNumber, LengthLimitingTextInputFormatter(50)],
-                      keyboardType: TextInputType.number,
-                      focusNode: _intervalFocus,
-                      controller: intervalCtrlr,
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 0.0, horizontal: 15.0),
-                        border: OutlineInputBorder(),
-                        errorText: _intervalVld ? '送信の間隔を入力してください' : null,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 20.0),
-                  Text(
-                    '分',
+                Container(
+                  child: Text(
+                    'キーを表示',
                     style: TextStyle(
                       inherit: true,
                       color: Colors.black,
@@ -562,133 +617,185 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
                       textBaseline: TextBaseline.alphabetic,
                     ),
                   ),
-                  SizedBox(width: 20.0),
-                  Container(
-                    width: 40.0,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black, width: 1),
-                      borderRadius: BorderRadius.horizontal(
-                          left: Radius.elliptical(10, 10),
-                          right: Radius.elliptical(0, 0)),
-                      color: Colors.grey[500],
-                    ),
-                    child: IconButton(
-                      onPressed: () {
-                        _addInterval();
-                      },
-                      color: Colors.white,
-                      icon: Icon(Icons.arrow_drop_up),
-                    ),
-                  ),
-                  Container(
-                    width: 40.0,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black, width: 1),
-                      borderRadius: BorderRadius.horizontal(
-                          left: Radius.elliptical(0, 0),
-                          right: Radius.elliptical(10, 10)),
-                      color: Colors.grey[500],
-                    ),
-                    child: IconButton(
-                      onPressed: () {
-                        _subtractInterval();
-                      },
-                      color: Colors.white,
-                      icon: Icon(Icons.arrow_drop_down),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-            // 記録
-            Container(
-              padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    child: Text(
-                      '記録',
-                      style: TextStyle(
-                        inherit: true,
-                        color: Colors.black,
-                        fontSize: 20.0,
-//                        fontWeight: FontWeight.bold,
-                        textBaseline: TextBaseline.alphabetic,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 20.0),
-                  Switch(
-                    value: _flag,
-                    activeColor: Colors.green,
-                    onChanged: (value) {
-                      unfocusAll();
-                      setState(() {
-                        _flag = value;
-                      });
-                    },
-                  ),
-                ],
-              ),
-            ),
-            // 認証コード
-            Container(
-              padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    child: Text(
-                      '認証コード',
-                      style: TextStyle(
-                        inherit: true,
-                        color: Colors.black,
-                        fontSize: 20.0,
-//                        fontWeight: FontWeight.bold,
-                        textBaseline: TextBaseline.alphabetic,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 20.0),
-                  Expanded(
-                    child: TextField(
-//                      maxLength: 30,
-//                      inputFormatters: [InputFormatUtil.OnlyEnglishAndNumber, LengthLimitingTextInputFormatter(50)],
-                      controller: codeCtrlr,
-                      focusNode: _codeFocus,
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 0.0, horizontal: 15.0),
-                        border: OutlineInputBorder(),
-                        errorText: _codeVld ? '認証コードを入力してください' : null,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            // 認証コード取得ボタン
-            Container(
-              padding: const EdgeInsets.all(2.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    'まで',
+          ),
+          // 送信の間隔
+          Container(
+            padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  child: Text(
+                    '送信の間隔',
                     style: TextStyle(
                       inherit: true,
                       color: Colors.black,
-                      fontSize: 12.0,
+                      fontSize: 20.0,
 //                        fontWeight: FontWeight.bold,
                       textBaseline: TextBaseline.alphabetic,
                     ),
                   ),
-                  SizedBox(width: 10.0),
-                  RaisedButton(
+                ),
+                SizedBox(width: 20.0),
+                Expanded(
+                  child: TextField(
+//                      maxLength: 30,
+//                      inputFormatters: [InputFormatUtil.OnlyEnglishAndNumber, LengthLimitingTextInputFormatter(50)],
+                    keyboardType: TextInputType.number,
+                    focusNode: _intervalFocus,
+                    controller: intervalCtrlr,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 0.0, horizontal: 15.0),
+                      border: OutlineInputBorder(),
+                      errorText: _intervalVld ? '送信の間隔を入力してください' : null,
+                    ),
+                  ),
+                ),
+                SizedBox(width: 20.0),
+                Text(
+                  '分',
+                  style: TextStyle(
+                    inherit: true,
+                    color: Colors.black,
+                    fontSize: 20.0,
+//                        fontWeight: FontWeight.bold,
+                    textBaseline: TextBaseline.alphabetic,
+                  ),
+                ),
+                SizedBox(width: 20.0),
+                Container(
+                  width: 40.0,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black, width: 1),
+                    borderRadius: BorderRadius.horizontal(
+                        left: Radius.elliptical(10, 10),
+                        right: Radius.elliptical(0, 0)),
+                    color: Colors.grey[500],
+                  ),
+                  child: IconButton(
+                    onPressed: () {
+                      _addInterval();
+                    },
+                    color: Colors.white,
+                    icon: Icon(Icons.arrow_drop_up),
+                  ),
+                ),
+                Container(
+                  width: 40.0,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black, width: 1),
+                    borderRadius: BorderRadius.horizontal(
+                        left: Radius.elliptical(0, 0),
+                        right: Radius.elliptical(10, 10)),
+                    color: Colors.grey[500],
+                  ),
+                  child: IconButton(
+                    onPressed: () {
+                      _subtractInterval();
+                    },
+                    color: Colors.white,
+                    icon: Icon(Icons.arrow_drop_down),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // 追跡記録
+          Container(
+            padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  child: Text(
+                    '追跡記録',
+                    style: TextStyle(
+                      inherit: true,
+                      color: Colors.black,
+                      fontSize: 20.0,
+//                        fontWeight: FontWeight.bold,
+                      textBaseline: TextBaseline.alphabetic,
+                    ),
+                  ),
+                ),
+                SizedBox(width: 20.0),
+                Switch(
+                  value: _trackFlag,
+                  activeColor: Colors.green,
+                  onChanged: (value) {
+                    unfocusAll();
+                    setState(() {
+                      _trackFlag = value;
+                    });
+                  },
+                ),
+              ],
+            ),
+          ),
+          // 認証コード
+          Container(
+            padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  child: Text(
+                    '認証コード',
+                    style: TextStyle(
+                      inherit: true,
+                      color: Colors.black,
+                      fontSize: 20.0,
+//                        fontWeight: FontWeight.bold,
+                      textBaseline: TextBaseline.alphabetic,
+                    ),
+                  ),
+                ),
+                SizedBox(width: 20.0),
+                Expanded(
+                  child: TextField(
+//                      maxLength: 30,
+//                      inputFormatters: [InputFormatUtil.OnlyEnglishAndNumber, LengthLimitingTextInputFormatter(50)],
+                    controller: codeCtrlr,
+                    focusNode: _codeFocus,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 0.0, horizontal: 15.0),
+                      border: OutlineInputBorder(),
+                      errorText: _codeVld ? '認証コードを入力してください' : null,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // 認証コード取得ボタン
+          Container(
+            padding: const EdgeInsets.all(2.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  '2021年11月30日まで',
+                  style: TextStyle(
+                    inherit: true,
+                    color: Colors.black,
+                    fontSize: 12.0,
+//                        fontWeight: FontWeight.bold,
+                    textBaseline: TextBaseline.alphabetic,
+                  ),
+                ),
+                SizedBox(width: 10.0),
+                ButtonTheme(
+                  minWidth: 150.0,
+                  child: RaisedButton(
                     shape: StadiumBorder(),
                     color: Colors.blue,
                     onPressed: () {
@@ -696,46 +803,46 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
                     },
 //                  disabledColor: Colors.l,
                     child: Text(
-                      '認証コード取得',
+                      _countdownTime > 0 ? '$_countdownTime' : '認証コード取得',
                       style: TextStyle(
                         color: Colors.white,
                       ),
                     ),
                     elevation: 10,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            // OK button
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(top: 20.0),
-                    child: RaisedButton(
-                      shape: StadiumBorder(),
-                      color: Colors.blue,
-                      onPressed: () {
-                        _registerSubmit(context);
-                      },
-                      child: Text(
-                        'OK',
-                        style: TextStyle(
-                          fontSize: 25,
-                          color: Colors.white,
-                        ),
+          ),
+          // OK button
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(top: 20.0),
+                  child: RaisedButton(
+                    shape: StadiumBorder(),
+                    color: Colors.blue,
+                    onPressed: () {
+                      _settingSubmit();
+                    },
+                    child: Text(
+                      'OK',
+                      style: TextStyle(
+                        fontSize: 25,
+                        color: Colors.white,
                       ),
-                      elevation: 10,
                     ),
+                    elevation: 10,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

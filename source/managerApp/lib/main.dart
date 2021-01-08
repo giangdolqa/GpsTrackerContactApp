@@ -7,6 +7,7 @@ import 'package:gps_tracker/views/login_view.dart';
 import 'package:gps_tracker/views/register_view.dart';
 import 'package:gps_tracker/views/home_view.dart';
 import 'package:gps_tracker/views/gpstracker_setting_view.dart';
+import 'package:gps_tracker/views/device_setting_view.dart';
 
 void main() => runApp(
     TrackerApp());
@@ -75,6 +76,7 @@ class TrackerAppState extends State<TrackerApp> {
         //'TwiceCheck': (BuildContext context) => TwiceCheckView(),  // 2段階認証
         'Home': (BuildContext context) => HomeView(),
         'Setting' : (BuildContext context) => GpsTrackerSettingView(),
+        'DeviceSetting' : (BuildContext context) => DeviceSettingView(),
       },
     );
   }
