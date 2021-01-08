@@ -63,7 +63,7 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
 
   @override
   void initState() {
-    deviceId = widget.deviceInfo.id.toString();
+    deviceId = widget.deviceInfo.name;
     if (widget.settingInfo != null) {
       nameCtrlr.text = widget.settingInfo.name;
       humidityCtrlr.text = widget.settingInfo.humidity.toString();
