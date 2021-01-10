@@ -26,19 +26,27 @@ Future<List<BluetoothDevice>> getConnectedDevices() async {
 
 void startBle() async {
   // startScan
-  model.flutterBlue.startScan(timeout: Duration(seconds: 4));
-  // scanResults
-  model.flutterBlue.scanResults.listen((results) {
-    // ble result device
-    for (ScanResult r in results) {
-      model.scanResults[r.device.name] = r;
-      if (r.device.name.length > 0) {
-        // print('${r.device.name} found! rssi: ${r.rssi}');
-        model.allBleNameAry.add(r.device.name);
-        getBleScanNameAry();
+  bool isBlueToothOn = await model.flutterBlue.isOn;
+  if (isBlueToothOn) {
+    await model.flutterBlue.stopScan();
+    model.flutterBlue.startScan(timeout: Duration(seconds: 4));
+    // scanResults
+    model.flutterBlue.scanResults.listen((results) {
+      // ble result device
+      for (ScanResult r in results) {
+        model.scanResults[r.device.name] = r;
+        if (r.device.name.length > 0) {
+          // print('${r.device.name} found! rssi: ${r.rssi}');
+          model.allBleNameAry.add(r.device.name);
+          getBleScanNameAry();
+        }
       }
-    }
-  });
+    });
+  }
+}
+
+Stream<bool> isScanning() {
+  return model.flutterBlue.isScanning;
 }
 
 List getBleScanNameAry() {

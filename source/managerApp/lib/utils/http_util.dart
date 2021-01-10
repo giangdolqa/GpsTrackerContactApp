@@ -32,8 +32,6 @@ class HttpUtil {
   static const String PATCH = 'patch';
   static const String DELETE = 'delete';
 
-  static final spUtil = SharedPreUtil();
-
   /// request method
   static Future<Map> request(String url, {data, method}) async {
     data = data ?? {};

@@ -57,6 +57,7 @@ class PositionUtil {
   // 位置通知サービス開始
   startListen(BuildContext context) async {
     // mqttUtil.client.connect("username", "password");
+    await BackgroundLocation.stopLocationService();
     await BackgroundLocation.setAndroidNotification(
       title: "Background service is running",
       message: "Background location in progress",
@@ -72,8 +73,8 @@ class PositionUtil {
       // Toast.show(locString , context);
       print(locString);
       globalTempPos = Position(latitude:location.longitude, longitude:location.longitude);
-      // mqttUtil.getSurroundingUserInfo("testdeviceName");
-      // SoundUtil.playAssetSound(null);
+      // mqttUtil.getSurroundingUserInfo("testdeviceName");UIBackgroundModes
+      SoundUtil.playAssetSound(null);
            // setState(() {
       //   this.latitude = location.latitude.toString();
       //   this.longitude = location.longitude.toString();

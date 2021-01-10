@@ -12,23 +12,23 @@ class KeyInfo {
   String key; // キー+暗号鍵
 
   KeyInfo jsonToKeyInfo(String jsonString, BuildContext context) {
-    KeyInfo keyInfo;
-
     JsonDecoder jd = new JsonDecoder();
     try {
-      keyInfo = jd.convert(jsonString);
+      Map<String, dynamic> tmpMap = jd.convert(jsonString);
+      type = tmpMap['type'];
+      name = tmpMap['name'];
+      key = tmpMap['key'];
     } catch (e) {
       Toast.show("データ転換失敗: " + e.toString(), context);
       return null;
     }
-    return keyInfo;
   }
 
   // キーハッシュ化
-  String getHashedKey(){
+  String getHashedKey() {
     // ①	時刻のD２文字目+1文字分、時刻を切り出す。
     String tempDatetimeStr = formatDate(DateTime.now(), [yyyy, mm, dd]);
-    String hashKey = tempDatetimeStr.substring(tempDatetimeStr.length-1);
+    String hashKey = tempDatetimeStr.substring(tempDatetimeStr.length - 1);
     // ②	その切り出した文字をキーとして、SHA256ハッシュ化する。
     var bytes = utf8.encode(hashKey);
     var hashedKeySha256 = sha256.convert(bytes);

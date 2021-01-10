@@ -45,7 +45,8 @@ dependencies:
   flutter_volume_slider: ^1.0.6
   flutter_blue: ^0.7.2
   nuid: ^1.1.0
-  app_settings: 4.0.4
+  app_settings: ^4.0.4
+  encrypt: ^4.1.0
 
 
 flutter_icons:
@@ -73,7 +74,6 @@ flutter:
   assets:
     - assets/sounds/alarm.mp3
     - assets/icon/help.png
-    - assets/icon/position.png
     - assets/icon/home.png
     - assets/icon/check.png
     - assets/icon/GPS_icon.png

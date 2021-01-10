@@ -1,5 +1,6 @@
 //import 'package:animated_splash/animated_splash.dart';
 
+import 'package:background_location/background_location.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -57,6 +58,12 @@ class TrackerAppState extends State<TrackerApp> {
   }
 
   @override
+  void dispose(){
+    super.dispose();
+    BackgroundLocation.stopLocationService();
+  }
+
+  @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
@@ -65,7 +72,7 @@ class TrackerAppState extends State<TrackerApp> {
     return MaterialApp(
       title: 'GPSTracker',
       debugShowCheckedModeBanner: true,
-      home: LoginView(),
+      home: HomeView(),
       theme: ThemeData(
         brightness: Brightness.light,
         primarySwatch: Colors.blue,

@@ -67,6 +67,8 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
   }
 
   void _getDeviceInfo() async {
+    myDevices.clear();
+    otherDevices.clear();
     if (_blueToothFlag) {
       flutterBlue.startScan(timeout: Duration(seconds: 30));
       flutterBlue.scanResults.listen((event) {
@@ -133,10 +135,23 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
           child: Row(
             children: [
               mypopup.PopupMenuButton(
-                child: Image(
-                  image: AssetImage("assets/icon/GPS_icon.png"),
-                  fit: BoxFit.fill,
-                  height: 35,
+                child: Stack(
+                  children: [
+                    Image(
+                        image: AssetImage("assets/icon/GPS_icon.png"),
+                        fit: BoxFit.fill),
+                    Container(
+                      padding: EdgeInsets.only(bottom:5),
+                      alignment: Alignment.center,
+                      child: Text(
+                        device.name.substring(0, 3).toUpperCase(),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 offset: Offset(0, 50),
                 itemBuilder: (_) =>
@@ -215,9 +230,11 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
         ),
       );
     });
-    setState(() {
-      myDevlist = tmpDevlist;
-    });
+    if (mounted) {
+      setState(() {
+        myDevlist = tmpDevlist;
+      });
+    }
   }
 
   void _onActionMenuSelect(Map<String, DeviceInfo> selectedVal) {
@@ -324,15 +341,24 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
                   device.name,
                   style: TextStyle(fontSize: 14),
                 ),
-              ),
-            ],
+                Container(
+                  padding: EdgeInsets.only(left: 10),
+                  child: Text(
+                    device.name,
+                    style: TextStyle(fontSize: 14),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       );
     });
-    setState(() {
-      otherDevList = tmpDevlist;
-    });
+    if (mounted) {
+      setState(() {
+        otherDevList = tmpDevlist;
+      });
+    }
   }
 
   _deviceSet(DeviceInfo deviceInfo) {
@@ -441,8 +467,8 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
           ),
           Container(
             padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
-            child: ListView(
-              shrinkWrap: true,
+            child: Column(
+              // shrinkWrap: true,
               children: myDevlist,
             ),
           ),
@@ -462,8 +488,8 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
           ),
           Container(
             padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
-            child: ListView(
-              shrinkWrap: true,
+            child: Column(
+              // shrinkWrap: true,
               children: otherDevList,
             ),
           ),

@@ -18,8 +18,10 @@ import 'shared_pre_util.dart';
 
 final MqttUtil mqttUtil = MqttUtil();
 
+
 class MqttUtil {
-  final client = MqttServerClient('test.mosquitto.org', ''); // 試験用サービス
+  // final client = MqttServerClient('test.mosquitto.org', ''); // 試験用サービス
+  final client = MqttServerClient('ik1-407-35954.vs.sakura.ne.jp', ''); // 試験用サービス
   MqttUtil() {
     /// Set logging on if needed, defaults to off
     client.logging(on: false);
@@ -52,8 +54,14 @@ class MqttUtil {
 
   // 接続初期化(非同期
   void _initConn() async {
+    final context = SecurityContext();
+    context.setTrustedCertificates("assets/cert/cert.pem");
+
     String username = await spUtil.GetUsername();
     String password = await spUtil.GetPassword();
+
+    username = "temporary";
+    password = "password";
 
     /// Create a connection message to use or use the default one. The default one sets the
     /// client identifier, any supplied username/password, the default keepalive interval(60s)
@@ -114,7 +122,7 @@ class MqttUtil {
       final pt =
           MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
       NormalInfo pi;
-      pi.jsonToUserinfo(pt, null);
+      pi.jsonToNormalinfo(pt, null);
       eventBus.fire(pi);
     });
   }
@@ -223,10 +231,17 @@ class MqttUtil {
 
     client.updates.listen((dynamic c) {
       final MqttPublishMessage recMess = c[0].payload;
-      final pt =
+      String pt =
           MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
       AlarmInfo ai = new AlarmInfo();
-      ai.jsonToUserinfo(pt, null);
+      var json = {
+        "Lat": 38.67,
+        "Lng": 12.66,
+        "Sex": 1,
+        "Age": 16
+      };
+      pt = json.toString();
+      ai.jsonStrToAlarminfo(pt, null);
       eventBus.fire(ai);
       print(
           'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');

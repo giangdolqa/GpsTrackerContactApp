@@ -1,4 +1,5 @@
 // ローカル保存
+import 'package:flutter_blue/flutter_blue.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 SharedPreUtil spUtil = new SharedPreUtil();
@@ -69,6 +70,7 @@ class SharedPreUtil {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     return sharedPreferences.getString("UserName");
   }
+
   Future SavePassword(String inputPhoneNum) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     bool bRslt = await sharedPreferences.setString("Password", inputPhoneNum);
@@ -77,5 +79,36 @@ class SharedPreUtil {
   Future GetPassword() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     return sharedPreferences.getString("Password");
+  }
+
+  // 登録済みデバイス保存
+  Future AddDeviceIdList(String di) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    List<String> diList =
+        sharedPreferences.getStringList("DeviceIdentifiers");
+    if (diList != null){
+      if (!diList.contains(di)) {
+        diList.add(di);
+      }
+    }
+    else{
+      diList = [];
+      diList.add(di);
+    }
+    sharedPreferences.setStringList("DeviceIdentifiers", diList);
+  }
+
+  // 登録済みデバイス取得
+  Future GetDeviceIdList() async{
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    List<String> diList =
+    sharedPreferences.getStringList("DeviceIdentifiers");
+    return diList;
+  }
+  // 登録済みデバイスクリア
+  Future ClearDeviceIdList() async{
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    List<String> diList = [];
+    sharedPreferences.setStringList("DeviceIdentifiers", diList);
   }
 }
