@@ -141,7 +141,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
                         image: AssetImage("assets/icon/GPS_icon.png"),
                         fit: BoxFit.fill),
                     Container(
-                      padding: EdgeInsets.only(bottom:5),
+                      padding: EdgeInsets.only(bottom: 5),
                       alignment: Alignment.center,
                       child: Text(
                         device.name.substring(0, 3).toUpperCase(),
@@ -341,15 +341,15 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
                   device.name,
                   style: TextStyle(fontSize: 14),
                 ),
-                Container(
-                  padding: EdgeInsets.only(left: 10),
-                  child: Text(
-                    device.name,
-                    style: TextStyle(fontSize: 14),
-                  ),
+              ),
+              Container(
+                padding: EdgeInsets.only(left: 10),
+                child: Text(
+                  device.name,
+                  style: TextStyle(fontSize: 14),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       );
@@ -375,10 +375,9 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
             .connect(autoConnect: false, timeout: Duration(seconds: 10));
 
         BluetoothCharacteristic mCharacteristic;
-        List<BluetoothService> services = await deviceInfo.device.device.discoverServices();
-        services.forEach((service)  {
-          
-        });
+        List<BluetoothService> services =
+            await deviceInfo.device.device.discoverServices();
+        services.forEach((service) {});
       }
     });
     // 設定画面へ遷移

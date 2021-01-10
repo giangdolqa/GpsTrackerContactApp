@@ -72,7 +72,7 @@ class TrackerAppState extends State<TrackerApp> {
     return MaterialApp(
       title: 'GPSTracker',
       debugShowCheckedModeBanner: true,
-      home: HomeView(),
+      home: LoginView(),
       theme: ThemeData(
         brightness: Brightness.light,
         primarySwatch: Colors.blue,
