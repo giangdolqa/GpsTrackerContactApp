@@ -3,15 +3,35 @@
 import 'package:background_location/background_location.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gps_tracker/utils/mqtt_util.dart';
 
 import 'package:gps_tracker/views/login_view.dart';
 import 'package:gps_tracker/views/register_view.dart';
 import 'package:gps_tracker/views/home_view.dart';
 import 'package:gps_tracker/views/gpstracker_setting_view.dart';
 import 'package:gps_tracker/views/device_setting_view.dart';
+import 'package:workmanager/workmanager.dart';
 
-void main() => runApp(
-    TrackerApp());
+// 常駐位置更新
+void callbackDispatcher() {
+  Workmanager.executeTask((task, inputData) {
+    print("Native called background task: $inputData"); //simpleTask will be emitted here.
+    mqttUtil.getSurroundingUserInfo();
+    return Future.value(true);
+  });
+}
+
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  // 常駐機能を登録
+  Workmanager.initialize(
+      callbackDispatcher, // The top level function, aka callbackDispatcher
+      isInDebugMode: true // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
+  );
+  Workmanager.registerPeriodicTask("2", "PeriodicTask", tag: "daemon");
+
+  runApp(TrackerApp());
+}
 
 class TrackerApp extends StatefulWidget {
   // This widget is the root of your application.
@@ -21,6 +41,7 @@ class TrackerApp extends StatefulWidget {
 
 class TrackerAppState extends State<TrackerApp> {
   WidgetsBinding widgetsBinding;
+
   //
   // // AuthCheck
   // LoginService loginService = new LoginService();
@@ -58,7 +79,7 @@ class TrackerAppState extends State<TrackerApp> {
   }
 
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
     BackgroundLocation.stopLocationService();
   }
@@ -79,11 +100,12 @@ class TrackerAppState extends State<TrackerApp> {
       ),
       routes: <String, WidgetBuilder>{
         'Login': (BuildContext context) => LoginView(),
-        'Register': (BuildContext context) => RegisterView.nextViewPath("TwiceCheck"),  // 2段階認証に値渡し
+        'Register': (BuildContext context) =>
+            RegisterView.nextViewPath("TwiceCheck"), // 2段階認証に値渡し
         //'TwiceCheck': (BuildContext context) => TwiceCheckView(),  // 2段階認証
         'Home': (BuildContext context) => HomeView(),
-        'Setting' : (BuildContext context) => GpsTrackerSettingView(),
-        'DeviceSetting' : (BuildContext context) => DeviceSettingView(),
+        'Setting': (BuildContext context) => GpsTrackerSettingView(),
+        'DeviceSetting': (BuildContext context) => DeviceSettingView(),
       },
     );
   }

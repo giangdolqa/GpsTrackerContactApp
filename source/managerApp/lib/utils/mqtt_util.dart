@@ -75,21 +75,23 @@ class MqttUtil {
         .authenticateAs(username, password)
         .startClean() // Non persistent session for testing
         .withWillQos(MqttQos.atLeastOnce);
-    print('EXAMPLE::Mosquitto client connecting....');
+    print('marmo::Mosquitto client connecting....');
+    client.secure = true;
+    client.securityContext = context;
     client.connectionMessage = connMess;
   }
 
   /// The subscribed callback
   void onSubscribed(String topic) {
-    print('EXAMPLE::Subscription confirmed for topic $topic');
+    print('marmo::Subscription confirmed for topic $topic');
   }
 
   /// The unsolicited disconnect callback
   void onDisconnected() {
-    print('EXAMPLE::OnDisconnected client callback - Client disconnection');
+    print('marmo::OnDisconnected client callback - Client disconnection');
     if (client.connectionStatus.disconnectionOrigin ==
         MqttDisconnectionOrigin.solicited) {
-      print('EXAMPLE::OnDisconnected callback is solicited, this is correct');
+      print('marmo::OnDisconnected callback is solicited, this is correct');
     }
     exit(-1);
   }
@@ -97,12 +99,12 @@ class MqttUtil {
   /// The successful connect callback
   void onConnected() {
     print(
-        'EXAMPLE::OnConnected client callback - Client connection was sucessful');
+        'marmo::OnConnected client callback - Client connection was sucessful');
   }
 
   /// Pong callback
   void pong() {
-    print('EXAMPLE::Ping response client callback invoked');
+    print('marmo::Ping response client callback invoked');
   }
 
   Future<String> getEncryptKey(String deviceName) async {
@@ -128,7 +130,7 @@ class MqttUtil {
   }
 
   // 緊急通知取得
-  getSurroundingUserInfo(String deviceName) {
+  getSurroundingUserInfo() {
     // final builder = MqttClientPayloadBuilder();
     // builder.addString('Hello from mqtt_client');
     double latitudeIn10Secs = globalTempPos.latitude * 60 * 60 / 10;
@@ -221,8 +223,7 @@ class MqttUtil {
 
     // 購読実行
     latlngList.forEach((latlngMapItem) {
-      String topic = deviceName +
-          "/emg/" +
+      String topic = "/emg/" +
           latlngMapItem["latitude"] +
           "/" +
           latlngMapItem["longitude"];
@@ -234,17 +235,10 @@ class MqttUtil {
       String pt =
           MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
       AlarmInfo ai = new AlarmInfo();
-      var json = {
-        "Lat": 38.67,
-        "Lng": 12.66,
-        "Sex": 1,
-        "Age": 16
-      };
-      pt = json.toString();
       ai.jsonStrToAlarminfo(pt, null);
       eventBus.fire(ai);
       print(
-          'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
+          'marmo::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
     });
   }
 }
