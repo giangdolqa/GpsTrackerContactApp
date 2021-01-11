@@ -1,4 +1,4 @@
-<mxfile host="65bd71144e" modified="2020-12-16T23:25:32.501Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.52.0 Chrome/83.0.4103.122 Electron/9.3.5 Safari/537.36" etag="hFqaAO7TgjI37Yu74wLg" version="13.10.0" type="embed">
+<mxfile host="65bd71144e" modified="2021-01-11T01:52:40.917Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.52.1 Chrome/83.0.4103.122 Electron/9.3.5 Safari/537.36" etag="VcSH4reLox26vCGp1pV3" version="13.10.0" type="embed">
     <diagram id="QHVtiO9V_2khdi5roGe5" name="ページ1">
         <mxGraphModel dx="1165" dy="779" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
@@ -164,7 +164,7 @@
                 <mxCell id="68" value="学校ID" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="1" vertex="1">
                     <mxGeometry x="260" y="820" width="30" height="8.61" as="geometry"/>
                 </mxCell>
-                <mxCell id="69" value="&lt;font color=&quot;#000000&quot;&gt;&lt;span style=&quot;font-size: 18px&quot;&gt;TRACKER.CO&lt;/span&gt;&lt;/font&gt;" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iTextInput;strokeColor=#444444;align=left;buttonText=;fontSize=8;labelBackgroundColor=none;opacity=30;fillColor=none;" parent="1" vertex="1">
+                <mxCell id="69" value="&lt;font color=&quot;#000000&quot;&gt;&lt;span style=&quot;font-size: 18px&quot;&gt;MARMO.CO&lt;/span&gt;&lt;/font&gt;" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iTextInput;strokeColor=#444444;align=left;buttonText=;fontSize=8;labelBackgroundColor=none;opacity=30;fillColor=none;" parent="1" vertex="1">
                     <mxGeometry x="260" y="836.92" width="360" height="27.94" as="geometry"/>
                 </mxCell>
                 <mxCell id="70" value="&lt;font color=&quot;#000000&quot; style=&quot;font-size: 18px&quot;&gt;********&lt;/font&gt;" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iTextInput;strokeColor=#444444;align=left;buttonText=;fontSize=8;labelBackgroundColor=none;opacity=30;fillColor=none;" parent="1" vertex="1">
@@ -182,7 +182,7 @@
                 <mxCell id="74" value="デバイスID" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="1" vertex="1">
                     <mxGeometry x="253.67000000000007" y="1054.25" width="165" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="75" value="&lt;span style=&quot;font-size: 18px&quot;&gt;GPS00002&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=0;align=left;spacingLeft=5;resizeWidth=1;" parent="1" vertex="1">
+                <mxCell id="75" value="&lt;span style=&quot;font-size: 18px&quot;&gt;M00002&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=0;align=left;spacingLeft=5;resizeWidth=1;" parent="1" vertex="1">
                     <mxGeometry x="253.67000000000007" y="1074.25" width="366.33" height="25" as="geometry"/>
                 </mxCell>
                 <mxCell id="76" value="氏名" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="1" vertex="1">

@@ -1,4 +1,4 @@
-<mxfile host="65bd71144e" modified="2020-12-30T13:55:52.470Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.52.1 Chrome/83.0.4103.122 Electron/9.3.5 Safari/537.36" etag="HBW49dh-DVHpSfF5p6HY" version="13.10.0" type="embed">
+<mxfile host="65bd71144e" modified="2021-01-10T08:00:25.779Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.52.1 Chrome/83.0.4103.122 Electron/9.3.5 Safari/537.36" etag="vwNru-aVxEg7DtTGr_Ll" version="13.10.0" type="embed">
     <diagram id="0ZzhSemCFJwRc41ak4Dr" name="ページ1">
         <mxGraphModel dx="1165" dy="779" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
@@ -34,7 +34,7 @@
                 <mxCell id="584" value="" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=0;strokeColor=#999999;fillColor=#ffffff;" parent="583" vertex="1">
                     <mxGeometry width="333.49" height="510" as="geometry"/>
                 </mxCell>
-                <mxCell id="585" value="GPSトラッカー（仮）へようこそ" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="584" vertex="1">
+                <mxCell id="585" value="marmoへようこそ" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="584" vertex="1">
                     <mxGeometry width="166.745" height="20" relative="1" as="geometry">
                         <mxPoint x="10" y="10" as="offset"/>
                     </mxGeometry>
@@ -96,7 +96,7 @@
                 <mxCell id="598" value="" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=0;strokeColor=#999999;fillColor=#ffffff;" parent="597" vertex="1">
                     <mxGeometry width="330" height="510" as="geometry"/>
                 </mxCell>
-                <mxCell id="599" value="GPSトラッカー（仮）" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="598" vertex="1">
+                <mxCell id="599" value="marmo" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="598" vertex="1">
                     <mxGeometry width="165" height="20" relative="1" as="geometry">
                         <mxPoint x="10" y="10" as="offset"/>
                     </mxGeometry>
@@ -429,7 +429,7 @@
                 <mxCell id="692" value="" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=0;strokeColor=#999999;fillColor=#ffffff;" parent="691" vertex="1">
                     <mxGeometry width="333.49" height="510" as="geometry"/>
                 </mxCell>
-                <mxCell id="693" value="GPSトラッカー（仮）へ登録" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="692" vertex="1">
+                <mxCell id="693" value="marmoへ登録" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="692" vertex="1">
                     <mxGeometry width="190" height="20" relative="1" as="geometry">
                         <mxPoint x="10" y="10" as="offset"/>
                     </mxGeometry>
@@ -545,7 +545,7 @@
                 <mxCell id="717" value="" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=0;strokeColor=#999999;fillColor=#ffffff;" parent="716" vertex="1">
                     <mxGeometry width="333.49" height="510" as="geometry"/>
                 </mxCell>
-                <mxCell id="718" value="GPSトラッカー（仮）へ登録" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="717" vertex="1">
+                <mxCell id="718" value="marmoへ登録" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="717" vertex="1">
                     <mxGeometry width="190" height="20" relative="1" as="geometry">
                         <mxPoint x="10" y="10" as="offset"/>
                     </mxGeometry>
@@ -604,7 +604,7 @@
                 <mxCell id="733" value="" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=0;strokeColor=#999999;fillColor=#ffffff;" parent="732" vertex="1">
                     <mxGeometry width="330" height="510" as="geometry"/>
                 </mxCell>
-                <mxCell id="734" value="GPSトラッカー（仮）パスワード再発行" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="733" vertex="1">
+                <mxCell id="734" value="marmoパスワード再発行" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="733" vertex="1">
                     <mxGeometry width="310" height="20" relative="1" as="geometry">
                         <mxPoint x="10" y="10" as="offset"/>
                     </mxGeometry>
@@ -659,7 +659,7 @@
                 <mxCell id="748" value="" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=0;strokeColor=#999999;fillColor=#ffffff;" parent="747" vertex="1">
                     <mxGeometry width="347.5" height="509.9999999999999" as="geometry"/>
                 </mxCell>
-                <mxCell id="749" value="GPS0002の設定" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="748" vertex="1">
+                <mxCell id="749" value="鈴木次郎の設定" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="748" vertex="1">
                     <mxGeometry width="155" height="20" relative="1" as="geometry">
                         <mxPoint x="25" y="10" as="offset"/>
                     </mxGeometry>
@@ -671,66 +671,66 @@
                 </mxCell>
                 <mxCell id="751" value="OK" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=5;strokeColor=none;fontColor=#ffffff;fontSize=16;fontStyle=1;fillColor=#007FFF;" parent="748" vertex="1">
                     <mxGeometry y="1" width="80" height="30" relative="1" as="geometry">
-                        <mxPoint x="125" y="-50" as="offset"/>
+                        <mxPoint x="125" y="-37" as="offset"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="752" value="名前" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="748" vertex="1">
-                    <mxGeometry x="10" y="56" width="30" height="8.61" as="geometry"/>
+                    <mxGeometry x="10" y="81.97" width="30" height="8.61" as="geometry"/>
                 </mxCell>
                 <mxCell id="753" value="&lt;font color=&quot;#000000&quot; style=&quot;font-size: 14px&quot;&gt;鈴木 次郎&lt;/font&gt;" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iTextInput;strokeColor=#444444;buttonText=;fontSize=8;whiteSpace=wrap;align=left;labelBackgroundColor=none;fillColor=none;opacity=30;" parent="748" vertex="1">
-                    <mxGeometry x="50" y="47.03" width="270" height="26.55" as="geometry"/>
+                    <mxGeometry x="50" y="73" width="270" height="26.55" as="geometry"/>
                 </mxCell>
                 <mxCell id="754" value="キー" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="748" vertex="1">
-                    <mxGeometry x="10" y="200" width="30" height="8.61" as="geometry"/>
+                    <mxGeometry x="10" y="225.97" width="30" height="8.61" as="geometry"/>
                 </mxCell>
                 <mxCell id="755" value="&lt;font color=&quot;#000000&quot; style=&quot;font-size: 18px&quot;&gt;********&lt;/font&gt;" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iTextInput;strokeColor=#444444;align=left;buttonText=;fontSize=8;labelBackgroundColor=none;opacity=30;fillColor=none;" parent="748" vertex="1">
-                    <mxGeometry x="10" y="216.92000000000002" width="310" height="27.94" as="geometry"/>
+                    <mxGeometry x="10" y="242.89000000000001" width="310" height="27.94" as="geometry"/>
                 </mxCell>
                 <mxCell id="756" value="送信の間隔" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="748" vertex="1">
-                    <mxGeometry x="10" y="307.44" width="70" height="8.61" as="geometry"/>
+                    <mxGeometry x="10" y="333.40999999999997" width="70" height="8.61" as="geometry"/>
                 </mxCell>
                 <mxCell id="758" value="生年月日" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="748" vertex="1">
-                    <mxGeometry x="10" y="130.97" width="30" height="8.61" as="geometry"/>
+                    <mxGeometry x="10" y="156.94" width="30" height="8.61" as="geometry"/>
                 </mxCell>
                 <mxCell id="759" value="性別" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="748" vertex="1">
-                    <mxGeometry x="10" y="92.41" width="30" height="8.61" as="geometry"/>
+                    <mxGeometry x="10" y="118.38" width="30" height="8.61" as="geometry"/>
                 </mxCell>
                 <mxCell id="760" value="&lt;span style=&quot;font-size: 14px&quot;&gt;男の子&lt;/span&gt;" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iComboBox;spacingTop=2;spacingLeft=2;align=left;strokeColor=#444444;fontColor=#666666;buttonText=;fontSize=8;fillColor=#dddddd;fillColor2=#3D5565;" parent="748" vertex="1">
-                    <mxGeometry x="50" y="84.97" width="90" height="23.5" as="geometry"/>
+                    <mxGeometry x="50" y="110.94" width="90" height="23.5" as="geometry"/>
                 </mxCell>
                 <mxCell id="761" value="&lt;font style=&quot;font-size: 12px&quot;&gt;男の子、女の子、答えない&lt;br&gt;年齢が13歳以上は男性、女性&lt;br&gt;&lt;/font&gt;" style="shape=note;strokeWidth=2;fontSize=14;size=20;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#666600;align=left;" parent="748" vertex="1">
-                    <mxGeometry x="180" y="73.58" width="167.5" height="40.51" as="geometry"/>
+                    <mxGeometry x="180" y="99.55" width="167.5" height="40.51" as="geometry"/>
                 </mxCell>
                 <mxCell id="762" value="&lt;font style=&quot;font-size: 14px&quot;&gt;キーを表示&lt;/font&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=0;fillColor=#eeeeee;strokeColor=#999999;gradientColor=#cccccc;align=left;spacingLeft=4;fontSize=17;fontColor=#666666;labelPosition=right;" parent="748" vertex="1">
-                    <mxGeometry x="10.004500000000007" y="253.00472049689438" width="25.01175" height="25.5" as="geometry"/>
+                    <mxGeometry x="10.004500000000007" y="278.9747204968944" width="25.01175" height="25.5" as="geometry"/>
                 </mxCell>
                 <mxCell id="763" value="認証コード" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="748" vertex="1">
-                    <mxGeometry x="10" y="388.97" width="30" height="8.61" as="geometry"/>
+                    <mxGeometry x="10" y="414.94000000000005" width="30" height="8.61" as="geometry"/>
                 </mxCell>
                 <mxCell id="764" value="&lt;font color=&quot;#000000&quot;&gt;&lt;span style=&quot;font-size: 14px&quot;&gt;0000-0000-0000-0000&lt;br&gt;&lt;/span&gt;&lt;/font&gt;" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iTextInput;strokeColor=#444444;buttonText=;fontSize=8;whiteSpace=wrap;align=left;labelBackgroundColor=none;fillColor=none;opacity=30;" parent="748" vertex="1">
-                    <mxGeometry x="80" y="380" width="240" height="26.55" as="geometry"/>
+                    <mxGeometry x="80" y="405.97" width="240" height="26.55" as="geometry"/>
                 </mxCell>
                 <mxCell id="765" value="&lt;span style=&quot;font-weight: 400&quot;&gt;認証コード取得&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=5;strokeColor=none;fontColor=#ffffff;fontSize=16;fontStyle=1;fillColor=#007FFF;" parent="748" vertex="1">
                     <mxGeometry y="1" width="120" height="30" relative="1" as="geometry">
-                        <mxPoint x="200" y="-100" as="offset"/>
+                        <mxPoint x="200" y="-74.03" as="offset"/>
                     </mxGeometry>
                 </mxCell>
                 <UserObject label="2021年11月30日まで" placeholders="1" id="766">
                     <mxCell style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;fontColor=#000000;" parent="748" vertex="1">
-                        <mxGeometry x="62.39" y="417" width="124.98" height="20" as="geometry"/>
+                        <mxGeometry x="62.39" y="442.97" width="124.98" height="20" as="geometry"/>
                     </mxCell>
                 </UserObject>
                 <mxCell id="768" value="追跡記録" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="748" vertex="1">
-                    <mxGeometry x="10" y="346.19" width="69.75" height="8.61" as="geometry"/>
+                    <mxGeometry x="10" y="372.15999999999997" width="69.75" height="8.61" as="geometry"/>
                 </mxCell>
                 <mxCell id="769" value="ON" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iOnOffButton;mainText=;strokeColor=#001DBC;fontSize=9;fontColor=#ffffff;spacingRight=14;buttonState=on;labelBackgroundColor=none;fillColor=#0050ef;" parent="748" vertex="1">
-                    <mxGeometry x="87.5" y="343" width="43.5" height="15" as="geometry"/>
+                    <mxGeometry x="87.5" y="368.97" width="43.5" height="15" as="geometry"/>
                 </mxCell>
                 <mxCell id="770" value="デフォルト OFF" style="shape=note;strokeWidth=2;fontSize=14;size=20;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#666600;align=center;" parent="748" vertex="1">
-                    <mxGeometry x="180" y="333.49" width="140" height="34" as="geometry"/>
+                    <mxGeometry x="180" y="359.46000000000004" width="140" height="34" as="geometry"/>
                 </mxCell>
                 <mxCell id="771" value="&lt;font style=&quot;font-size: 14px&quot;&gt;2010/12/04&lt;/font&gt;" style="rounded=1;arcSize=9;fillColor=#F7F8F9;align=left;spacingLeft=5;strokeColor=#DEE1E6;html=1;strokeWidth=2;fontColor=#596780;fontSize=12" parent="748" vertex="1">
-                    <mxGeometry x="77.5" y="118.78" width="122.5" height="33" as="geometry"/>
+                    <mxGeometry x="77.5" y="144.75" width="122.5" height="33" as="geometry"/>
                 </mxCell>
                 <mxCell id="772" value="" style="shape=mxgraph.gmdl.calendar;fillColor=#5A6881;strokeColor=none" parent="771" vertex="1">
                     <mxGeometry x="1" y="0.5" width="18" height="18" relative="1" as="geometry">
@@ -738,19 +738,25 @@
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="840" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shadow=0;dashed=0;strokeWidth=1;shape=mxgraph.ios.iPrevNext;strokeColor=#444444;fillColor=#dddddd;fillColor2=#3D5565;fillColor3=#ffffff;align=center;" parent="748" vertex="1">
-                    <mxGeometry x="150" y="302.05" width="30" height="18.95" as="geometry"/>
+                    <mxGeometry x="150" y="328.02" width="30" height="18.95" as="geometry"/>
                 </mxCell>
                 <mxCell id="839" value="&lt;font style=&quot;font-size: 12px&quot;&gt;５分&lt;/font&gt;" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iTextInput;strokeColor=#444444;buttonText=;fontSize=8;whiteSpace=wrap;align=center;" parent="748" vertex="1">
-                    <mxGeometry x="87.5" y="301.74" width="62.5" height="20" as="geometry"/>
+                    <mxGeometry x="87.5" y="327.71000000000004" width="62.5" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="841" value="アラート湿度" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="748" vertex="1">
-                    <mxGeometry x="10" y="175.69999999999982" width="70" height="8.61" as="geometry"/>
+                    <mxGeometry x="10" y="201.66999999999982" width="70" height="8.61" as="geometry"/>
                 </mxCell>
                 <mxCell id="842" value="&lt;font style=&quot;font-size: 12px&quot;&gt;40%&lt;/font&gt;" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iTextInput;strokeColor=#444444;buttonText=;fontSize=8;whiteSpace=wrap;align=center;" parent="748" vertex="1">
-                    <mxGeometry x="97.5" y="170" width="62.5" height="20" as="geometry"/>
+                    <mxGeometry x="97.5" y="195.97" width="62.5" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="843" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shadow=0;dashed=0;strokeWidth=1;shape=mxgraph.ios.iPrevNext;strokeColor=#444444;fillColor=#dddddd;fillColor2=#3D5565;fillColor3=#ffffff;align=center;" parent="748" vertex="1">
-                    <mxGeometry x="160" y="170.3100000000004" width="30" height="18.95" as="geometry"/>
+                    <mxGeometry x="160" y="196.2800000000004" width="30" height="18.95" as="geometry"/>
+                </mxCell>
+                <mxCell id="858" value="ID" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" vertex="1" parent="748">
+                    <mxGeometry x="10" y="48.9699999999998" width="30" height="8.61" as="geometry"/>
+                </mxCell>
+                <mxCell id="859" value="&lt;font style=&quot;font-size: 14px&quot;&gt;JIROU&lt;/font&gt;" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iTextInput;strokeColor=#444444;buttonText=;fontSize=8;whiteSpace=wrap;align=left;labelBackgroundColor=none;fillColor=none;opacity=30;" vertex="1" parent="748">
+                    <mxGeometry x="50" y="40" width="270" height="26.55" as="geometry"/>
                 </mxCell>
                 <mxCell id="773" value="⑦デバイスの設定" style="shape=note;strokeWidth=2;fontSize=14;size=20;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#666600;" parent="1" vertex="1">
                     <mxGeometry x="410" y="1800" width="150" height="40" as="geometry"/>
@@ -782,7 +788,7 @@
                 <mxCell id="782" value="" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=0;strokeColor=#999999;fillColor=#ffffff;" parent="781" vertex="1">
                     <mxGeometry width="330" height="509.9999999999999" as="geometry"/>
                 </mxCell>
-                <mxCell id="783" value="&lt;font style=&quot;font-size: 14px&quot;&gt;GPSトラッカー（仮）設定&lt;/font&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="782" vertex="1">
+                <mxCell id="783" value="&lt;font style=&quot;font-size: 14px&quot;&gt;&lt;span style=&quot;font-size: 12px&quot;&gt;marmo&lt;/span&gt;設定&lt;/font&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="782" vertex="1">
                     <mxGeometry width="165" height="20" relative="1" as="geometry">
                         <mxPoint x="30" y="10" as="offset"/>
                     </mxGeometry>
@@ -792,10 +798,10 @@
                         <mxPoint x="10" y="30" as="offset"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="785" value="GPS" style="html=1;strokeWidth=1;shadow=0;dashed=0;shape=mxgraph.ios7ui.icon;fontSize=8;fontColor=#ffffff;buttonText=;whiteSpace=wrap;align=center;labelBackgroundColor=none;fillColor=none;" parent="782" vertex="1">
+                <mxCell id="785" value="marmo" style="html=1;strokeWidth=1;shadow=0;dashed=0;shape=mxgraph.ios7ui.icon;fontSize=8;fontColor=#ffffff;buttonText=;whiteSpace=wrap;align=center;labelBackgroundColor=none;fillColor=none;" parent="782" vertex="1">
                     <mxGeometry x="20" y="150" width="40" height="36" as="geometry"/>
                 </mxCell>
-                <mxCell id="786" value="GPS00001　&lt;span style=&quot;color: rgb(0 , 0 , 0)&quot;&gt;&lt;font style=&quot;font-size: 13px&quot;&gt;鈴木太郎　設定済み　未接続&lt;/font&gt;&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="782" vertex="1">
+                <mxCell id="786" value="JIROU　&lt;span style=&quot;color: rgb(0 , 0 , 0)&quot;&gt;&lt;font style=&quot;font-size: 13px&quot;&gt;鈴木太郎　設定済み　未接続&lt;/font&gt;&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="782" vertex="1">
                     <mxGeometry width="250" height="20" relative="1" as="geometry">
                         <mxPoint x="70" y="158" as="offset"/>
                     </mxGeometry>
@@ -803,13 +809,13 @@
                 <mxCell id="787" value="GPS" style="html=1;strokeWidth=1;shadow=0;dashed=0;shape=mxgraph.ios7ui.icon;fontSize=8;fontColor=#ffffff;buttonText=;whiteSpace=wrap;align=center;labelBackgroundColor=none;fillColor=none;" parent="782" vertex="1">
                     <mxGeometry x="20" y="250" width="40" height="36" as="geometry"/>
                 </mxCell>
-                <mxCell id="788" value="GPS00002" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="782" vertex="1">
+                <mxCell id="788" value="未設定" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="782" vertex="1">
                     <mxGeometry x="70" y="258" width="240" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="789" value="GPS00003" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="782" vertex="1">
+                <mxCell id="789" value="未設定" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="782" vertex="1">
                     <mxGeometry x="70" y="308" width="240" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="790" value="GPS" style="html=1;strokeWidth=1;shadow=0;dashed=0;shape=mxgraph.ios7ui.icon;fontSize=8;fontColor=#ffffff;buttonText=;whiteSpace=wrap;align=center;labelBackgroundColor=none;fillColor=none;" parent="782" vertex="1">
+                <mxCell id="790" value="marmo" style="html=1;strokeWidth=1;shadow=0;dashed=0;shape=mxgraph.ios7ui.icon;fontSize=8;fontColor=#ffffff;buttonText=;whiteSpace=wrap;align=center;labelBackgroundColor=none;fillColor=none;" parent="782" vertex="1">
                     <mxGeometry x="20" y="300" width="40" height="36" as="geometry"/>
                 </mxCell>
                 <mxCell id="791" value="ON" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iOnOffButton;mainText=;strokeColor=#001DBC;fontSize=9;fontColor=#ffffff;spacingRight=14;buttonState=on;labelBackgroundColor=none;fillColor=#0050ef;" parent="782" vertex="1">
@@ -820,7 +826,7 @@
                         <mxPoint x="21" y="81" as="offset"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="793" value="GPSトラッカーを設定する時はBluetoothをONに&lt;br&gt;してください。" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="782" vertex="1">
+                <mxCell id="793" value="marmoを設定する時はBluetoothをONにしてください。" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="782" vertex="1">
                     <mxGeometry width="290" height="20" relative="1" as="geometry">
                         <mxPoint x="20" y="50" as="offset"/>
                     </mxGeometry>
@@ -884,7 +890,7 @@
                 <mxCell id="812" value="デバイスの電源ONで&lt;br&gt;３分間ペアリング" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.text.stickyNote2;fontColor=#666666;mainText=;fontSize=17;whiteSpace=wrap;fillColor=#ffffcc;strokeColor=#F62E00;labelBackgroundColor=none;" parent="806" vertex="1">
                     <mxGeometry x="40" y="800" width="300" height="80" as="geometry"/>
                 </mxCell>
-                <mxCell id="813" value="GPSトラッカー（仮）設定" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="806" vertex="1">
+                <mxCell id="813" value="marmo設定" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="806" vertex="1">
                     <mxGeometry x="30" y="190.00000000000023" width="165" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="814" value="" style="shape=line;strokeColor=#ddeeff;strokeWidth=2;html=1;resizeWidth=1;" parent="806" vertex="1">
@@ -893,22 +899,22 @@
                 <mxCell id="815" value="OK" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=5;strokeColor=none;fontColor=#ffffff;fillColor=#66bbff;fontSize=16;fontStyle=1;opacity=30;" parent="806" vertex="1">
                     <mxGeometry x="145" y="645" width="80" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="816" value="GPS" style="html=1;strokeWidth=1;shadow=0;dashed=0;shape=mxgraph.ios7ui.icon;fontSize=8;fontColor=#ffffff;buttonText=;whiteSpace=wrap;align=center;labelBackgroundColor=none;fillColor=none;opacity=30;" parent="806" vertex="1">
+                <mxCell id="816" value="marmo" style="html=1;strokeWidth=1;shadow=0;dashed=0;shape=mxgraph.ios7ui.icon;fontSize=8;fontColor=#ffffff;buttonText=;whiteSpace=wrap;align=center;labelBackgroundColor=none;fillColor=none;opacity=30;" parent="806" vertex="1">
                     <mxGeometry x="40" y="300" width="40" height="36" as="geometry"/>
                 </mxCell>
-                <mxCell id="817" value="GPS00001" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="806" vertex="1">
+                <mxCell id="817" value="鈴木次郎" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="806" vertex="1">
                     <mxGeometry x="90" y="308" width="165" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="818" value="GPS" style="html=1;strokeWidth=1;shadow=0;dashed=0;shape=mxgraph.ios7ui.icon;fontSize=8;fontColor=#ffffff;buttonText=;whiteSpace=wrap;align=center;labelBackgroundColor=none;fillColor=none;opacity=30;" parent="806" vertex="1">
+                <mxCell id="818" value="marmo" style="html=1;strokeWidth=1;shadow=0;dashed=0;shape=mxgraph.ios7ui.icon;fontSize=8;fontColor=#ffffff;buttonText=;whiteSpace=wrap;align=center;labelBackgroundColor=none;fillColor=none;opacity=30;" parent="806" vertex="1">
                     <mxGeometry x="40" y="350" width="40" height="36" as="geometry"/>
                 </mxCell>
-                <mxCell id="819" value="GPS00002" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="806" vertex="1">
+                <mxCell id="819" value="未設定" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="806" vertex="1">
                     <mxGeometry x="90" y="358" width="165" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="820" value="GPS00003" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="806" vertex="1">
+                <mxCell id="820" value="未設定" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="806" vertex="1">
                     <mxGeometry x="90" y="408" width="165" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="821" value="GPS" style="html=1;strokeWidth=1;shadow=0;dashed=0;shape=mxgraph.ios7ui.icon;fontSize=8;fontColor=#ffffff;buttonText=;whiteSpace=wrap;align=center;labelBackgroundColor=none;fillColor=none;opacity=30;" parent="806" vertex="1">
+                <mxCell id="821" value="marmo" style="html=1;strokeWidth=1;shadow=0;dashed=0;shape=mxgraph.ios7ui.icon;fontSize=8;fontColor=#ffffff;buttonText=;whiteSpace=wrap;align=center;labelBackgroundColor=none;fillColor=none;opacity=30;" parent="806" vertex="1">
                     <mxGeometry x="40" y="400" width="40" height="36" as="geometry"/>
                 </mxCell>
                 <mxCell id="822" value="ON" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iOnOffButton;mainText=;strokeColor=#001DBC;fontSize=9;fontColor=#ffffff;spacingRight=14;buttonState=on;labelBackgroundColor=none;fillColor=#0050ef;opacity=30;" parent="806" vertex="1">
@@ -934,7 +940,7 @@
                 <mxCell id="828" value="&lt;font style=&quot;font-size: 24px&quot; color=&quot;#ff3333&quot;&gt;768131&lt;/font&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="825" vertex="1">
                     <mxGeometry x="16.996666666666666" y="77.81183823529413" width="126.5" height="5.392156862745099" as="geometry"/>
                 </mxCell>
-                <mxCell id="829" value="&lt;b&gt;GPS00001をペア設定しますか？&lt;/b&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="825" vertex="1">
+                <mxCell id="829" value="&lt;b&gt;marmoをペア設定しますか？&lt;/b&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="825" vertex="1">
                     <mxGeometry width="190" height="20" relative="1" as="geometry">
                         <mxPoint x="15.33" y="17.5" as="offset"/>
                     </mxGeometry>
