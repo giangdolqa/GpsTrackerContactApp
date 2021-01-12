@@ -12,24 +12,7 @@ import 'package:gps_tracker/views/gpstracker_setting_view.dart';
 import 'package:gps_tracker/views/device_setting_view.dart';
 import 'package:workmanager/workmanager.dart';
 
-// 常駐位置更新
-void callbackDispatcher() {
-  Workmanager.executeTask((task, inputData) {
-    print("Native called background task: $inputData"); //simpleTask will be emitted here.
-    mqttUtil.getSurroundingUserInfo();
-    return Future.value(true);
-  });
-}
-
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  // 常駐機能を登録
-  Workmanager.initialize(
-      callbackDispatcher, // The top level function, aka callbackDispatcher
-      isInDebugMode: true // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
-  );
-  Workmanager.registerPeriodicTask("2", "PeriodicTask", tag: "daemon");
-
   runApp(TrackerApp());
 }
 
@@ -91,9 +74,9 @@ class TrackerAppState extends State<TrackerApp> {
       DeviceOrientation.portraitDown,
     ]);
     return MaterialApp(
-      title: 'GPSTracker',
+      title: 'Marmo',
       debugShowCheckedModeBanner: true,
-      home: LoginView(),
+      home: HomeView(),
       theme: ThemeData(
         brightness: Brightness.light,
         primarySwatch: Colors.blue,

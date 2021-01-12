@@ -259,97 +259,26 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
       tmpDevlist.add(
         Container(
           padding: EdgeInsets.all(5),
-          child: Row(
-            children: [
-              mypopup.PopupMenuButton(
-                child: Image(
-                  image: AssetImage("assets/icon/GPS_icon.png"),
-                  fit: BoxFit.fill,
-                  height: 35,
-                ),
-                offset: Offset(0, 50),
-                itemBuilder: (_) =>
-                    <mypopup.PopupMenuItem<Map<String, DeviceInfo>>>[
-                  new mypopup.PopupMenuItem<Map<String, DeviceInfo>>(
-                    child: Container(
-                      height: double.infinity,
-                      width: 120,
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.only(left: 5, top: 5),
-                            child: Icon(
-                              Icons.settings,
-                              size: 30,
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              padding: EdgeInsets.only(left: 5, top: 5),
-                              child: Text(
-                                "設定",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                ),
-                              ),
-                              // alignment: Alignment.center,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    color: Color(0x55c4c4c4),
-                    value: {"setting": device},
+          child: InkWell(
+            onTap: _onTapOtherDevice(device),
+            child: Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.only(left: 10),
+                  child: Text(
+                    device.name,
+                    style: TextStyle(fontSize: 14),
                   ),
-                  new mypopup.PopupMenuItem<Map<String, DeviceInfo>>(
-                    child: Container(
-                      height: double.infinity,
-                      width: 120,
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.only(left: 5, top: 5),
-                            child: Image.asset(
-                              "assets/icon/dust.png",
-                              width: 30,
-                              height: 30,
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              padding: EdgeInsets.only(left: 5, top: 5),
-                              child: Text(
-                                "削除",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                ),
-                              ),
-                              // alignment: Alignment.center,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    value: {"delete": device},
+                ),
+                Container(
+                  padding: EdgeInsets.only(left: 10),
+                  child: Text(
+                    device.name,
+                    style: TextStyle(fontSize: 14),
                   ),
-                ],
-                onSelected: _onActionMenuSelect,
-              ),
-              Container(
-                padding: EdgeInsets.only(left: 10),
-                child: Text(
-                  device.name,
-                  style: TextStyle(fontSize: 14),
                 ),
-              ),
-              Container(
-                padding: EdgeInsets.only(left: 10),
-                child: Text(
-                  device.name,
-                  style: TextStyle(fontSize: 14),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       );
@@ -359,6 +288,11 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
         otherDevList = tmpDevlist;
       });
     }
+  }
+
+  _onTapOtherDevice(DeviceInfo device){
+    device.device.device.connect(timeout: Duration(seconds: 60), autoConnect: false);
+
   }
 
   _deviceSet(DeviceInfo deviceInfo) {
