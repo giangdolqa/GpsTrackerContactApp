@@ -59,7 +59,7 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
   int _countdownTime = 0;
 
   // GenderVal
-  String dropdownValue;
+  String dropdownValue = '男の子';
 
   @override
   void initState() {
