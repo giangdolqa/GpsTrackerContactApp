@@ -5,23 +5,27 @@ import 'dart:io';
 
 import 'package:date_format/date_format.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:gps_tracker/beans/device_dbInfo.dart';
 import 'package:gps_tracker/beans/normal_info.dart';
 import 'package:gps_tracker/beans/alarm_info.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
+import 'db_util.dart';
 import 'event_util.dart';
 import 'position_util.dart';
 import 'shared_pre_util.dart';
 
 final MqttUtil mqttUtil = MqttUtil();
 
-
 class MqttUtil {
   // final client = MqttServerClient('test.mosquitto.org', ''); // 試験用サービス
-  final client = MqttServerClient('ik1-407-35954.vs.sakura.ne.jp', ''); // 試験用サービス
+  final client =
+      MqttServerClient('ik1-407-35954.vs.sakura.ne.jp', ''); // 試験用サービス
   MqttUtil() {
     /// Set logging on if needed, defaults to off
     client.logging(on: false);
@@ -35,8 +39,8 @@ class MqttUtil {
 
     /// Add the successful connection callback
     client.onConnected = onConnected;
-    // client.port = 8883; // 実装用
-    client.port = 1883; // 試験用
+    client.port = 8883; // 試験用
+    // client.port = 1883; // 試験用
 
     /// Add a subscribed callback, there is also an unsubscribed callback if you need it.
     /// You can add these before connection or change them dynamically after connection if
@@ -54,8 +58,12 @@ class MqttUtil {
 
   // 接続初期化(非同期
   void _initConn() async {
-    final context = SecurityContext();
-    context.setTrustedCertificates("assets/cert/cert.pem");
+    final context = SecurityContext.defaultContext;
+    // final currDir = path.current + path.separator;
+    // context.setTrustedCertificates(path.join('assets', 'cert', 'cert.pem'));
+    // context.setTrustedCertificates("/assets/cert/cert.pem");
+    ByteData data = await rootBundle.load('assets/cert/cert.pem');
+    context.setTrustedCertificatesBytes(data.buffer.asUint8List());
 
     String username = await spUtil.GetUsername();
     String password = await spUtil.GetPassword();
@@ -69,27 +77,39 @@ class MqttUtil {
     final connMess = MqttConnectMessage()
         .withClientIdentifier("UniqueId")
         .keepAliveFor(20) // Must agree with the keep alive set above or not set
-        .withWillTopic(
-            'willtopic') // If you set this you must set a will message
-        .withWillMessage('My Will message')
         .authenticateAs(username, password)
         .startClean() // Non persistent session for testing
         .withWillQos(MqttQos.atLeastOnce);
-    print('EXAMPLE::Mosquitto client connecting....');
+    print('marmo::Mosquitto client connecting....');
+    client.secure = true;
+    client.securityContext = context;
     client.connectionMessage = connMess;
+
+    await client.connect();
+  }
+
+  Future connect() async{
+    try {
+      await client.connect();
+    }
+    catch (e){
+      print('marmo::Mosquitto client connect failed.... $e');
+      return false;
+    }
+    return true;
   }
 
   /// The subscribed callback
   void onSubscribed(String topic) {
-    print('EXAMPLE::Subscription confirmed for topic $topic');
+    print('marmo::Subscription confirmed for topic $topic');
   }
 
   /// The unsolicited disconnect callback
   void onDisconnected() {
-    print('EXAMPLE::OnDisconnected client callback - Client disconnection');
+    print('marmo::OnDisconnected client callback - Client disconnection');
     if (client.connectionStatus.disconnectionOrigin ==
         MqttDisconnectionOrigin.solicited) {
-      print('EXAMPLE::OnDisconnected callback is solicited, this is correct');
+      print('marmo::OnDisconnected callback is solicited, this is correct');
     }
     exit(-1);
   }
@@ -97,12 +117,12 @@ class MqttUtil {
   /// The successful connect callback
   void onConnected() {
     print(
-        'EXAMPLE::OnConnected client callback - Client connection was sucessful');
+        'marmo::OnConnected client callback - Client connection was sucessful');
   }
 
   /// Pong callback
   void pong() {
-    print('EXAMPLE::Ping response client callback invoked');
+    print('marmo::Ping response client callback invoked');
   }
 
   Future<String> getEncryptKey(String deviceName) async {
@@ -127,10 +147,30 @@ class MqttUtil {
     });
   }
 
-  // 緊急通知取得
-  getSurroundingUserInfo(String deviceName) {
+  // デバイス毎に緊急通知購読
+  getAllDeviceAlarmInfo() async {
+    await connect();
+    List<DeviceDBInfo> deviceList = await DbUtil.dbUtil.getDeviceDBInfoList();
+    deviceList.forEach((element) {
+      getSurroundingUserInfo(element.name);
+    });
+  }
+
+// 緊急通知取得
+  getSurroundingUserInfo(deviceName) async {
     // final builder = MqttClientPayloadBuilder();
     // builder.addString('Hello from mqtt_client');
+    // try {
+    //   await client.connect();
+    // } on Exception catch (e) {
+    //   print('marmo::client exception - $e');
+    //   client.disconnect();
+    // }
+
+    globalTempPos = await geolocator.getCurrentPosition();
+    if (globalTempPos == null) {
+      return null;
+    }
     double latitudeIn10Secs = globalTempPos.latitude * 60 * 60 / 10;
     double longitudeIn10Secs = globalTempPos.longitude * 60 * 60 / 10;
 
@@ -229,22 +269,17 @@ class MqttUtil {
       client.subscribe(topic, MqttQos.exactlyOnce);
     });
 
-    client.updates.listen((dynamic c) {
+    // Create the topic filter
+    final topicFilter = MqttClientTopicFilter('emg/#', client.updates);
+    // Now listen on the filtered updates, not the client updates
+    // ignore: avoid_types_on_closure_parameters
+    topicFilter.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
       final MqttPublishMessage recMess = c[0].payload;
-      String pt =
+      final pt =
           MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
-      AlarmInfo ai = new AlarmInfo();
-      var json = {
-        "Lat": 38.67,
-        "Lng": 12.66,
-        "Sex": 1,
-        "Age": 16
-      };
-      pt = json.toString();
-      ai.jsonStrToAlarminfo(pt, null);
-      eventBus.fire(ai);
+
       print(
-          'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
+          'marmo::Filtered Change notification for ebcon/#:: topic is <${c[0].topic}>, payload is <-- $pt -->');
     });
   }
 }

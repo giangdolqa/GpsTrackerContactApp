@@ -7,6 +7,7 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'package:gps_tracker/beans/device_info.dart';
 import 'package:gps_tracker/beans/setting_info.dart';
 import 'package:gps_tracker/utils/ble_util.dart';
+import 'package:gps_tracker/utils/crypt_util.dart';
 import 'package:gps_tracker/components/my_popup_menu.dart' as mypopup;
 import 'package:gps_tracker/views/device_setting_view.dart';
 
@@ -21,17 +22,21 @@ class GpsTrackerSettingView extends StatefulWidget {
 
 class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
   String title = 'GPSトラッカー設定';
+  final String settingUUID = '51f2e511-be4e-42e2-a502-0bf3aa109855';
   bool _blueToothFlag = false;
   List<DeviceInfo> myDevices = [];
   List<DeviceInfo> otherDevices = [];
   List<Widget> myDevlist = [];
   List<Widget> otherDevList = [];
-  Timer _timer = null;
   FlutterBlue flutterBlue = FlutterBlue.instance;
+  BluetoothCharacteristic mCharacteristic;
+  List deviceCallbackData = [];
+  final _codeFormat = new NumberFormat("000000", "en_US");
 
   @override
   void initState() {
     super.initState();
+//    _getDeviceInfo();
     flutterBlue.state.listen((state) {
       if (state == BluetoothState.on) {
         setState(() {
@@ -41,28 +46,19 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
       } else if (state == BluetoothState.off) {
         setState(() {
           _blueToothFlag = false;
+          otherDevList = [];
+          myDevlist = [];
         });
       }
     });
-
-//    const timeInterval = const Duration(seconds: 1);
-//    _timer = Timer.periodic(timeInterval, (timer) {
-//      _initBluetoothState();
-//    });
   }
 
-  _initDeviceList() async {
-    _getDeviceInfo();
-//    _getMyDevListRow();
-//    _getOtherDevListRow();
-  }
-
-  _initBluetoothState() async {
-    bool isBluetoothOn = await getBlueToothState();
-    if (mounted) {
-      setState(() {
-        _blueToothFlag = isBluetoothOn;
-      });
+  int _getSettingCode(int deviceId) {
+    if (deviceId == null) {
+      return 123456;
+    } else {
+      int result = 1048575 - deviceId + 1;
+      return result;
     }
   }
 
@@ -82,46 +78,32 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
           tempDi.id = result.device.id;
           tempDi.type = result.device.type;
           tempDi.device = result;
-          bool _flg = false;
-          for (var i = 0; i < otherDevices.length; i++) {
-            if (otherDevices[i].id == tempDi.id) {
-              _flg = true;
-              break;
-            }
-          }
-          if (!_flg) {
+//          bool _flg = false;
+//          for (var i = 0; i < otherDevices.length; i++) {
+//            if (otherDevices[i].id == tempDi.id) {
+//              _flg = true;
+//              break;
+//            }
+//          }
+//          if (!_flg) {
+//            otherDevices.add(tempDi);
+//          }
+          if (!otherDevices.contains(tempDi)) {
             otherDevices.add(tempDi);
           }
         }
         _getOtherDevListRow();
       });
-//        startBle();
-//      // 接続したデバイスを取得
-//      List<BluetoothDevice> connectedDevices = await getConnectedDevices();
-//      connectedDevices.forEach((bluetoothDevice) {
-//        DeviceInfo tempDi = new DeviceInfo();
-//        tempDi.name = bluetoothDevice.name;
-//        tempDi.id = bluetoothDevice.id;
-//        tempDi.type = bluetoothDevice.type;
-//        myDevices.add(tempDi);
-//      });
-//
-//      //その他のデバイスを取得
-//      List bleScanNameAry = getBleScanNameAry();
-//      bleScanNameAry.forEach((deviceName) {
-//        DeviceInfo tempDi = new DeviceInfo();
-//        tempDi.name = deviceName;
-//        otherDevices.add(tempDi);
-//      });
     } else {
       myDevices.clear();
       otherDevices.clear();
     }
 //    DeviceInfo tempDi = new DeviceInfo();
 //    tempDi.name = "name";
-//    tempDi.id = DeviceIdentifier("id");
+//    tempDi.id = DeviceIdentifier("123456");
 //    tempDi.type = BluetoothDeviceType.classic;
 //    myDevices.add(tempDi);
+//    _getMyDevListRow();
   }
 
   // デバイスリストアイテム作成
@@ -135,20 +117,36 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
           child: Row(
             children: [
               mypopup.PopupMenuButton(
-                child: Stack(
+                child: Row(
                   children: [
-                    Image(
-                        image: AssetImage("assets/icon/GPS_icon.png"),
-                        fit: BoxFit.fill),
                     Container(
-                      padding: EdgeInsets.only(bottom: 5),
-                      alignment: Alignment.center,
+                      width: 35,
+                      height: 35,
+                      // margin: EdgeInsets.fromLTRB(0, 64.0, 0, 0),
+                      child: Stack(
+                        children: [
+                          Image(
+                              image: AssetImage("assets/icon/GPS_icon.png"),
+                              fit: BoxFit.fill),
+                          Container(
+                            padding: EdgeInsets.only(bottom:5),
+                            alignment: Alignment.center,
+                            child: Text(
+                              device.name.substring(0, 3).toUpperCase(),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(left: 10),
                       child: Text(
-                        device.name.substring(0, 3).toUpperCase(),
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                        ),
+                        device.name,
+                        style: TextStyle(fontSize: 14),
                       ),
                     ),
                   ],
@@ -221,10 +219,10 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
                 ],
                 onSelected: _onActionMenuSelect,
               ),
-              Container(
-                padding: EdgeInsets.only(left: 10),
-                child: Text(device.name, style: TextStyle(fontSize: 14)),
-              ),
+//              Container(
+//                padding: EdgeInsets.only(left: 10),
+//                child: Text(device.name, style: TextStyle(fontSize: 14)),
+//              ),
             ],
           ),
         ),
@@ -240,7 +238,10 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
   void _onActionMenuSelect(Map<String, DeviceInfo> selectedVal) {
     switch (selectedVal.keys.first) {
       case "setting":
-        showAlert(context, selectedVal.values.first);
+        int settingCode = _getSettingCode(
+            int.parse(selectedVal.values.first.id.toString().substring(0, 5)));
+        showAlert(
+            context, selectedVal.values.first, _codeFormat.format(settingCode));
         break;
       case "delete":
         // 削除処理
@@ -259,97 +260,42 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
       tmpDevlist.add(
         Container(
           padding: EdgeInsets.all(5),
-          child: Row(
-            children: [
-              mypopup.PopupMenuButton(
-                child: Image(
-                  image: AssetImage("assets/icon/GPS_icon.png"),
-                  fit: BoxFit.fill,
+          child: InkWell(
+            onTap: () {}, //　ペアリング処理
+            child: Row(
+              children: [
+                Container(
+                  width: 35,
                   height: 35,
-                ),
-                offset: Offset(0, 50),
-                itemBuilder: (_) =>
-                    <mypopup.PopupMenuItem<Map<String, DeviceInfo>>>[
-                  new mypopup.PopupMenuItem<Map<String, DeviceInfo>>(
-                    child: Container(
-                      height: double.infinity,
-                      width: 120,
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.only(left: 5, top: 5),
-                            child: Icon(
-                              Icons.settings,
-                              size: 30,
-                            ),
+                  // margin: EdgeInsets.fromLTRB(0, 64.0, 0, 0),
+                  child: Stack(
+                    children: [
+                      Image(
+                          image: AssetImage("assets/icon/GPS_icon.png"),
+                          fit: BoxFit.fill),
+                      Container(
+                        padding: EdgeInsets.only(bottom:5),
+                        alignment: Alignment.center,
+                        child: Text(
+                          device.name.substring(0, 3).toUpperCase(),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
                           ),
-                          Expanded(
-                            child: Container(
-                              padding: EdgeInsets.only(left: 5, top: 5),
-                              child: Text(
-                                "設定",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                ),
-                              ),
-                              // alignment: Alignment.center,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                    color: Color(0x55c4c4c4),
-                    value: {"setting": device},
+                    ],
                   ),
-                  new mypopup.PopupMenuItem<Map<String, DeviceInfo>>(
-                    child: Container(
-                      height: double.infinity,
-                      width: 120,
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.only(left: 5, top: 5),
-                            child: Image.asset(
-                              "assets/icon/dust.png",
-                              width: 30,
-                              height: 30,
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              padding: EdgeInsets.only(left: 5, top: 5),
-                              child: Text(
-                                "削除",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                ),
-                              ),
-                              // alignment: Alignment.center,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    value: {"delete": device},
+                ),
+                Container(
+                  padding: EdgeInsets.only(left: 10),
+                  child: Text(
+                    device.name,
+                    style: TextStyle(fontSize: 14),
                   ),
-                ],
-                onSelected: _onActionMenuSelect,
-              ),
-              Container(
-                padding: EdgeInsets.only(left: 10),
-                child: Text(
-                  device.name,
-                  style: TextStyle(fontSize: 14),
                 ),
-              ),
-              Container(
-                padding: EdgeInsets.only(left: 10),
-                child: Text(
-                  device.name,
-                  style: TextStyle(fontSize: 14),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       );
@@ -361,34 +307,97 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
     }
   }
 
+  dataCallbackDevice() async {
+    await mCharacteristic.setNotifyValue(true);
+    mCharacteristic.value.listen((value) {
+      if (value == null) {
+        return;
+      }
+      List data = [];
+      for (var i = 0; i < value.length; i++) {
+        String dataStr = value[i].toRadixString(16);
+        if (dataStr.length < 2) {
+          dataStr = "0" + dataStr;
+        }
+        String dataEndStr = "0x" + dataStr;
+        data.add(dataEndStr);
+      }
+      deviceCallbackData = data;
+    });
+  }
+
+  _onTapOtherDevice(DeviceInfo device) {
+    device.device.device
+        .connect(timeout: Duration(seconds: 60), autoConnect: false);
+  }
+
   _deviceSet(DeviceInfo deviceInfo) {
     SettingInfo temp = null;
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) =>
-            DeviceSettingView(deviceInfo: deviceInfo, settingInfo: temp),
-      ),
-    ).then((result) async {
-      if (result != null) {
-        await deviceInfo.device.device
-            .connect(autoConnect: false, timeout: Duration(seconds: 10));
-
-        BluetoothCharacteristic mCharacteristic;
-        List<BluetoothService> services =
-            await deviceInfo.device.device.discoverServices();
-        services.forEach((service) {});
+    deviceInfo.device.device
+        .connect(autoConnect: false, timeout: Duration(seconds: 10))
+        .whenComplete(() async {
+      BluetoothCharacteristic mCharacteristic;
+      List<BluetoothService> services =
+          await deviceInfo.device.device.discoverServices();
+      services.forEach((service) async {
+        var characteristics = service.characteristics;
+        characteristics.forEach((characteristic) {
+          if (characteristic.uuid.toString() == settingUUID) {
+            mCharacteristic = characteristic;
+            const timeout = const Duration(seconds: 10);
+            Timer(timeout, () {
+              dataCallbackDevice();
+            });
+          }
+        });
+      });
+      if (mCharacteristic == null) {
+        print("デバイスペアリングエラー");
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                DeviceSettingView(deviceInfo: deviceInfo, settingInfo: temp),
+          ),
+        ).then((result) {
+          if (result != null) {
+            mCharacteristic.write(result);
+            deviceInfo.device.device.disconnect();
+          }
+        });
       }
+    }).catchError(() {
+      print("デバイスペアリングエラー");
     });
     // 設定画面へ遷移
   }
 
-  showAlert(BuildContext context, DeviceInfo deviceInfo) {
+  showAlert(BuildContext context, DeviceInfo deviceInfo, String settingCode) {
     showDialog(
       context: context,
       builder: (context) => new AlertDialog(
-        title: Text('ペアリング'),
-        content: Text(deviceInfo.name + 'をペア設定しますか？'),
+        title: Text(deviceInfo.name + 'をペア設定しますか？'),
+        content: Container(
+          height: 80,
+          alignment: Alignment.centerLeft,
+          child: new Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Bluetoothペア設定コード'),
+                SizedBox(height: 10.0),
+                Text(
+                  settingCode,
+                  style: TextStyle(
+                    inherit: true,
+                    color: Colors.red,
+                    fontSize: 25.0,
+                    fontWeight: FontWeight.bold,
+                    textBaseline: TextBaseline.alphabetic,
+                  ),
+                ),
+              ]),
+        ),
         actions: <Widget>[
           new RaisedButton(
             onPressed: () {

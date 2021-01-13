@@ -16,8 +16,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_controller/google_maps_controller.dart';
+import 'package:gps_tracker/beans/device_dbInfo.dart';
 import 'package:gps_tracker/beans/normal_info.dart';
 import 'package:gps_tracker/beans/alarm_info.dart';
+import 'package:gps_tracker/utils/db_util.dart';
 import 'package:gps_tracker/utils/event_util.dart';
 import 'package:gps_tracker/utils/nuid_util.dart';
 import 'package:marquee/marquee.dart';
@@ -26,12 +28,25 @@ import 'package:toast/toast.dart';
 import 'package:gps_tracker/components/my_popup_menu.dart' as mypopup;
 import 'package:gps_tracker/utils/position_util.dart';
 import 'package:gps_tracker/utils/mqtt_util.dart';
+import 'package:workmanager/workmanager.dart';
 
 class HomeView extends StatefulWidget {
   HomeView();
 
   @override
   HomeViewState createState() => HomeViewState();
+}
+
+// 常駐位置更新
+void callbackDispatcher() {
+  Workmanager.executeTask((task, inputData) {
+    print(
+        "WorkManager Executed !!  Native called background task: $inputData"); //simpleTask will be emitted here.
+    mqttUtil.getAllDeviceAlarmInfo();
+    print(
+        "WorkManager Done !!  Native called background task: $inputData"); //simpleTask will be emitted here.
+    return Future.value(true);
+  });
 }
 
 class HomeViewState extends State<HomeView>
@@ -58,8 +73,15 @@ class HomeViewState extends State<HomeView>
   void initState() {
     super.initState();
     // 位置情報取得開始
-    positionUtil.getPermissions(context);
-    positionUtil.startListen(context);
+    // positionUtil.getPermissions(context);
+    // positionUtil.startListen(context);
+    // 常駐機能を登録
+    Workmanager.initialize(
+        callbackDispatcher, // The top level function, aka callbackDispatcher
+        isInDebugMode:
+            true // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
+        );
+    Workmanager.registerPeriodicTask("2", "PeriodicTask", tag: "daemon");
 
     // 緊急通知処理登録
     eventBus.on<AlarmInfo>().listen((event) {
@@ -77,6 +99,9 @@ class HomeViewState extends State<HomeView>
         _addNormalMarkers(event);
       }
     });
+    //
+    // mqttUtil.connect();
+    // mqttUtil.getAllDeviceAlarmInfo();
   }
 
   // 画面破棄
@@ -183,10 +208,7 @@ class HomeViewState extends State<HomeView>
         pictureRecorder, Rect.fromLTWH(0, 0, clipWidth, clipHeight))
       ..drawImage(
           image, const Offset(0, 0), Paint()..blendMode = BlendMode.dstOver);
-    textPainter.paint(
-        canvas,
-        Offset(65,
-            textPainter.height / 2.0 + 10));
+    textPainter.paint(canvas, Offset(65, textPainter.height / 2.0 + 10));
     final pic = pictureRecorder.endRecording();
 
     // rasterizing
@@ -206,7 +228,7 @@ class HomeViewState extends State<HomeView>
           CameraUpdate cameraUpdate = CameraUpdate.newLatLngZoom(
               LatLng(ai.position.latitude, ai.position.longitude), 14);
           googleMapController.moveCamera(cameraUpdate);
-          _onMarkerTapped(markerId);
+          // _onMarkerTapped(markerId);
         },
         position: position);
 
