@@ -40,11 +40,11 @@ class HomeView extends StatefulWidget {
 
 // 常駐位置更新
 void callbackDispatcher() {
-  Workmanager.executeTask((task, inputData) {
+  Workmanager.executeTask((task, inputData) async {
     print(
         "WorkManager Executed !!  Native called background task: $inputData"); //simpleTask will be emitted here.
     MqttUtil tmpMqttUtil = new MqttUtil();
-    tmpMqttUtil.getAllDeviceAlarmInfo();
+    await tmpMqttUtil.getAllDeviceAlarmInfo();
     print(
         "WorkManager Done !!  Native called background task: $inputData"); //simpleTask will be emitted here.
     return Future.value(true);
@@ -83,7 +83,7 @@ class HomeViewState extends State<HomeView>
         isInDebugMode:
             true // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
         );
-    Workmanager.registerPeriodicTask("2", "PeriodicTask", tag: "daemon");
+    Workmanager.registerPeriodicTask("2", "PeriodicTask", tag: "marmo_daemon");
 
     // 緊急通知処理登録
     eventBus.on<AlarmInfo>().listen((event) {
@@ -104,7 +104,7 @@ class HomeViewState extends State<HomeView>
     });
     //
     // mqttUtil.connect();
-    mqttUtil.getAllDeviceAlarmInfo();
+    // mqttUtil.getAllDeviceAlarmInfo();
   }
 
   // 画面破棄

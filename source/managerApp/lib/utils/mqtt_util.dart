@@ -182,8 +182,8 @@ class MqttUtil {
   // デバイス毎に緊急通知購読
   getAllDeviceAlarmInfo() async {
     print("marmo::------------------" + client.connectionStatus.toString());
-    connect().then((value) {
-      getSurroundingUserInfo();
+    connect().then((value) async {
+      await getSurroundingUserInfo();
     });
     // getSurroundingUserInfo();
   }

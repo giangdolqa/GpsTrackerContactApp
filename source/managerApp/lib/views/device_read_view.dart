@@ -14,6 +14,7 @@ import 'package:marmo/utils/shared_pre_util.dart';
 import 'package:marmo/views/device_setting_view.dart';
 
 import 'package:intl/intl.dart';
+import 'package:marquee/marquee.dart';
 
 class GpsTrackerReadingView extends StatefulWidget {
   GpsTrackerReadingView({Key key}) : super(key: key);
@@ -50,6 +51,12 @@ class GpsTrackerReadingViewState extends State<GpsTrackerReadingView> {
         });
       }
     });
+  }
+
+  //
+  void _getConnectDeviceFromDB() async{
+    myDBDevicesList.clear();
+
   }
 
   int _getSettingCode(int deviceId) {
@@ -115,8 +122,14 @@ class GpsTrackerReadingViewState extends State<GpsTrackerReadingView> {
             ),
           ),
           InkWell(
-            child: Image(
-                image: AssetImage("assets/icon/confirm.png"), fit: BoxFit.fill),
+            child: Container(
+              width: 35,
+              height: 35,
+              child: Image(
+                  image: AssetImage("assets/icon/confirm.png"),
+                  fit: BoxFit.fill),
+            ),
+            onTap: () {}, // TODO: 接触確認画面へ遷移
           ),
         ],
       ),
@@ -135,113 +148,80 @@ class GpsTrackerReadingViewState extends State<GpsTrackerReadingView> {
           padding: EdgeInsets.all(5),
           child: Row(
             children: [
-              mypopup.PopupMenuButton(
-                child: Row(
+              Container(
+                width: 35,
+                height: 35,
+                // margin: EdgeInsets.fromLTRB(0, 64.0, 0, 0),
+                child: Stack(
                   children: [
+                    Image(
+                        image: AssetImage("assets/icon/GPS_icon.png"),
+                        fit: BoxFit.fill),
                     Container(
-                      width: 35,
-                      height: 35,
-                      // margin: EdgeInsets.fromLTRB(0, 64.0, 0, 0),
-                      child: Stack(
-                        children: [
-                          Image(
-                              image: AssetImage("assets/icon/GPS_icon.png"),
-                              fit: BoxFit.fill),
-                          Container(
-                            padding: EdgeInsets.only(bottom: 5),
-                            alignment: Alignment.center,
-                            child: Text(
-                              "GPS",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(left: 10),
+                      padding: EdgeInsets.only(bottom: 5),
+                      alignment: Alignment.center,
                       child: Text(
-                        device.name,
-                        style: TextStyle(fontSize: 14),
+                        "GPS",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                        ),
                       ),
                     ),
                   ],
                 ),
-                offset: Offset(0, 50),
-                itemBuilder: (_) =>
-                    <mypopup.PopupMenuItem<Map<String, DeviceInfo>>>[
-                  new mypopup.PopupMenuItem<Map<String, DeviceInfo>>(
-                    child: Container(
-                      height: double.infinity,
-                      width: 120,
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.only(left: 5, top: 5),
-                            child: Icon(
-                              Icons.settings,
-                              size: 30,
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              padding: EdgeInsets.only(left: 5, top: 5),
-                              child: Text(
-                                "設定",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                ),
-                              ),
-                              // alignment: Alignment.center,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    color: Color(0x55c4c4c4),
-                    value: {"setting": device},
-                  ),
-                  new mypopup.PopupMenuItem<Map<String, DeviceInfo>>(
-                    child: Container(
-                      height: double.infinity,
-                      width: 120,
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.only(left: 5, top: 5),
-                            child: Image.asset(
-                              "assets/icon/dust.png",
-                              width: 30,
-                              height: 30,
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              padding: EdgeInsets.only(left: 5, top: 5),
-                              child: Text(
-                                "削除",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                ),
-                              ),
-                              // alignment: Alignment.center,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    value: {"delete": device},
-                  ),
-                ],
-                onSelected: _onActionMenuSelect,
               ),
-//              Container(
-//                padding: EdgeInsets.only(left: 10),
-//                child: Text(device.name, style: TextStyle(fontSize: 14)),
-//              ),
+              // 顧客名称
+              Expanded(
+                flex: 1,
+                child: Container(
+                  padding: EdgeInsets.only(left: 10),
+                  child: Text(
+                    device.name,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 14),
+                  ),
+                ),
+              ),
+              // 接続状態
+              Expanded(
+                flex: 1,
+                child: Container(
+                  padding: EdgeInsets.only(left: 5),
+                  child: Text(
+                    "接続済み",
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: false,
+                    style: TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ),
+              // 読み込みボタン
+              InkWell(
+                child: Container(
+                  width: 40,
+                  height: 35,
+                  padding: EdgeInsets.only(left: 5),
+                  child: Image(
+                      image: AssetImage("assets/icon/refresh.png"),
+                      fit: BoxFit.fill),
+                ),
+                onTap: () {}, // TODO: BLE読み込み
+              ),
+              // 接触確認ボタン
+              InkWell(
+                child: Container(
+                  width: 40,
+                  height: 35,
+                  padding: EdgeInsets.only(left: 5),
+                  child: Image(
+                      image: AssetImage("assets/icon/confirm.png"),
+                      fit: BoxFit.fill),
+                ),
+                onTap: () {}, // TODO: 接触確認画面へ遷移
+              ),
             ],
           ),
         ),
