@@ -10,6 +10,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:gps_tracker/beans/device_dbInfo.dart';
 import 'package:gps_tracker/beans/normal_info.dart';
 import 'package:gps_tracker/beans/alarm_info.dart';
+import 'package:gps_tracker/utils/sound_util.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:path_provider/path_provider.dart';
@@ -24,8 +25,8 @@ final MqttUtil mqttUtil = MqttUtil();
 
 class MqttUtil {
   // final client = MqttServerClient('test.mosquitto.org', ''); // 試験用サービス
-  final client =
-      MqttServerClient('ik1-407-35954.vs.sakura.ne.jp', ''); // 試験用サービス
+  final client = MqttServerClient('broker.emqx.io', ''); // 試験用サービス
+  // final client =  MqttServerClient('ik1-407-35954.vs.sakura.ne.jp', '');
   MqttUtil() {
     /// Set logging on if needed, defaults to off
     client.logging(on: false);
@@ -39,8 +40,9 @@ class MqttUtil {
 
     /// Add the successful connection callback
     client.onConnected = onConnected;
-    client.port = 8883; // 試験用
-    // client.port = 1883; // 試験用
+    // client.port = 8883; // 試験用
+    // client.port = 8083 ; // 試験用
+    client.port = 1883; // 試験用
 
     /// Add a subscribed callback, there is also an unsubscribed callback if you need it.
     /// You can add these before connection or change them dynamically after connection if
@@ -52,14 +54,11 @@ class MqttUtil {
     /// Set a ping received callback if needed, called whenever a ping response(pong) is received
     /// from the broker.
     client.pongCallback = pong;
-
-    _initConn(); // 接続初期化(非同期
   }
 
   // 接続初期化(非同期
   void _initConn() async {
     final context = SecurityContext.defaultContext;
-    // final currDir = path.current + path.separator;
     // context.setTrustedCertificates(path.join('assets', 'cert', 'cert.pem'));
     // context.setTrustedCertificates("/assets/cert/cert.pem");
     ByteData data = await rootBundle.load('assets/cert/cert.pem');
@@ -75,7 +74,7 @@ class MqttUtil {
     /// client identifier, any supplied username/password, the default keepalive interval(60s)
     /// and clean session, an example of a specific one below.
     final connMess = MqttConnectMessage()
-        .withClientIdentifier("UniqueId")
+        .withClientIdentifier("MarmoApp")
         .keepAliveFor(20) // Must agree with the keep alive set above or not set
         .authenticateAs(username, password)
         .startClean() // Non persistent session for testing
@@ -84,15 +83,48 @@ class MqttUtil {
     client.secure = true;
     client.securityContext = context;
     client.connectionMessage = connMess;
-
-    await client.connect();
   }
 
-  Future connect() async{
+
+  // 接続初期化(非同期
+  void _initConn_test() async {
+    // final context = SecurityContext.defaultContext;
+    // context.setTrustedCertificates(path.join('assets', 'cert', 'cert.pem'));
+    // context.setTrustedCertificates("/assets/cert/cert.pem");
+    // ByteData data = await rootBundle.load('assets/cert/cert.pem');
+    // context.setTrustedCertificatesBytes(data.buffer.asUint8List());
+
+    String username = await spUtil.GetUsername();
+    String password = await spUtil.GetPassword();
+
+    username = "temporary";
+    password = "password";
+
+    /// Create a connection message to use or use the default one. The default one sets the
+    /// client identifier, any supplied username/password, the default keepalive interval(60s)
+    /// and clean session, an example of a specific one below.
+    final connMess = MqttConnectMessage()
+        .withClientIdentifier("UniqueId")
+        .keepAliveFor(20) // Must agree with the keep alive set above or not set
+    // .authenticateAs(username, password)
+        .startClean() // Non persistent session for testing
+        .withWillQos(MqttQos.atLeastOnce);
+    print('marmo::Mosquitto client connecting....');
+    // client.secure = true;
+    // client.securityContext = context;
+    client.connectionMessage = connMess;
+
+    // await client.connect();
+  }
+
+  Future connect() async {
     try {
-      await client.connect();
-    }
-    catch (e){
+      // await _initConn(); // 接続初期化(非同期
+      await _initConn_test(); // 接続初期化(非同期
+      var mqttClientConnectionStatus = await client.connect();
+      print(
+          'marmo::Mosquitto client connect failed.... $mqttClientConnectionStatus');
+    } catch (e) {
       print('marmo::Mosquitto client connect failed.... $e');
       return false;
     }
@@ -142,22 +174,22 @@ class MqttUtil {
       final pt =
           MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
       NormalInfo pi;
-      pi.jsonToNormalinfo(pt, null);
+      pi.jsonToNormalinfo(pt, "aaa", null);
       eventBus.fire(pi);
     });
   }
 
   // デバイス毎に緊急通知購読
   getAllDeviceAlarmInfo() async {
-    await connect();
-    List<DeviceDBInfo> deviceList = await DbUtil.dbUtil.getDeviceDBInfoList();
-    deviceList.forEach((element) {
-      getSurroundingUserInfo(element.name);
+    print("marmo::------------------" + client.connectionStatus.toString());
+    connect().then((value) {
+      getSurroundingUserInfo();
     });
+    // getSurroundingUserInfo();
   }
 
 // 緊急通知取得
-  getSurroundingUserInfo(deviceName) async {
+  getSurroundingUserInfo() async {
     // final builder = MqttClientPayloadBuilder();
     // builder.addString('Hello from mqtt_client');
     // try {
@@ -206,8 +238,8 @@ class MqttUtil {
     latlngList.add(latlngMap);
 
     // 	+/emg/10秒単位の緯度-1/10秒単位の経度
-    latitude = latitudeIn10Secs.toString();
-    longitude = (longitudeIn10Secs - 1).toString();
+    latitude = (latitudeIn10Secs - 1).toString();
+    longitude = longitudeIn10Secs.toString();
     latlngMap = {
       "latitude": latitude,
       "longitude": longitude,
@@ -261,25 +293,27 @@ class MqttUtil {
 
     // 購読実行
     latlngList.forEach((latlngMapItem) {
-      String topic = deviceName +
-          "/emg/" +
+      String topic = "/emg/" +
           latlngMapItem["latitude"] +
           "/" +
           latlngMapItem["longitude"];
       client.subscribe(topic, MqttQos.exactlyOnce);
     });
 
-    // Create the topic filter
-    final topicFilter = MqttClientTopicFilter('emg/#', client.updates);
+    // 緊急通知処理登録
+    final topicFilter = MqttClientTopicFilter('/emg/#', client.updates);
     // Now listen on the filtered updates, not the client updates
     // ignore: avoid_types_on_closure_parameters
     topicFilter.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
       final MqttPublishMessage recMess = c[0].payload;
-      final pt =
+      String pt =
           MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
-
+      SoundUtil.playAssetSound(null);
+      AlarmInfo ai = new AlarmInfo();
+      ai.jsonStrToAlarminfo(pt, null);
+      eventBus.fire(ai);
       print(
-          'marmo::Filtered Change notification for ebcon/#:: topic is <${c[0].topic}>, payload is <-- $pt -->');
+          'marmo::Filtered Change notification for emg/#:: topic is <${c[0].topic}>, payload is <-- $pt -->');
     });
   }
 }

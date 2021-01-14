@@ -4,6 +4,7 @@ import 'package:background_location/background_location.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gps_tracker/utils/mqtt_util.dart';
+import 'package:gps_tracker/views/device_read_view.dart';
 
 import 'package:gps_tracker/views/login_view.dart';
 import 'package:gps_tracker/views/register_view.dart';
@@ -89,6 +90,7 @@ class TrackerAppState extends State<TrackerApp> {
         'Home': (BuildContext context) => HomeView(),
         'Setting': (BuildContext context) => GpsTrackerSettingView(),
         'DeviceSetting': (BuildContext context) => DeviceSettingView(),
+        'DeviceReading': (BuildContext context) => GpsTrackerReadingView(),
       },
     );
   }

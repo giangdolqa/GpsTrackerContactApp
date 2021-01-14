@@ -111,10 +111,10 @@ class DbUtil {
   }
 
   //Get number  of objects
-  Future<DeviceDBInfo> getDeviceDBInfoByDeviceId(String deviceId) async {
+  Future<DeviceDBInfo> getDeviceDBInfoByDeviceName(String deviceName) async {
     Database db = await this.database;
     List<Map<String, dynamic>> x = await db.rawQuery(
-        'SELECT * from $deviceInfoTable WHERE $colDeviceId =$deviceId');
+        'SELECT * from $deviceInfoTable WHERE $colDeviceName =$deviceName');
     if (x.length > 0) {
       Map<String, dynamic> deviceMap = x[0];
       DeviceDBInfo di = new DeviceDBInfo();

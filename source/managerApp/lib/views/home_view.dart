@@ -22,6 +22,7 @@ import 'package:gps_tracker/beans/alarm_info.dart';
 import 'package:gps_tracker/utils/db_util.dart';
 import 'package:gps_tracker/utils/event_util.dart';
 import 'package:gps_tracker/utils/nuid_util.dart';
+import 'package:gps_tracker/utils/sound_util.dart';
 import 'package:marquee/marquee.dart';
 import 'package:toast/toast.dart';
 
@@ -42,7 +43,8 @@ void callbackDispatcher() {
   Workmanager.executeTask((task, inputData) {
     print(
         "WorkManager Executed !!  Native called background task: $inputData"); //simpleTask will be emitted here.
-    mqttUtil.getAllDeviceAlarmInfo();
+    MqttUtil tmpMqttUtil = new MqttUtil();
+    tmpMqttUtil.getAllDeviceAlarmInfo();
     print(
         "WorkManager Done !!  Native called background task: $inputData"); //simpleTask will be emitted here.
     return Future.value(true);
@@ -88,6 +90,7 @@ class HomeViewState extends State<HomeView>
       if (mounted) {
         // List<Position> alarmList = [];
         // alarmList.add(event.position);
+        SoundUtil.playAssetSound(null);
         _addAlarmCustomMarker(event);
       }
     });
@@ -101,7 +104,7 @@ class HomeViewState extends State<HomeView>
     });
     //
     // mqttUtil.connect();
-    // mqttUtil.getAllDeviceAlarmInfo();
+    mqttUtil.getAllDeviceAlarmInfo();
   }
 
   // 画面破棄
@@ -541,6 +544,7 @@ class HomeViewState extends State<HomeView>
         break;
       case "read":
         // 読み込み処理
+        Navigator.of(context).pushNamed("DeviceReading");
         break;
       case "contact":
         // 接触確認処理

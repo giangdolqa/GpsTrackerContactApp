@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:gps_tracker/utils/db_util.dart';
 import 'package:toast/toast.dart';
 
 class NormalInfo {
@@ -17,8 +18,10 @@ class NormalInfo {
   String name; // 顧客名称
   String description; // 地図表示用詳細情報
 
-  NormalInfo jsonToNormalinfo(String jsonString, BuildContext context) {
+  Future<NormalInfo> jsonToNormalinfo(String jsonString, String deviceName,BuildContext context) async {
     JsonDecoder jd = new JsonDecoder();
+    var deviceInfo = await DbUtil.dbUtil.getDeviceDBInfoByDeviceName(deviceName);
+
     try {
       Map<String, dynamic> tmpMap = jd.convert(jsonString);
       latNoSec = tmpMap['Lat no sec'];
