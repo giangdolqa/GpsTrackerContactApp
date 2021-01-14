@@ -1,5 +1,5 @@
 //　ローカルDB
-import 'package:gps_tracker/beans/device_dbInfo.dart';
+import 'package:marmo/beans/device_dbInfo.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'dart:io';

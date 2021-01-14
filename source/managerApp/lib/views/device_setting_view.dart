@@ -3,9 +3,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:gps_tracker/beans/device_info.dart';
-import 'package:gps_tracker/beans/setting_info.dart';
-import 'package:gps_tracker/utils/shared_pre_util.dart';
+import 'package:marmo/beans/device_info.dart';
+import 'package:marmo/beans/setting_info.dart';
+import 'package:marmo/utils/shared_pre_util.dart';
 import 'package:http/http.dart';
 
 import 'package:intl/intl.dart';

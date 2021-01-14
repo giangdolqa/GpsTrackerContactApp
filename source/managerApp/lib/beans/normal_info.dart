@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:gps_tracker/utils/db_util.dart';
+import 'package:marmo/utils/db_util.dart';
 import 'package:toast/toast.dart';
 
 class NormalInfo {

@@ -1,4 +1,4 @@
-package com.gps_tracker
+package com.marmo
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

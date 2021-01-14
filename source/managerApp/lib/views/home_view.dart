@@ -16,19 +16,19 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_controller/google_maps_controller.dart';
-import 'package:gps_tracker/beans/device_dbInfo.dart';
-import 'package:gps_tracker/beans/normal_info.dart';
-import 'package:gps_tracker/beans/alarm_info.dart';
-import 'package:gps_tracker/utils/db_util.dart';
-import 'package:gps_tracker/utils/event_util.dart';
-import 'package:gps_tracker/utils/nuid_util.dart';
-import 'package:gps_tracker/utils/sound_util.dart';
+import 'package:marmo/beans/device_dbInfo.dart';
+import 'package:marmo/beans/normal_info.dart';
+import 'package:marmo/beans/alarm_info.dart';
+import 'package:marmo/utils/db_util.dart';
+import 'package:marmo/utils/event_util.dart';
+import 'package:marmo/utils/nuid_util.dart';
+import 'package:marmo/utils/sound_util.dart';
 import 'package:marquee/marquee.dart';
 import 'package:toast/toast.dart';
 
-import 'package:gps_tracker/components/my_popup_menu.dart' as mypopup;
-import 'package:gps_tracker/utils/position_util.dart';
-import 'package:gps_tracker/utils/mqtt_util.dart';
+import 'package:marmo/components/my_popup_menu.dart' as mypopup;
+import 'package:marmo/utils/position_util.dart';
+import 'package:marmo/utils/mqtt_util.dart';
 import 'package:workmanager/workmanager.dart';
 
 class HomeView extends StatefulWidget {
