@@ -14,6 +14,9 @@ class DeviceDBInfo {
   String key; // 暗号キー
   String userName; // ユーザー名称
   num state;  // 接続状態
+  num count;  // 設定次数
+  String bleId; // BLEID
+  String password; // 一時パスワード
 
   /// Map
   Map<String, dynamic> toMap() {
@@ -23,6 +26,9 @@ class DeviceDBInfo {
     data['key'] = this.key;
     data['username'] = this.userName;
     data['state'] = this.state;
+    data['setting_count'] = this.count;
+    data['ble_id'] = this.bleId;
+    data['password'] = this.password;
     return data;
   }
 
@@ -32,5 +38,8 @@ class DeviceDBInfo {
     key = inputMap['key'];
     userName = inputMap['username'];
     state = inputMap['state'];
+    count = inputMap['setting_count'];
+    bleId = inputMap['ble_id'];
+    password = inputMap['password'];
   }
 }

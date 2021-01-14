@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gps_tracker/beans/device_info.dart';
 import 'package:gps_tracker/beans/setting_info.dart';
+import 'package:gps_tracker/utils/shared_pre_util.dart';
+import 'package:http/http.dart';
 
 import 'package:intl/intl.dart';
 
@@ -20,7 +23,9 @@ class DeviceSettingView extends StatefulWidget {
 }
 
 class DeviceSettingViewState extends State<DeviceSettingView> {
+  SharedPreUtil sharedPreUtil;
   String deviceId;
+  String deviceName;
 
   bool _isCheck = false;
   bool _trackFlag = false;
@@ -61,9 +66,16 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
   // GenderVal
   String dropdownValue = '男の子';
 
+  String validDays = '';
+  final String server = "203.137.100.55/pleasanter";
+  final String apiKey = "56161eb08314a9b7e5b49f85de53df6d8613f6f96da898dbecf179a8fed7243e8cb803295b6b3c36c359ee184f62f378961ee7877c8e2ae02bd8ce8187605cad";
+  final String idColumn = "ID";
+  final String authCodeColumn = "AuthCode";
+
   @override
   void initState() {
-    deviceId = widget.deviceInfo.name;
+//    deviceId = widget.deviceInfo.id;
+    deviceName = widget.deviceInfo.name;
     if (widget.settingInfo != null) {
       nameCtrlr.text = widget.settingInfo.name;
       humidityCtrlr.text = widget.settingInfo.humidity.toString();
@@ -257,10 +269,25 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
   Future<void> _getCode(BuildContext context) async {
     if (_countdownTime == 0) {
       unfocusAll();
-      setState(() {
-        _countdownTime = 30;
-      });
-      startCountdownTimer();
+      String authCode = await sharedPreUtil.GetAuthCode();
+      String url = 'http://' + server+'/device/code/patch';
+      Map<String, String> headers = {"Content-type": "application/json"};
+      var pleasanterJson = {"ApiVersion": 1.1, "ApiKey": apiKey, "Offset": 0,
+        "View": {"NearCompletionTime": true,"ColumnFilterHash": {idColumn: deviceId, authCodeColumn: authCode}}};
+
+      Response response = await post(url, headers: headers, body: json.encode(pleasanterJson));
+      if (response.statusCode == 200) {
+        var dbResult = json.decode(response.body);
+        int validDay = int.parse(dbResult['Response']['ValidDays']);
+        String temp = DateFormat('yyyy年MM月dd日').format(DateTime.now().add(new Duration(days: validDay)));
+        setState(() {
+          validDays = temp;
+          _countdownTime = 30;
+        });
+        startCountdownTimer();
+      }else{
+        _outputInfo("", "サーバと接続失敗");
+      }
     } else {
       return null;
     }
@@ -294,11 +321,31 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
     Navigator.of(context).pop(result);
   }
 
+  _outputInfo(String iTitle, String iErrInfo){
+    Widget cancelButton = FlatButton(
+      child: Text("OK"),
+      onPressed:  () {Navigator.of(context).pop();},
+    );
+    AlertDialog alert = AlertDialog(
+      title: Text(iTitle),
+      content: Text(iErrInfo),
+      actions: [
+        cancelButton,
+      ],
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(deviceId + 'の設定'),
+        title: Text(deviceName + 'の設定'),
         elevation: 15,
       ),
       body: ListView(
@@ -783,7 +830,7 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  '2021年11月30日まで',
+                  validDays + 'まで',
                   style: TextStyle(
                     inherit: true,
                     color: Colors.black,

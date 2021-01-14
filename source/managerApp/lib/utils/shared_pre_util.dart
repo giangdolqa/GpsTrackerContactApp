@@ -111,4 +111,14 @@ class SharedPreUtil {
     List<String> diList = [];
     sharedPreferences.setStringList("DeviceIdentifiers", diList);
   }
+
+  Future SaveAuthCode(String inputAuthCode) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    bool bRslt = await sharedPreferences.setString("AuthCode", inputAuthCode);
+  }
+
+  Future GetAuthCode() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    return sharedPreferences.getString("AuthCode");
+  }
 }
