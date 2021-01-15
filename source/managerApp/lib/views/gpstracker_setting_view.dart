@@ -646,7 +646,18 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
   MarmoInfo _convertListToMap(List<int> list) {
     Uint8List bytes = Uint8List.fromList(list);
     String jsonString = String.fromCharCodes(bytes);
-    MarmoInfo result = json.decode(jsonString);
+    Map<String, dynamic> temp = new Map<String, dynamic>();
+    temp = json.decode(jsonString);
+    MarmoInfo result = new MarmoInfo();
+    result.id = temp['id'];
+    result.name = temp['name'];
+    result.sex = temp['sex'];
+    result.birthday = temp['birthday'];
+    result.humidity = temp['alert humidity'];
+    result.key = temp['key'];
+    result.interval = temp['publish interval'];
+    result.validays = temp['expiration date'];
+    result.password = temp['temporary password'];
     return result;
   }
 
