@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:marmo/beans/marmo_info.dart';
 import 'package:marmo/beans/device_dbInfo.dart';
 import 'package:marmo/beans/device_info.dart';
 import 'package:marmo/beans/setting_info.dart';
@@ -25,7 +28,7 @@ class GpsTrackerSettingView extends StatefulWidget {
 }
 
 class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
-  String title = 'GPSトラッカー設定';
+  String title = 'marmo設定';
   final String settingUUID = '51f2e511-be4e-42e2-a502-0bf3aa109855';
   bool _blueToothFlag = false;
   List<DeviceDBInfo> dbDevices = [];
@@ -36,6 +39,8 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
   FlutterBlue flutterBlue = FlutterBlue.instance;
   BluetoothCharacteristic mCharacteristic;
   List deviceCallbackData = [];
+  String password = '';
+  int deviceID;
 
   final _codeFormat = new NumberFormat("000000", "en_US");
 
@@ -43,7 +48,8 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
   SharedPreUtil sharedPreUtil;
 
   final String server = "203.137.100.55/pleasanter";
-  final String apiKey = "56161eb08314a9b7e5b49f85de53df6d8613f6f96da898dbecf179a8fed7243e8cb803295b6b3c36c359ee184f62f378961ee7877c8e2ae02bd8ce8187605cad";
+  final String apiKey =
+      "56161eb08314a9b7e5b49f85de53df6d8613f6f96da898dbecf179a8fed7243e8cb803295b6b3c36c359ee184f62f378961ee7877c8e2ae02bd8ce8187605cad";
   final String idColumn = "ID";
   final String loginIDColumn = "LoginID";
   final String keyColumn = "Key";
@@ -99,6 +105,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
         tempDi.id = result.device.id;
         tempDi.type = result.device.type;
         tempDi.device = result;
+        tempDi.count = 0;
 //          bool _flg = false;
 //          for (var i = 0; i < otherDevices.length; i++) {
 //            if (otherDevices[i].id == tempDi.id) {
@@ -115,13 +122,13 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
             _flg = true;
             tempDi.count = dbDevices[i].count;
             tempDi.deviceDB = dbDevices[i];
+//            tempDi.deviceID = int.parse(dbDevices[i].id);
             break;
           }
         }
         if (_flg) {
           myDevices.add(tempDi);
         } else if (!otherDevices.contains(tempDi)) {
-          tempDi.count = 0;
           otherDevices.add(tempDi);
         }
       }
@@ -176,7 +183,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
                               image: AssetImage("assets/icon/GPS_icon.png"),
                               fit: BoxFit.fill),
                           Container(
-                            padding: EdgeInsets.only(bottom:5),
+                            padding: EdgeInsets.only(bottom: 5),
                             alignment: Alignment.center,
                             child: Text(
                               device.name.substring(0, 3).toUpperCase(),
@@ -281,6 +288,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
   void _onActionMenuSelect(Map<String, DeviceInfo> selectedVal) {
     switch (selectedVal.keys.first) {
       case "setting":
+        _deviceConnect(selectedVal.values.first);
         int settingCode = 0;
         if (selectedVal.values.first.count < 2) {
           if (selectedVal.values.first.count == 1) {
@@ -290,15 +298,15 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
           if (selectedVal.values.first.count == 0) {
             settingCode = _getSettingCode(null);
           }
-          showAlert(
-              context, selectedVal.values.first,
+          showAlert(context, selectedVal.values.first,
               _codeFormat.format(settingCode));
         } else {
-
+          _deviceSet(selectedVal.values.first);
         }
         break;
       case "delete":
         // 削除処理
+        _deviceDelete(selectedVal.values.first);
         break;
       default:
         // do nothing
@@ -329,7 +337,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
                               image: AssetImage("assets/icon/GPS_icon.png"),
                               fit: BoxFit.fill),
                           Container(
-                            padding: EdgeInsets.only(bottom:5),
+                            padding: EdgeInsets.only(bottom: 5),
                             alignment: Alignment.center,
                             child: Text(
                               device.name.substring(0, 3).toUpperCase(),
@@ -353,7 +361,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
                 ),
                 offset: Offset(0, 50),
                 itemBuilder: (_) =>
-                <mypopup.PopupMenuItem<Map<String, DeviceInfo>>>[
+                    <mypopup.PopupMenuItem<Map<String, DeviceInfo>>>[
                   new mypopup.PopupMenuItem<Map<String, DeviceInfo>>(
                     child: Container(
                       height: double.infinity,
@@ -424,7 +432,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
         .connect(autoConnect: false, timeout: Duration(seconds: 10))
         .whenComplete(() async {
       List<BluetoothService> services =
-      await deviceInfo.device.device.discoverServices();
+          await deviceInfo.device.device.discoverServices();
       services.forEach((service) async {
         var characteristics = service.characteristics;
         characteristics.forEach((characteristic) {
@@ -438,19 +446,39 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
         });
       });
       if (mCharacteristic == null) {
-        print("デバイスペアリングエラー");
+        _outputInfo("", "デバイスペアリング失敗");
+        deviceInfo.device.device.disconnect();
       }
     }).catchError(() {
-      print("デバイスペアリングエラー");
+      _outputInfo("", "デバイスペアリング失敗");
+      deviceInfo.device.device.disconnect();
     });
   }
 
   void _deviceSet(DeviceInfo deviceInfo) {
     SettingInfo temp = null;
-    _deviceConnect(deviceInfo);
     if (mCharacteristic == null) {
-      print("デバイスペアリングエラー");
+      _outputInfo("", "デバイスペアリング失敗");
+      deviceInfo.device.device.disconnect();
     } else {
+      if (deviceCallbackData != null && deviceCallbackData.length > 0) {
+        MarmoInfo de = _convertListToMap(deviceCallbackData);
+        temp = new SettingInfo();
+        temp.name = de.name;
+        temp.gender = de.sex;
+        temp.birthday = new DateTime(
+            int.parse(de.birthday.substring(0, 4)),
+            int.parse(de.birthday.substring(4, 2)),
+            int.parse(de.birthday.substring(6, 2)));
+        temp.humidity = de.humidity;
+        temp.key = de.key;
+        temp.interval = de.interval;
+        temp.validays = de.validays;
+        deviceID = int.parse(de.id);
+        password = de.password;
+      } else {
+        deviceID = _newID();
+      }
       // 設定画面へ遷移
       Navigator.push(
         context,
@@ -461,38 +489,85 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
       ).then((result) async {
         if (result != null) {
           String username = await sharedPreUtil.GetUsername();
-          mCharacteristic.write(result);
-          mCharacteristic = null;
-          deviceInfo.device.device.disconnect();
+          DeviceDBInfo temp = new DeviceDBInfo();
+          temp.id = deviceID.toString();
+          temp.name = result.name;
+          temp.key = result.key;
+          temp.userName = username;
+          temp.state = 0;
+          temp.bleId = deviceInfo.id.toString();
           if (deviceInfo.count == 0) {
-            String url = 'http://' + server+'/device/code/patch';
+            String url = 'http://' + server + '/device';
             Map<String, String> headers = {"Content-type": "application/json"};
-            var pleasanterJson = {"ApiVersion": 1.1, "ApiKey": apiKey, "Offset": 0,
-              "View": {"NearCompletionTime": true,"ColumnFilterHash": {idColumn: '', loginIDColumn: username, keyColumn: result.key}}};
-
-            Response response = await post(url, headers: headers, body: json.encode(pleasanterJson));
+            var pleasanterJson = {
+              "ApiVersion": 1.1,
+              "ApiKey": apiKey,
+              "Offset": 0,
+              "View": {
+                "NearCompletionTime": true,
+                "ColumnFilterHash": {
+                  idColumn: deviceID,
+                  loginIDColumn: username,
+                  keyColumn: result.key
+                }
+              }
+            };
+            Response response = await post(url,
+                headers: headers, body: json.encode(pleasanterJson));
             if (response.statusCode == 200) {
               var dbResult = json.decode(response.body);
-              String password = dbResult['Response']['TemporaryPassword'];
-              DeviceDBInfo temp = new DeviceDBInfo();
-              temp.id = '';
-              temp.name = result.name;
-              temp.key = result.key;
-              temp.userName = username;
-              temp.state = 0;
+              password = dbResult['Response']['TemporaryPassword'];
               temp.count = 1;
-              temp.bleId = deviceInfo.id.toString();
               temp.password = password;
-            }else{
+              dbUtil.insertDeviceDBInfo(temp);
+            } else {
               _outputInfo("", "サーバと接続失敗");
             }
+          } else {
+            temp.count = 2;
+            temp.password = password;
+            dbUtil.updateDeviceDBInfo(temp);
           }
+          String jsonResult = json.encode(result);
+          List<int> listResult = jsonResult.codeUnits;
+          mCharacteristic.write(listResult);
+          mCharacteristic = null;
+          deviceID = null;
+          password = null;
+          deviceInfo.device.device.disconnect();
+          Navigator.of(context).pushNamed('Setting');
         }
       });
     }
   }
 
-  void showAlert(BuildContext context, DeviceInfo deviceInfo, String settingCode) {
+  void _deviceDelete(DeviceInfo deviceInfo) async {
+    String url = 'http://' + server + '/device/' + deviceInfo.deviceDB.id;
+    Map<String, String> headers = {"Content-type": "application/json"};
+//    var pleasanterJson = {
+//      "ApiVersion": 1.1,
+//      "ApiKey": apiKey,
+//      "Offset": 0,
+//      "View": {
+//        "NearCompletionTime": true,
+//        "ColumnFilterHash": {
+//          idColumn: ''
+//        }
+//      }
+//    };
+//    Response response = await delete(url,
+//        headers: headers, body: json.encode(pleasanterJson));
+    Response response = await delete(url, headers: headers);
+    if (response.statusCode == 200) {
+      dbUtil.deleteDeviceDBInfo(deviceInfo.deviceDB.id);
+      Navigator.of(context).pushNamed('Setting');
+    } else {
+      _outputInfo("", "サーバと接続失敗");
+    }
+  }
+
+  void showAlert(
+      BuildContext context, DeviceInfo deviceInfo, String settingCode) {
     showDialog(
       context: context,
       builder: (context) => new AlertDialog(
@@ -536,10 +611,12 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
     );
   }
 
-  _outputInfo(String iTitle, String iErrInfo){
+  _outputInfo(String iTitle, String iErrInfo) {
     Widget cancelButton = FlatButton(
       child: Text("OK"),
-      onPressed:  () {Navigator.of(context).pop();},
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
     );
     AlertDialog alert = AlertDialog(
       title: Text(iTitle),
@@ -556,6 +633,21 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
     );
   }
 
+  MarmoInfo _convertListToMap(List<int> list) {
+    Uint8List bytes = Uint8List.fromList(list);
+    String jsonString = String.fromCharCodes(bytes);
+    MarmoInfo result = json.decode(jsonString);
+    return result;
+  }
+
+  int _newID() {
+    var rng = new Random();
+    int result = rng.nextInt(100000);
+    while (result < 10000) {
+      result = rng.nextInt(100000);
+    }
+    return result;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -570,7 +662,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
           Container(
             padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
             child: Text(
-              "GPSトラッカーを設定するときはBluetoothをONにしてください。",
+              "marmoを設定するときはBluetoothをONにしてください。",
               style: TextStyle(fontSize: 14),
             ),
           ),
