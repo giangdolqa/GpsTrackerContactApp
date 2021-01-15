@@ -45,7 +45,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
   final _codeFormat = new NumberFormat("000000", "en_US");
 
   DbUtil dbUtil;
-  SharedPreUtil sharedPreUtil;
+  SharedPreUtil sharedPreUtil = new SharedPreUtil();
 
   final String server = "203.137.100.55/pleasanter";
   final String apiKey =
@@ -528,7 +528,17 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
             temp.password = password;
             dbUtil.updateDeviceDBInfo(temp);
           }
-          String jsonResult = json.encode(result);
+          Map<String, dynamic> data = new Map<String, dynamic>();
+          data['id'] = deviceID;
+          data['name'] = result.name;
+          data['sex'] = result.gender;
+          data['birthday'] = DateFormat('yyyyMMdd').format(result.birthday);
+          data['alert humidity'] = result.humidity;
+          data['key'] = result.key;
+          data['publish interval'] = result.interval;
+          data['expiration date'] = result.validays;
+          data['temporary password'] = password;
+          String jsonResult = json.encode(data);
           List<int> listResult = jsonResult.codeUnits;
           mCharacteristic.write(listResult);
           mCharacteristic = null;
