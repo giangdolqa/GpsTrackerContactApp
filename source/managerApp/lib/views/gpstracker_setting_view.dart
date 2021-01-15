@@ -44,7 +44,6 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
 
   final _codeFormat = new NumberFormat("000000", "en_US");
 
-  DbUtil dbUtil;
   SharedPreUtil sharedPreUtil = new SharedPreUtil();
 
   final String server = "203.137.100.55/pleasanter";
@@ -57,12 +56,6 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
   @override
   void initState() {
     super.initState();
-//    _getDeviceInfo();
-    if (DbUtil.dbUtil == null) {
-      dbUtil = new DbUtil();
-    } else {
-      dbUtil = DbUtil.dbUtil;
-    }
     flutterBlue.state.listen((state) {
       if (state == BluetoothState.on) {
         setState(() {
@@ -91,7 +84,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
   void _getDeviceInfo() async {
     myDevices.clear();
     otherDevices.clear();
-    dbDevices = await dbUtil.getDeviceDBInfoList();
+    dbDevices = await marmoDB.getDeviceDBInfoList();
     flutterBlue.startScan(timeout: Duration(seconds: 60));
     flutterBlue.scanResults.listen((event) {
       myDevices.clear();
@@ -519,14 +512,14 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
               password = dbResult['Response']['TemporaryPassword'];
               temp.count = 1;
               temp.password = password;
-              dbUtil.insertDeviceDBInfo(temp);
+              marmoDB.insertDeviceDBInfo(temp);
             } else {
               _outputInfo("", "サーバと接続失敗");
             }
           } else {
             temp.count = 2;
             temp.password = password;
-            dbUtil.updateDeviceDBInfo(temp);
+            marmoDB.updateDeviceDBInfo(temp);
           }
           Map<String, dynamic> data = new Map<String, dynamic>();
           data['id'] = deviceID;
@@ -569,7 +562,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
 //        headers: headers, body: json.encode(pleasanterJson));
     Response response = await delete(url, headers: headers);
     if (response.statusCode == 200) {
-      dbUtil.deleteDeviceDBInfo(deviceInfo.deviceDB.id);
+      marmoDB.deleteDeviceDBInfo(deviceInfo.deviceDB.id);
       Navigator.of(context).pushNamed('Setting');
     } else {
       _outputInfo("", "サーバと接続失敗");
