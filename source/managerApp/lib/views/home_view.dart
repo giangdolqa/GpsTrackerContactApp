@@ -16,18 +16,19 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_controller/google_maps_controller.dart';
-import 'package:gps_tracker/beans/device_dbInfo.dart';
-import 'package:gps_tracker/beans/normal_info.dart';
-import 'package:gps_tracker/beans/alarm_info.dart';
-import 'package:gps_tracker/utils/db_util.dart';
-import 'package:gps_tracker/utils/event_util.dart';
-import 'package:gps_tracker/utils/nuid_util.dart';
+import 'package:marmo/beans/device_dbInfo.dart';
+import 'package:marmo/beans/normal_info.dart';
+import 'package:marmo/beans/alarm_info.dart';
+import 'package:marmo/utils/db_util.dart';
+import 'package:marmo/utils/event_util.dart';
+import 'package:marmo/utils/nuid_util.dart';
+import 'package:marmo/utils/sound_util.dart';
 import 'package:marquee/marquee.dart';
 import 'package:toast/toast.dart';
 
-import 'package:gps_tracker/components/my_popup_menu.dart' as mypopup;
-import 'package:gps_tracker/utils/position_util.dart';
-import 'package:gps_tracker/utils/mqtt_util.dart';
+import 'package:marmo/components/my_popup_menu.dart' as mypopup;
+import 'package:marmo/utils/position_util.dart';
+import 'package:marmo/utils/mqtt_util.dart';
 import 'package:workmanager/workmanager.dart';
 
 class HomeView extends StatefulWidget {
@@ -39,10 +40,11 @@ class HomeView extends StatefulWidget {
 
 // 常駐位置更新
 void callbackDispatcher() {
-  Workmanager.executeTask((task, inputData) {
+  Workmanager.executeTask((task, inputData) async {
     print(
         "WorkManager Executed !!  Native called background task: $inputData"); //simpleTask will be emitted here.
-    mqttUtil.getAllDeviceAlarmInfo();
+    MqttUtil tmpMqttUtil = new MqttUtil();
+    await tmpMqttUtil.getAllDeviceAlarmInfo();
     print(
         "WorkManager Done !!  Native called background task: $inputData"); //simpleTask will be emitted here.
     return Future.value(true);
@@ -81,13 +83,14 @@ class HomeViewState extends State<HomeView>
         isInDebugMode:
             true // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
         );
-    Workmanager.registerPeriodicTask("2", "PeriodicTask", tag: "daemon");
+    Workmanager.registerPeriodicTask("2", "PeriodicTask", tag: "marmo_daemon");
 
     // 緊急通知処理登録
     eventBus.on<AlarmInfo>().listen((event) {
       if (mounted) {
         // List<Position> alarmList = [];
         // alarmList.add(event.position);
+        SoundUtil.playAssetSound(null);
         _addAlarmCustomMarker(event);
       }
     });
@@ -541,6 +544,7 @@ class HomeViewState extends State<HomeView>
         break;
       case "read":
         // 読み込み処理
+        Navigator.of(context).pushNamed("DeviceReading");
         break;
       case "contact":
         // 接触確認処理

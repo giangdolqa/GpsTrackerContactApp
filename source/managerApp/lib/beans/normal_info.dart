@@ -2,7 +2,9 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:marmo/beans/device_dbInfo.dart';
+import 'package:marmo/utils/crypt_util.dart';
+import 'package:marmo/utils/db_util.dart';
 import 'package:toast/toast.dart';
 
 class NormalInfo {
@@ -17,17 +19,31 @@ class NormalInfo {
   String name; // 顧客名称
   String description; // 地図表示用詳細情報
 
-  NormalInfo jsonToNormalinfo(String jsonString, BuildContext context) {
+  Future<NormalInfo> jsonToNormalinfo(
+      String jsonString, String deviceName, BuildContext context) async {
     JsonDecoder jd = new JsonDecoder();
+    var deviceInfo =
+        await DbUtil.dbUtil.getDeviceDBInfoByDeviceName(deviceName);
+
+    if (deviceInfo == null) {
+      deviceInfo = new DeviceDBInfo();
+      deviceInfo.key = "adsfadsfadsfadsfadsfadsfadsfadsf";
+
+      // return null;
+    }
+
     try {
       Map<String, dynamic> tmpMap = jd.convert(jsonString);
       latNoSec = tmpMap['Lat no sec'];
       lngNoSec = tmpMap['Lng no sec'];
       temperature = tmpMap['TEMP'];
       humidity = tmpMap['HUM'];
-      latitude = tmpMap['Lat'];
-      longitude = tmpMap['Lng'];
-      step = tmpMap['Step'];
+      latitude = num.parse(
+          CryptUtil.decrypt(tmpMap['Lat'].toString(), deviceInfo.key));
+      longitude = num.parse(
+          CryptUtil.decrypt(tmpMap['Lng'].toString(), deviceInfo.key));
+      step = num.parse(
+          CryptUtil.decrypt(tmpMap['Step'].toString(), deviceInfo.key));
     } catch (e) {
       if (context != null) {
         Toast.show("データ転換失敗: " + e.toString(), context);

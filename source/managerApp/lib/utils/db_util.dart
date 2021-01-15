@@ -1,5 +1,5 @@
 //　ローカルDB
-import 'package:gps_tracker/beans/device_dbInfo.dart';
+import 'package:marmo/beans/device_dbInfo.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'dart:io';
@@ -18,6 +18,9 @@ class DbUtil {
   String colDeviceKey = 'key'; // 暗号キー
   String colState = 'state'; // 設定済みステート 0:未 1:済み
   String colUserName = 'username'; // ユーザー名称
+  String colCount = 'setting_count'; // 設定次数
+  String colBleId = 'ble_id'; // bluetoothID
+  String colPassword = 'password'; // 一時パスワード
 
   DbUtil._createInstance();
 
@@ -48,7 +51,7 @@ class DbUtil {
   void _createDb(Database db, int newVersion) async {
     await db.execute(
         'CREATE TABLE $deviceInfoTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colDeviceId TEXT, $colDeviceName TEXT, '
-        '$colDeviceKey TEXT, $colState INTEGER, $colUserName TEXT)');
+        '$colDeviceKey TEXT, $colState INTEGER, $colUserName TEXT, $colCount INTEGER, $colBleId TEXT)');
   }
 
 //Fetch Operation :Get all object from database
@@ -108,10 +111,10 @@ class DbUtil {
   }
 
   //Get number  of objects
-  Future<DeviceDBInfo> getDeviceDBInfoByDeviceId(String deviceId) async {
+  Future<DeviceDBInfo> getDeviceDBInfoByDeviceName(String deviceName) async {
     Database db = await this.database;
     List<Map<String, dynamic>> x = await db.rawQuery(
-        'SELECT * from $deviceInfoTable WHERE $colDeviceId =$deviceId');
+        'SELECT * from $deviceInfoTable WHERE $colDeviceName =$deviceName');
     if (x.length > 0) {
       Map<String, dynamic> deviceMap = x[0];
       DeviceDBInfo di = new DeviceDBInfo();

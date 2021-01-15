@@ -1,15 +1,19 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:gps_tracker/beans/device_info.dart';
-import 'package:gps_tracker/beans/setting_info.dart';
-import 'package:gps_tracker/utils/ble_util.dart';
-import 'package:gps_tracker/utils/crypt_util.dart';
-import 'package:gps_tracker/components/my_popup_menu.dart' as mypopup;
-import 'package:gps_tracker/views/device_setting_view.dart';
+import 'package:marmo/beans/device_dbInfo.dart';
+import 'package:marmo/beans/device_info.dart';
+import 'package:marmo/beans/setting_info.dart';
+import 'package:marmo/utils/db_util.dart';
+import 'package:marmo/utils/crypt_util.dart';
+import 'package:marmo/components/my_popup_menu.dart' as mypopup;
+import 'package:marmo/utils/shared_pre_util.dart';
+import 'package:marmo/views/device_setting_view.dart';
+import 'package:http/http.dart';
 
 import 'package:intl/intl.dart';
 
@@ -24,6 +28,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
   String title = 'GPSトラッカー設定';
   final String settingUUID = '51f2e511-be4e-42e2-a502-0bf3aa109855';
   bool _blueToothFlag = false;
+  List<DeviceDBInfo> dbDevices = [];
   List<DeviceInfo> myDevices = [];
   List<DeviceInfo> otherDevices = [];
   List<Widget> myDevlist = [];
@@ -31,12 +36,27 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
   FlutterBlue flutterBlue = FlutterBlue.instance;
   BluetoothCharacteristic mCharacteristic;
   List deviceCallbackData = [];
+
   final _codeFormat = new NumberFormat("000000", "en_US");
+
+  DbUtil dbUtil;
+  SharedPreUtil sharedPreUtil;
+
+  final String server = "203.137.100.55/pleasanter";
+  final String apiKey = "56161eb08314a9b7e5b49f85de53df6d8613f6f96da898dbecf179a8fed7243e8cb803295b6b3c36c359ee184f62f378961ee7877c8e2ae02bd8ce8187605cad";
+  final String idColumn = "ID";
+  final String loginIDColumn = "LoginID";
+  final String keyColumn = "Key";
 
   @override
   void initState() {
     super.initState();
 //    _getDeviceInfo();
+    if (DbUtil.dbUtil == null) {
+      dbUtil = new DbUtil();
+    } else {
+      dbUtil = DbUtil.dbUtil;
+    }
     flutterBlue.state.listen((state) {
       if (state == BluetoothState.on) {
         setState(() {
@@ -65,19 +85,20 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
   void _getDeviceInfo() async {
     myDevices.clear();
     otherDevices.clear();
-    if (_blueToothFlag) {
-      flutterBlue.startScan(timeout: Duration(seconds: 30));
-      flutterBlue.scanResults.listen((event) {
-        otherDevices.clear();
-        for (ScanResult result in event) {
-          if (result.device.name.isEmpty) {
-            continue;
-          }
-          DeviceInfo tempDi = new DeviceInfo();
-          tempDi.name = result.device.name;
-          tempDi.id = result.device.id;
-          tempDi.type = result.device.type;
-          tempDi.device = result;
+    dbDevices = await dbUtil.getDeviceDBInfoList();
+    flutterBlue.startScan(timeout: Duration(seconds: 60));
+    flutterBlue.scanResults.listen((event) {
+      myDevices.clear();
+      otherDevices.clear();
+      for (ScanResult result in event) {
+        if (result.device.name.isEmpty) {
+          continue;
+        }
+        DeviceInfo tempDi = new DeviceInfo();
+        tempDi.name = result.device.name;
+        tempDi.id = result.device.id;
+        tempDi.type = result.device.type;
+        tempDi.device = result;
 //          bool _flg = false;
 //          for (var i = 0; i < otherDevices.length; i++) {
 //            if (otherDevices[i].id == tempDi.id) {
@@ -88,16 +109,25 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
 //          if (!_flg) {
 //            otherDevices.add(tempDi);
 //          }
-          if (!otherDevices.contains(tempDi)) {
-            otherDevices.add(tempDi);
+        bool _flg = false;
+        for (var i = 0; i < dbDevices.length; i++) {
+          if (dbDevices[i].bleId == tempDi.id) {
+            _flg = true;
+            tempDi.count = dbDevices[i].count;
+            tempDi.deviceDB = dbDevices[i];
+            break;
           }
         }
-        _getOtherDevListRow();
-      });
-    } else {
-      myDevices.clear();
-      otherDevices.clear();
-    }
+        if (_flg) {
+          myDevices.add(tempDi);
+        } else if (!otherDevices.contains(tempDi)) {
+          tempDi.count = 0;
+          otherDevices.add(tempDi);
+        }
+      }
+      _getOtherDevListRow();
+      _getMyDevListRow();
+    });
 //    DeviceInfo tempDi = new DeviceInfo();
 //    tempDi.name = "name";
 //    tempDi.id = DeviceIdentifier("123456");
@@ -109,6 +139,23 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
   // デバイスリストアイテム作成
   void _getMyDevListRow() async {
     myDevlist.clear();
+    dbDevices.forEach((db) {
+      bool _flg = false;
+      for (var i = 0; i < myDevices.length; i++) {
+        if (myDevices[i].id.toString() == db.bleId) {
+          _flg = true;
+          break;
+        }
+      }
+      if (!_flg) {
+        DeviceInfo tempDi = new DeviceInfo();
+        tempDi.name = db.name;
+        tempDi.id = DeviceIdentifier(db.bleId);
+        tempDi.device = null;
+        tempDi.deviceDB = db;
+        myDevices.add(tempDi);
+      }
+    });
     List<Widget> tmpDevlist = [];
     myDevices.forEach((device) {
       tmpDevlist.add(
@@ -219,10 +266,6 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
                 ],
                 onSelected: _onActionMenuSelect,
               ),
-//              Container(
-//                padding: EdgeInsets.only(left: 10),
-//                child: Text(device.name, style: TextStyle(fontSize: 14)),
-//              ),
             ],
           ),
         ),
@@ -238,10 +281,21 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
   void _onActionMenuSelect(Map<String, DeviceInfo> selectedVal) {
     switch (selectedVal.keys.first) {
       case "setting":
-        int settingCode = _getSettingCode(
-            int.parse(selectedVal.values.first.id.toString().substring(0, 5)));
-        showAlert(
-            context, selectedVal.values.first, _codeFormat.format(settingCode));
+        int settingCode = 0;
+        if (selectedVal.values.first.count < 2) {
+          if (selectedVal.values.first.count == 1) {
+            settingCode = _getSettingCode(
+                int.parse(selectedVal.values.first.deviceDB.id));
+          }
+          if (selectedVal.values.first.count == 0) {
+            settingCode = _getSettingCode(null);
+          }
+          showAlert(
+              context, selectedVal.values.first,
+              _codeFormat.format(settingCode));
+        } else {
+
+        }
         break;
       case "delete":
         // 削除処理
@@ -260,42 +314,81 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
       tmpDevlist.add(
         Container(
           padding: EdgeInsets.all(5),
-          child: InkWell(
-            onTap: () {}, //　ペアリング処理
-            child: Row(
-              children: [
-                Container(
-                  width: 35,
-                  height: 35,
-                  // margin: EdgeInsets.fromLTRB(0, 64.0, 0, 0),
-                  child: Stack(
-                    children: [
-                      Image(
-                          image: AssetImage("assets/icon/GPS_icon.png"),
-                          fit: BoxFit.fill),
-                      Container(
-                        padding: EdgeInsets.only(bottom:5),
-                        alignment: Alignment.center,
-                        child: Text(
-                          device.name.substring(0, 3).toUpperCase(),
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
+          child: Row(
+            children: [
+              mypopup.PopupMenuButton(
+                child: Row(
+                  children: [
+                    Container(
+                      width: 35,
+                      height: 35,
+                      // margin: EdgeInsets.fromLTRB(0, 64.0, 0, 0),
+                      child: Stack(
+                        children: [
+                          Image(
+                              image: AssetImage("assets/icon/GPS_icon.png"),
+                              fit: BoxFit.fill),
+                          Container(
+                            padding: EdgeInsets.only(bottom:5),
+                            alignment: Alignment.center,
+                            child: Text(
+                              device.name.substring(0, 3).toUpperCase(),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(left: 10),
+                      child: Text(
+                        device.name,
+                        style: TextStyle(fontSize: 14),
+                      ),
+                    ),
+                  ],
                 ),
-                Container(
-                  padding: EdgeInsets.only(left: 10),
-                  child: Text(
-                    device.name,
-                    style: TextStyle(fontSize: 14),
+                offset: Offset(0, 50),
+                itemBuilder: (_) =>
+                <mypopup.PopupMenuItem<Map<String, DeviceInfo>>>[
+                  new mypopup.PopupMenuItem<Map<String, DeviceInfo>>(
+                    child: Container(
+                      height: double.infinity,
+                      width: 120,
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.only(left: 5, top: 5),
+                            child: Icon(
+                              Icons.settings,
+                              size: 30,
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              padding: EdgeInsets.only(left: 5, top: 5),
+                              child: Text(
+                                "設定",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                ),
+                              ),
+                              // alignment: Alignment.center,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    color: Color(0x55c4c4c4),
+                    value: {"setting": device},
                   ),
-                ),
-              ],
-            ),
+                ],
+                onSelected: _onActionMenuSelect,
+              ),
+            ],
           ),
         ),
       );
@@ -307,7 +400,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
     }
   }
 
-  dataCallbackDevice() async {
+  void dataCallbackDevice() async {
     await mCharacteristic.setNotifyValue(true);
     mCharacteristic.value.listen((value) {
       if (value == null) {
@@ -326,19 +419,12 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
     });
   }
 
-  _onTapOtherDevice(DeviceInfo device) {
-    device.device.device
-        .connect(timeout: Duration(seconds: 60), autoConnect: false);
-  }
-
-  _deviceSet(DeviceInfo deviceInfo) {
-    SettingInfo temp = null;
+  void _deviceConnect(DeviceInfo deviceInfo) {
     deviceInfo.device.device
         .connect(autoConnect: false, timeout: Duration(seconds: 10))
         .whenComplete(() async {
-      BluetoothCharacteristic mCharacteristic;
       List<BluetoothService> services =
-          await deviceInfo.device.device.discoverServices();
+      await deviceInfo.device.device.discoverServices();
       services.forEach((service) async {
         var characteristics = service.characteristics;
         characteristics.forEach((characteristic) {
@@ -353,27 +439,60 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
       });
       if (mCharacteristic == null) {
         print("デバイスペアリングエラー");
-      } else {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) =>
-                DeviceSettingView(deviceInfo: deviceInfo, settingInfo: temp),
-          ),
-        ).then((result) {
-          if (result != null) {
-            mCharacteristic.write(result);
-            deviceInfo.device.device.disconnect();
-          }
-        });
       }
     }).catchError(() {
       print("デバイスペアリングエラー");
     });
-    // 設定画面へ遷移
   }
 
-  showAlert(BuildContext context, DeviceInfo deviceInfo, String settingCode) {
+  void _deviceSet(DeviceInfo deviceInfo) {
+    SettingInfo temp = null;
+    _deviceConnect(deviceInfo);
+    if (mCharacteristic == null) {
+      print("デバイスペアリングエラー");
+    } else {
+      // 設定画面へ遷移
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              DeviceSettingView(deviceInfo: deviceInfo, settingInfo: temp),
+        ),
+      ).then((result) async {
+        if (result != null) {
+          String username = await sharedPreUtil.GetUsername();
+          mCharacteristic.write(result);
+          mCharacteristic = null;
+          deviceInfo.device.device.disconnect();
+          if (deviceInfo.count == 0) {
+            String url = 'http://' + server+'/device/code/patch';
+            Map<String, String> headers = {"Content-type": "application/json"};
+            var pleasanterJson = {"ApiVersion": 1.1, "ApiKey": apiKey, "Offset": 0,
+              "View": {"NearCompletionTime": true,"ColumnFilterHash": {idColumn: '', loginIDColumn: username, keyColumn: result.key}}};
+
+            Response response = await post(url, headers: headers, body: json.encode(pleasanterJson));
+            if (response.statusCode == 200) {
+              var dbResult = json.decode(response.body);
+              String password = dbResult['Response']['TemporaryPassword'];
+              DeviceDBInfo temp = new DeviceDBInfo();
+              temp.id = '';
+              temp.name = result.name;
+              temp.key = result.key;
+              temp.userName = username;
+              temp.state = 0;
+              temp.count = 1;
+              temp.bleId = deviceInfo.id.toString();
+              temp.password = password;
+            }else{
+              _outputInfo("", "サーバと接続失敗");
+            }
+          }
+        }
+      });
+    }
+  }
+
+  void showAlert(BuildContext context, DeviceInfo deviceInfo, String settingCode) {
     showDialog(
       context: context,
       builder: (context) => new AlertDialog(
@@ -416,6 +535,27 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
       ),
     );
   }
+
+  _outputInfo(String iTitle, String iErrInfo){
+    Widget cancelButton = FlatButton(
+      child: Text("OK"),
+      onPressed:  () {Navigator.of(context).pop();},
+    );
+    AlertDialog alert = AlertDialog(
+      title: Text(iTitle),
+      content: Text(iErrInfo),
+      actions: [
+        cancelButton,
+      ],
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {

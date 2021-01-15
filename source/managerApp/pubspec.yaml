@@ -1,5 +1,5 @@
-name: gps_tracker
-description: A new Flutter application.
+name: marmo
+description: gps tracker management app
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -80,7 +80,10 @@ flutter:
     - assets/icon/home.png
     - assets/icon/check.png
     - assets/icon/GPS_icon.png
+    - assets/icon/phone.png
     - assets/icon/dust.png
+    - assets/icon/confirm.png
+    - assets/icon/refresh.png
     - assets/cert/cert.pem
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
