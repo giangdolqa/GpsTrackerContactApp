@@ -19,17 +19,16 @@ class NormalInfo {
   String name; // 顧客名称
   String description; // 地図表示用詳細情報
 
-  Future<NormalInfo> jsonToNormalinfo(
+  Future<bool> jsonToNormalinfo(
       String jsonString, String deviceName, BuildContext context) async {
     JsonDecoder jd = new JsonDecoder();
-    var deviceInfo =
-        await DbUtil.dbUtil.getDeviceDBInfoByDeviceName(deviceName);
-
-    if (deviceInfo == null) {
-      deviceInfo = new DeviceDBInfo();
-      deviceInfo.key = "adsfadsfadsfadsfadsfadsfadsfadsf";
-
+    DeviceDBInfo deviceInfo = new DeviceDBInfo();
+    try {
+      deviceInfo = await marmoDB.getDeviceDBInfoByDeviceName(deviceName);
+    } catch (e) {
+      print("marmo:: jsonToNormalinfo failed $e");
       // return null;
+      deviceInfo.key = "adsfadsfadsfadsfadsfadsfadsfadsf";
     }
 
     try {
@@ -38,17 +37,23 @@ class NormalInfo {
       lngNoSec = tmpMap['Lng no sec'];
       temperature = tmpMap['TEMP'];
       humidity = tmpMap['HUM'];
+      // tmpMap['Lat'] = CryptUtil.encrypt(tmpMap['Lat'].toString(), deviceInfo.key);
+      // tmpMap['Lng'] = CryptUtil.encrypt(tmpMap['Lng'].toString(), deviceInfo.key);
+      // tmpMap['Step'] = CryptUtil.encrypt(tmpMap['Step'].toString(), deviceInfo.key);
       latitude = num.parse(
           CryptUtil.decrypt(tmpMap['Lat'].toString(), deviceInfo.key));
       longitude = num.parse(
           CryptUtil.decrypt(tmpMap['Lng'].toString(), deviceInfo.key));
       step = num.parse(
           CryptUtil.decrypt(tmpMap['Step'].toString(), deviceInfo.key));
+      return true;
     } catch (e) {
+      print("緊急通知データ転換失敗: $e ");
+
       if (context != null) {
-        Toast.show("データ転換失敗: " + e.toString(), context);
+        Toast.show("緊急通知データ転換失敗: " + e.toString(), context);
       }
-      return null;
     }
+    return false;
   }
 }

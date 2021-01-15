@@ -74,7 +74,7 @@ class PositionUtil {
       print(locString);
       globalTempPos = Position(latitude:location.longitude, longitude:location.longitude);
       // mqttUtil.getSurroundingUserInfo("testdeviceName");UIBackgroundModes
-      SoundUtil.playAssetSound(null);
+      // SoundUtil.playAssetSound(null);
            // setState(() {
       //   this.latitude = location.latitude.toString();
       //   this.longitude = location.longitude.toString();

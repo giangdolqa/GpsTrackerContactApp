@@ -83,7 +83,12 @@ class HomeViewState extends State<HomeView>
         isInDebugMode:
             true // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
         );
-    Workmanager.registerPeriodicTask("2", "PeriodicTask", tag: "marmo_daemon");
+    Workmanager.registerPeriodicTask(
+      "2",
+      "PeriodicTask",
+      tag: "marmo_daemon",
+      frequency: Duration(minutes: 15),
+    );
 
     // 緊急通知処理登録
     eventBus.on<AlarmInfo>().listen((event) {
@@ -105,6 +110,9 @@ class HomeViewState extends State<HomeView>
     //
     // mqttUtil.connect();
     // mqttUtil.getAllDeviceAlarmInfo();
+    // mqttUtil.subScribePositionByDeviceName("device_test");
+    // MqttUtil tmpMqttUtil = new MqttUtil();
+    // tmpMqttUtil.getAllDeviceAlarmInfo();
   }
 
   // 画面破棄

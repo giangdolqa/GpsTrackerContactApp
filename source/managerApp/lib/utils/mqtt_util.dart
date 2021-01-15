@@ -85,7 +85,6 @@ class MqttUtil {
     client.connectionMessage = connMess;
   }
 
-
   // 接続初期化(非同期
   void _initConn_test() async {
     // final context = SecurityContext.defaultContext;
@@ -123,7 +122,7 @@ class MqttUtil {
       await _initConn_test(); // 接続初期化(非同期
       var mqttClientConnectionStatus = await client.connect();
       print(
-          'marmo::Mosquitto client connect failed.... $mqttClientConnectionStatus');
+          'marmo::Mosquitto client connect successed.... $mqttClientConnectionStatus');
     } catch (e) {
       print('marmo::Mosquitto client connect failed.... $e');
       return false;
@@ -164,27 +163,41 @@ class MqttUtil {
     client.subscribe(topic, MqttQos.exactlyOnce);
   }
 
+  void subScribePositionByDeviceName(String deviceName) async {
+    connect().then((value) async {
+      _getPosistionByDeviceName(deviceName);
+    });
+  }
+
   // 緯度経度がデバイスから配信
-  getPosistionByDeviceName(String deviceName) {
-    String topic = deviceName + "/#";
+  _getPosistionByDeviceName(String deviceName) async {
+    String topic = "/" + deviceName + "/#";
     client.subscribe(topic, MqttQos.exactlyOnce);
 
-    client.updates.listen((dynamic c) {
+    // 通常デバイス情報登録
+    final topicFilter = MqttClientTopicFilter(topic, client.updates);
+    // Now listen on the filtered updates, not the client updates
+    // ignore: avoid_types_on_closure_parameters
+    topicFilter.updates
+        .listen((List<MqttReceivedMessage<MqttMessage>> c) async {
       final MqttPublishMessage recMess = c[0].payload;
       final pt =
-          MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
-      NormalInfo pi;
-      pi.jsonToNormalinfo(pt, "aaa", null);
-      eventBus.fire(pi);
+      MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+      NormalInfo pi = new NormalInfo();
+      final rslt = await pi.jsonToNormalinfo(pt, "aaa", null);
+      if (rslt) {
+        eventBus.fire(pi);
+      }
+      print(
+          'marmo:: Mqtt normal info :: topic is <${c[0]
+              .topic}>, payload is <-- $pt -->');
     });
   }
 
   // デバイス毎に緊急通知購読
   getAllDeviceAlarmInfo() async {
-    print("marmo::------------------" + client.connectionStatus.toString());
-    connect().then((value) async {
-      await getSurroundingUserInfo();
-    });
+    await connect();
+    await getSurroundingUserInfo();
     // getSurroundingUserInfo();
   }
 
@@ -304,16 +317,45 @@ class MqttUtil {
     final topicFilter = MqttClientTopicFilter('/emg/#', client.updates);
     // Now listen on the filtered updates, not the client updates
     // ignore: avoid_types_on_closure_parameters
-    topicFilter.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
-      final MqttPublishMessage recMess = c[0].payload;
+    var list = await topicFilter.updates.toList();
+    list.forEach((mqttMess) {
+      final MqttPublishMessage recMess = mqttMess[0].payload;
       String pt =
-          MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+      MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
       SoundUtil.playAssetSound(null);
-      AlarmInfo ai = new AlarmInfo();
-      ai.jsonStrToAlarminfo(pt, null);
-      eventBus.fire(ai);
+
+      // TODO: ローカルプッシュ & プッシュpayloadでAlarmInfoを作成＆fire (下記コメント参照
+      // AlarmInfo ai = new AlarmInfo();
+      // ai.jsonStrToAlarminfo(pt, null);
+      // eventBus.fire(ai);
+
       print(
-          'marmo::Filtered Change notification for emg/#:: topic is <${c[0].topic}>, payload is <-- $pt -->');
+          'marmo:: Mqtt alarm info :: topic is <${mqttMess[0]
+              .topic}>, payload is <-- $pt -->');
     });
   }
+    // var list = await topicFilter.updates.first;
+    // final MqttPublishMessage recMess = list[0].payload;
+    // String pt =
+    // MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+    // SoundUtil.playAssetSound(null);
+    // AlarmInfo ai = new AlarmInfo();
+    // ai.jsonStrToAlarminfo(pt, null);
+    // eventBus.fire(ai);
+    // print(
+    //     'marmo:: Mqtt alarm info :: topic is <${list[0]
+    //         .topic}>, payload is <-- $pt -->');
+  // }
+//   topicFilter.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
+//     final MqttPublishMessage recMess = c[0].payload;
+//     String pt =
+//         MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+//     SoundUtil.playAssetSound(null);
+//     AlarmInfo ai = new AlarmInfo();
+//     ai.jsonStrToAlarminfo(pt, null);
+//     eventBus.fire(ai);
+//     print(
+//         'marmo:: Mqtt alarm info :: topic is <${c[0].topic}>, payload is <-- $pt -->');
+//   });
+// }
 }

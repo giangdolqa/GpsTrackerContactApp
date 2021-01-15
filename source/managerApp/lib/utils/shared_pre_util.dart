@@ -121,4 +121,15 @@ class SharedPreUtil {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     return sharedPreferences.getString("AuthCode");
   }
+
+  // 日替わりtemporary password
+  Future SaveTempPassword(String tempPass) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    bool bRslt = await sharedPreferences.setString("tempPassword", tempPass);
+  }
+
+  Future GetTempPassword() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    return sharedPreferences.getString("tempPassword");
+  }
 }

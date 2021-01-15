@@ -1,6 +1,7 @@
 //　暗号化&復号化ツール
 import 'dart:convert';
 
+import 'package:crypto/crypto.dart';
 import 'package:encrypt/encrypt.dart';
 
 class CryptUtil {
@@ -8,7 +9,8 @@ class CryptUtil {
     // 32 length key
     final key = Key.fromUtf8(aes256Key);
     final encrypter = Encrypter(AES(key, mode: AESMode.ecb));
-    final encrypted = encrypter.encrypt(plainText).base16;
+    final encryptBytes= encrypter.encrypt(plainText);
+    final encrypted = encryptBytes.base64;
     return encrypted;
   }
 
@@ -16,9 +18,7 @@ class CryptUtil {
     // 32 length key
     final key = Key.fromUtf8(aes256Key);
     final encrypter = Encrypter(AES(key, mode: AESMode.ecb));
-    final text =
-        "A set of high-level APIs over PointyCastle for two-way cryptography.";
-    Encrypted encryptedBytes = Encrypted.fromUtf8(encryptedText);
+    Encrypted encryptedBytes = Encrypted.from64(encryptedText);
     final decrypted = encrypter.decrypt(encryptedBytes);
     return decrypted;
   }

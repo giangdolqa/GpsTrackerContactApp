@@ -6,6 +6,8 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 
+final marmoDB = new DbUtil();
+
 class DbUtil {
   static DbUtil dbUtil; //Singleton DbUtil
   static Database _database; //Singleton Database
