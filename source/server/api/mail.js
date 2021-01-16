@@ -17,7 +17,10 @@ const transporter = mail.createTransport({
 //
 // メールの送信
 //
-exports.send = (toaddress, passwd) => {
+exports.send = (toaddress, passwd, willsend) => {
+	if(willsend === false)
+		return;
+
 	let len = passwd.length;
 	// メールメッセージ
 	let mailOptions = {
