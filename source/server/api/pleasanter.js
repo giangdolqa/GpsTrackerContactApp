@@ -772,177 +772,202 @@ exports.apply_device_code = function(res, req){
 			Offset: 0,
 			View: {
 				ColumnFilterHash: {
-					ClassA: req.body.ID		// ID
+					ClassD: req.body.AuthCode	// 認証コード
 				}
 			}
 		})
 	}, function(error, response, body){
 		if (!error && response.statusCode === 200) {
 			const bodyJson = JSON.parse(body);
-			if (bodyJson.Response.TotalCount <= 0){
-				res.statusCode = 400;
-				res.json({Error, Message : 'Not record' });
-				return;
-			}
-			var count = 0;
 			bodyJson.Response.Data.forEach(data => {
-				if(data.ClassHash.ClassA !== req.body.ID)
+				if(data.ClassHash.ClassA !== req.body.ID && data.ClassHash.ClassD === req.body.AuthCode){
+					res.statusCode = 401;
+					res.json({Error, Message : 'This authorization code is used.' });
 					return;
-				count++;
-				var validDays = 0;	//残り日数
-				if(data.ClassHash.ClassD !== "" && data.ClassHash.ClassD !== req.body.AuthCode){
-					//古い認証コードテーブルの残り日数を取り出す
-					request.post({
-						uri: URL + 'items/' + AUTH_TABLE + '/get',
-						headers: { "Content-type": "application/json;charset=utf-8" },
-						body: JSON.stringify({
-							ApiVersion: 1.1,
-							ApiKey: API_KEY,
-							Offset: 0,
-							View: {
-								ColumnFilterHash: {
-									ClassA: data.ClassHash.ClassD,	// 認証コード
-									CheckA: false		// 休止中でない
-								}
-							}
-						})
-					}, function(error, response, body){
-						if (!error && response.statusCode === 200) {
-							const bodyJson = JSON.parse(body);
-							if (bodyJson.Response.Data.length > 0){
-								var dataAuth = bodyJson.Response.Data[0];
-								validDays = dataAuth.NumHash.NumA;
-								request.post({
-									uri: URL + 'items/' + data.ResultId +'/update',
-									headers: { "Content-type": "application/json;charset=utf-8" },
-									body: JSON.stringify({
-										ApiVersion: 1.1,
-										ApiKey: API_KEY,
-										NumHash: {
-											NumA: 0		// 残り日数を0に
-										}
-									})
-								});
-								//新しい認証コードテーブルの残り日数を取り出す
-								request.post({
-									uri: URL + 'items/' + AUTH_TABLE + '/get',
-									headers: { "Content-type": "application/json;charset=utf-8" },
-									body: JSON.stringify({
-										ApiVersion: 1.1,
-										ApiKey: API_KEY,
-										Offset: 0,
-										View: {
-											ColumnFilterHash: {
-												ClassA: req.body.AuthCode,	// 認証コード
-												CheckA: false		// 休止中でない
-											}
-										}
-									})
-								}, function(error, response, body){
-									if (!error && response.statusCode === 200) {
-										const bodyJson = JSON.parse(body);
-										if (bodyJson.Response.Data.length > 0){
-											var dataAuth = bodyJson.Response.Data[0];
-											validDays += dataAuth.NumHash.NumA;
-											request.post({
-												uri: URL + 'items/' + data.ResultId +'/update',
-												headers: { "Content-type": "application/json;charset=utf-8" },
-												body: JSON.stringify({
-													ApiVersion: 1.1,
-													ApiKey: API_KEY,
-													NumHash: {
-														NumA: validDays		// 残り日数をセット
-													}
-												})
-											});
-											//新しい認証コードテーブルの残り日数を取り出す
-											let resData = {
-												AuthCode: req.body.AuthCode,	// 認証コード
-												ValidDays: validDays			// 残り日数
-											};
-											res.json(resData);
-
-											//認証コードをセットする
-											request.post({
-												uri: URL + 'items/' + data.ResultId +'/update',
-												headers: { "Content-type": "application/json;charset=utf-8" },
-												body: JSON.stringify({
-													ApiVersion: 1.1,
-													ApiKey: API_KEY,
-													ClassHash: {
-														ClassD: req.body.AuthCode	// 認証コード
-													}
-												})
-											});
-										}
-									}
-									else{
-										res.statusCode = response.statusCode;
-										res.json({Error, Message : response.Message });
-									}
-								});
-							}
-						}
-					});
-				}
-				else {
-					//新しい認証コードテーブルの残り日数を取り出す
-					request.post({
-						uri: URL + 'items/' + AUTH_TABLE + '/get',
-						headers: { "Content-type": "application/json;charset=utf-8" },
-						body: JSON.stringify({
-							ApiVersion: 1.1,
-							ApiKey: API_KEY,
-							Offset: 0,
-							View: {
-								ColumnFilterHash: {
-									ClassA: req.body.AuthCode,	// 認証コード
-									CheckA: false		// 休止中でない
-								}
-							}
-						})
-					}, function(error, response, body){
-						if (!error && response.statusCode === 200) {
-							const bodyJson = JSON.parse(body);
-							if (bodyJson.Response.Data.length > 0){
-								var dataAuth = bodyJson.Response.Data[0];
-								//新しい認証コードテーブルの残り日数を取り出す
-								let resData = {
-									AuthCode: req.body.AuthCode,		// 認証コード
-									ValidDays: dataAuth.NumHash.NumA	// 残り日数
-								};
-								res.json(resData);
-
-								//認証コードをセットする
-								request.post({
-									uri: URL + 'items/' + data.ResultId +'/update',
-									headers: { "Content-type": "application/json;charset=utf-8" },
-									body: JSON.stringify({
-										ApiVersion: 1.1,
-										ApiKey: API_KEY,
-										ClassHash: {
-											ClassD: req.body.AuthCode	// 認証コード
-										}
-									})
-								});
-							}
-						}
-						else{
-							res.statusCode = response.statusCode;
-							res.json({Error, Message : response.Message });
-						}
-					});
 				}
 			});
-			if(!count){
-				res.statusCode = 400;
-				res.json({Error, Message : 'Not record' });
-				return;
-			}
-		}
-		else{
-			res.statusCode = response.statusCode;
-			res.json({Error, Message : response.Message });
+			request.post({
+				uri: URL + 'items/' + DEVICE_TABLE + '/get',
+				headers: { "Content-type": "application/json;charset=utf-8" },
+				body: JSON.stringify({
+					ApiVersion: 1.1,
+					ApiKey: API_KEY,
+					Offset: 0,
+					View: {
+						ColumnFilterHash: {
+							ClassA: req.body.ID		// ID
+						}
+					}
+				})
+			}, function(error, response, body){
+				if (!error && response.statusCode === 200) {
+					const bodyJson = JSON.parse(body);
+					if (bodyJson.Response.TotalCount <= 0){
+						res.statusCode = 400;
+						res.json({Error, Message : 'Not record' });
+						return;
+					}
+					var count = 0;
+					bodyJson.Response.Data.forEach(data => {
+						if(data.ClassHash.ClassA !== req.body.ID)
+							return;
+						count++;
+						var validDays = 0;	//残り日数
+						if(data.ClassHash.ClassD !== "" && data.ClassHash.ClassD !== req.body.AuthCode){
+							//古い認証コードテーブルの残り日数を取り出す
+							request.post({
+								uri: URL + 'items/' + AUTH_TABLE + '/get',
+								headers: { "Content-type": "application/json;charset=utf-8" },
+								body: JSON.stringify({
+									ApiVersion: 1.1,
+									ApiKey: API_KEY,
+									Offset: 0,
+									View: {
+										ColumnFilterHash: {
+											ClassA: data.ClassHash.ClassD,	// 認証コード
+											CheckA: false		// 休止中でない
+										}
+									}
+								})
+							}, function(error, response, body){
+								if (!error && response.statusCode === 200) {
+									const bodyJson = JSON.parse(body);
+									if (bodyJson.Response.Data.length > 0){
+										var dataAuth = bodyJson.Response.Data[0];
+										validDays = dataAuth.NumHash.NumA;
+										request.post({
+											uri: URL + 'items/' + data.ResultId +'/update',
+											headers: { "Content-type": "application/json;charset=utf-8" },
+											body: JSON.stringify({
+												ApiVersion: 1.1,
+												ApiKey: API_KEY,
+												NumHash: {
+													NumA: 0		// 残り日数を0に
+												}
+											})
+										});
+										//新しい認証コードテーブルの残り日数を取り出す
+										request.post({
+											uri: URL + 'items/' + AUTH_TABLE + '/get',
+											headers: { "Content-type": "application/json;charset=utf-8" },
+											body: JSON.stringify({
+												ApiVersion: 1.1,
+												ApiKey: API_KEY,
+												Offset: 0,
+												View: {
+													ColumnFilterHash: {
+														ClassA: req.body.AuthCode,	// 認証コード
+														CheckA: false		// 休止中でない
+													}
+												}
+											})
+										}, function(error, response, body){
+											if (!error && response.statusCode === 200) {
+												const bodyJson = JSON.parse(body);
+												if (bodyJson.Response.Data.length > 0){
+													var dataAuth = bodyJson.Response.Data[0];
+													validDays += dataAuth.NumHash.NumA;
+													request.post({
+														uri: URL + 'items/' + data.ResultId +'/update',
+														headers: { "Content-type": "application/json;charset=utf-8" },
+														body: JSON.stringify({
+															ApiVersion: 1.1,
+															ApiKey: API_KEY,
+															NumHash: {
+																NumA: validDays		// 残り日数をセット
+															}
+														})
+													});
+													//新しい認証コードテーブルの残り日数を取り出す
+													let resData = {
+														AuthCode: req.body.AuthCode,	// 認証コード
+														ValidDays: validDays			// 残り日数
+													};
+													res.json(resData);
+
+													//認証コードをセットする
+													request.post({
+														uri: URL + 'items/' + data.ResultId +'/update',
+														headers: { "Content-type": "application/json;charset=utf-8" },
+														body: JSON.stringify({
+															ApiVersion: 1.1,
+															ApiKey: API_KEY,
+															ClassHash: {
+																ClassD: req.body.AuthCode	// 認証コード
+															}
+														})
+													});
+												}
+											}
+											else{
+												res.statusCode = response.statusCode;
+												res.json({Error, Message : response.Message });
+											}
+										});
+									}
+								}
+							});
+						}
+						else {
+							//新しい認証コードテーブルの残り日数を取り出す
+							request.post({
+								uri: URL + 'items/' + AUTH_TABLE + '/get',
+								headers: { "Content-type": "application/json;charset=utf-8" },
+								body: JSON.stringify({
+									ApiVersion: 1.1,
+									ApiKey: API_KEY,
+									Offset: 0,
+									View: {
+										ColumnFilterHash: {
+											ClassA: req.body.AuthCode,	// 認証コード
+											CheckA: false		// 休止中でない
+										}
+									}
+								})
+							}, function(error, response, body){
+								if (!error && response.statusCode === 200) {
+									const bodyJson = JSON.parse(body);
+									if (bodyJson.Response.Data.length > 0){
+										var dataAuth = bodyJson.Response.Data[0];
+										//新しい認証コードテーブルの残り日数を取り出す
+										let resData = {
+											AuthCode: req.body.AuthCode,		// 認証コード
+											ValidDays: dataAuth.NumHash.NumA	// 残り日数
+										};
+										res.json(resData);
+
+										//認証コードをセットする
+										request.post({
+											uri: URL + 'items/' + data.ResultId +'/update',
+											headers: { "Content-type": "application/json;charset=utf-8" },
+											body: JSON.stringify({
+												ApiVersion: 1.1,
+												ApiKey: API_KEY,
+												ClassHash: {
+													ClassD: req.body.AuthCode	// 認証コード
+												}
+											})
+										});
+									}
+								}
+								else{
+									res.statusCode = response.statusCode;
+									res.json({Error, Message : response.Message });
+								}
+							});
+						}
+					});
+					if(!count){
+						res.statusCode = 400;
+						res.json({Error, Message : 'Not record' });
+						return;
+					}
+				}
+				else{
+					res.statusCode = response.statusCode;
+					res.json({Error, Message : response.Message });
+				}
+			});
 		}
 	});
 }
@@ -1399,8 +1424,8 @@ exports.create_contact = function(res, req){
 //濃厚接触確認
 exports.get_contact = function(res, req){
 	var resData = [];
-	if(req.body.data.length > 0){
-		var len = req.body.data.length;
+	var len = req.body.data.length;
+	if(len > 0){
 		var count = 0;
 		for(var i = 0; i < len; i++){
 			var data = req.body.data[i];
@@ -1421,13 +1446,15 @@ exports.get_contact = function(res, req){
 				count++;
 				if (!error && response.statusCode === 200) {
 					const bodyJson = JSON.parse(body);
-					var data = bodyJson.Response.Data[0];
-					contactData = {
-						Time: get_datetime_vale(data.DateHash.DateA),
-						Type: (data.CheckHash.CheckA === true) ? 1 : 0,
-						RPI: data.ClassHash.ClassA
-					};
-					resData.push(contactData);
+					if(bodyJson.Response.Data.length > 0){
+						var data = bodyJson.Response.Data[0];
+						contactData = {
+							Time: get_datetime_vale(data.DateHash.DateA),
+							Type: (data.CheckHash.CheckA === true) ? 1 : 0,
+							RPI: data.ClassHash.ClassA
+						};
+						resData.push(contactData);
+					}
 					if(count == len){
 						res.json(resData)
 					}
