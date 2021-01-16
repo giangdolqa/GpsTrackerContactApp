@@ -11,11 +11,9 @@ const API_KEY = 'b112d2d4dc3ccd0c24fd560174a94290b2281810e164d99b2cecc345f9c1eba
 const ALGO = 'aes-256-cbc';
 const PASSWORD = 'NcVpn_dCAVe#+_*';
 const SALT = 'v4CYLWpU#QZM$&L';
-const TemporaryPasswordFile = 'TemporaryPassword.txt';
 
 const USER_TABLE 			= '2'
 const DEVICE_TABLE			= '4'
-const PROF_MASTER			= '5'
 const AUTH_TABLE			= '7'
 const SCHOOL_TABLE			= '8'
 const CONTACT_TABLE			= '9'
