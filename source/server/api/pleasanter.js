@@ -399,149 +399,6 @@ exports.verify_auth = function(res, req){
 	});
 }
 
-
-//SMS認証コード発行
-exports.request_auth_sms = function(res, req){
-	request.post({
-		uri: URL + 'items/' + USER_TABLE + '/get',
-		headers: { "Content-type": "application/json;charset=utf-8" },
-		body: JSON.stringify({
-			ApiVersion: 1.1,
-			ApiKey: API_KEY,
-			Offset: 0,
-			View: {
-				ColumnFilterHash: {
-					ClassG: req.body.LoginID	// ログインID
-				}
-			}
-		})
-	}, function(error, response, body){
-		if (!error && response.statusCode === 200) {
-			const bodyJson = JSON.parse(body);
-			if (bodyJson.Response.TotalCount <= 0){
-				res.statusCode = 400;
-				res.json({Error, Message : 'Not record' });
-				return;
-			}
-			var count = 0;
-			bodyJson.Response.Data.forEach(data => {
-				if(data.ClassHash.ClassG !== req.body.LoginID)
-					return;
-				count++;
-				var smsCode = generatePassword();
-				request.post({
-					uri: URL + 'items/' + data.ResultId +'/update',
-					headers: { "Content-type": "application/json;charset=utf-8" },
-					body: JSON.stringify({
-						ApiVersion: 1.1,
-						ApiKey: API_KEY,
-						ClassHash: {
-							ClassJ: smsCode
-						},
-						DateHash: {
-							DateA: moment().format("YYYY-MM-DDTHH:mm:ss")
-						}
-					})
-				}, (error, response, body) => {
-					if (!error && response.statusCode === 200) {
-						var smsSend = false;
-						request.post({
-							uri: URL + 'items/' + MESSAGE_SEND_TABLE + '/get',
-							headers: { "Content-type": "application/json;charset=utf-8" },
-							body: JSON.stringify({
-								ApiVersion: 1.1,
-								ApiKey: API_KEY
-							})
-						}, function(error, response, body){
-							if (!error && response.statusCode === 200) {
-								const bodyJson = JSON.parse(body);
-								if (bodyJson.Response.Data.length > 0){
-									var willsend = bodyJson.Response.Data[0];
-									smsSend = willsend.CheckHash.CheckB;
-								}
-							}
-							//認証コードを送信する
-							sms.send(data.ClassHash.ClassE, smsCode, smsSend);
-							res.sendStatus(200);
-						});
-					}
-					else{
-						res.send(response);
-					}
-				});
-			});
-			if(!count){
-				res.statusCode = 400;
-				res.json({Error, Message : 'Not record' });
-				return;
-			}
-		}
-		else{
-			res.statusCode = response.statusCode;
-			res.json({Error, Message : response.Message });
-		}
-	});
-}
-
-//SMS認証コード確認
-exports.verify_auth_sms = function(res, req){
-	request.post({
-		uri: URL + 'items/' + USER_TABLE + '/get',
-		headers: { "Content-type": "application/json;charset=utf-8" },
-		body: JSON.stringify({
-			ApiVersion: 1.1,
-			ApiKey: API_KEY,
-			Offset: 0,
-			View: {
-				ColumnFilterHash: {
-					ClassG: req.body.LoginID	// ログインID
-				}
-			}
-		})
-	}, function(error, response, body){
-		if (!error && response.statusCode === 200) {
-			const bodyJson = JSON.parse(body);
-			if (bodyJson.Response.TotalCount <= 0){
-				res.statusCode = 400;
-				res.json({Error, Message : 'Not record' });
-				return;
-			}
-			var count = 0;
-			bodyJson.Response.Data.forEach(data => {
-				if(data.ClassHash.ClassG !== req.body.LoginID)
-					return;
-				count++;
-				var limit = new Date(data.DateHash.DateA);
-				limit.setMinutes(limit.getMinutes() + 30);
-				if(limit < new Date()){
-					res.statusCode = 401;
-					res.json({Error, Message : 'Authentication code expired' });
-					return;
-				}
-				var smsCode = data.ClassHash.ClassJ;
-				if(smsCode === req.body.SmsCode){
-					res.sendStatus(200);
-					return;
-				}
-				else {
-					res.statusCode = 402;
-					res.json({Error, Message : 'Authentication code mismatch' });
-					return;
-				}
-			});
-			if(!count){
-				res.statusCode = 400;
-				res.json({Error, Message : 'LoginID mismatch' });
-				return;
-			}
-		}
-		else{
-			res.statusCode = response.statusCode;
-			res.json({Error, Message : response.Message });
-		}
-	});
-}
-
 //デバイス情報登録
 exports.create_device = function(res, req){
 	request.post({
@@ -1464,6 +1321,290 @@ exports.get_contact = function(res, req){
 	}else{
 		res.json(resData)
 	}
+}
+
+//SMS認証コード発行
+exports.request_auth_sms = function(res, req){
+	request.post({
+		uri: URL + 'items/' + USER_TABLE + '/get',
+		headers: { "Content-type": "application/json;charset=utf-8" },
+		body: JSON.stringify({
+			ApiVersion: 1.1,
+			ApiKey: API_KEY,
+			Offset: 0,
+			View: {
+				ColumnFilterHash: {
+					ClassG: req.body.LoginID	// ログインID
+				}
+			}
+		})
+	}, function(error, response, body){
+		if (!error && response.statusCode === 200) {
+			const bodyJson = JSON.parse(body);
+			if (bodyJson.Response.TotalCount <= 0){
+				res.statusCode = 400;
+				res.json({Error, Message : 'Not record' });
+				return;
+			}
+			var count = 0;
+			bodyJson.Response.Data.forEach(data => {
+				if(data.ClassHash.ClassG !== req.body.LoginID)
+					return;
+				count++;
+				var smsCode = generatePassword();
+				request.post({
+					uri: URL + 'items/' + data.ResultId +'/update',
+					headers: { "Content-type": "application/json;charset=utf-8" },
+					body: JSON.stringify({
+						ApiVersion: 1.1,
+						ApiKey: API_KEY,
+						ClassHash: {
+							ClassJ: smsCode
+						},
+						DateHash: {
+							DateA: moment().format("YYYY-MM-DDTHH:mm:ss")
+						}
+					})
+				}, (error, response, body) => {
+					if (!error && response.statusCode === 200) {
+						var smsSend = false;
+						request.post({
+							uri: URL + 'items/' + MESSAGE_SEND_TABLE + '/get',
+							headers: { "Content-type": "application/json;charset=utf-8" },
+							body: JSON.stringify({
+								ApiVersion: 1.1,
+								ApiKey: API_KEY
+							})
+						}, function(error, response, body){
+							if (!error && response.statusCode === 200) {
+								const bodyJson = JSON.parse(body);
+								if (bodyJson.Response.Data.length > 0){
+									var willsend = bodyJson.Response.Data[0];
+									smsSend = willsend.CheckHash.CheckB;
+								}
+							}
+							//認証コードを送信する
+							sms.send(data.ClassHash.ClassE, smsCode, smsSend);
+							res.sendStatus(200);
+						});
+					}
+					else{
+						res.send(response);
+					}
+				});
+			});
+			if(!count){
+				res.statusCode = 400;
+				res.json({Error, Message : 'Not record' });
+				return;
+			}
+		}
+		else{
+			res.statusCode = response.statusCode;
+			res.json({Error, Message : response.Message });
+		}
+	});
+}
+
+//SMS認証コード確認
+exports.verify_auth_sms = function(res, req){
+	request.post({
+		uri: URL + 'items/' + USER_TABLE + '/get',
+		headers: { "Content-type": "application/json;charset=utf-8" },
+		body: JSON.stringify({
+			ApiVersion: 1.1,
+			ApiKey: API_KEY,
+			Offset: 0,
+			View: {
+				ColumnFilterHash: {
+					ClassG: req.body.LoginID	// ログインID
+				}
+			}
+		})
+	}, function(error, response, body){
+		if (!error && response.statusCode === 200) {
+			const bodyJson = JSON.parse(body);
+			if (bodyJson.Response.TotalCount <= 0){
+				res.statusCode = 400;
+				res.json({Error, Message : 'Not record' });
+				return;
+			}
+			var count = 0;
+			bodyJson.Response.Data.forEach(data => {
+				if(data.ClassHash.ClassG !== req.body.LoginID)
+					return;
+				count++;
+				var limit = new Date(data.DateHash.DateA);
+				limit.setMinutes(limit.getMinutes() + 30);
+				if(limit < new Date()){
+					res.statusCode = 401;
+					res.json({Error, Message : 'Authentication code expired' });
+					return;
+				}
+				var smsCode = data.ClassHash.ClassJ;
+				if(smsCode === req.body.SmsCode){
+					res.sendStatus(200);
+					return;
+				}
+				else {
+					res.statusCode = 402;
+					res.json({Error, Message : 'Authentication code mismatch' });
+					return;
+				}
+			});
+			if(!count){
+				res.statusCode = 400;
+				res.json({Error, Message : 'LoginID mismatch' });
+				return;
+			}
+		}
+		else{
+			res.statusCode = response.statusCode;
+			res.json({Error, Message : response.Message });
+		}
+	});
+}
+
+//メール認証コード発行
+exports.request_auth_mail = function(res, req){
+	request.post({
+		uri: URL + 'items/' + USER_TABLE + '/get',
+		headers: { "Content-type": "application/json;charset=utf-8" },
+		body: JSON.stringify({
+			ApiVersion: 1.1,
+			ApiKey: API_KEY,
+			Offset: 0,
+			View: {
+				ColumnFilterHash: {
+					ClassG: req.body.LoginID	// ログインID
+				}
+			}
+		})
+	}, function(error, response, body){
+		if (!error && response.statusCode === 200) {
+			const bodyJson = JSON.parse(body);
+			if (bodyJson.Response.TotalCount <= 0){
+				res.statusCode = 400;
+				res.json({Error, Message : 'Not record' });
+				return;
+			}
+			var count = 0;
+			bodyJson.Response.Data.forEach(data => {
+				if(data.ClassHash.ClassG !== req.body.LoginID)
+					return;
+				count++;
+				var smsCode = generatePassword();
+				request.post({
+					uri: URL + 'items/' + data.ResultId +'/update',
+					headers: { "Content-type": "application/json;charset=utf-8" },
+					body: JSON.stringify({
+						ApiVersion: 1.1,
+						ApiKey: API_KEY,
+						ClassHash: {
+							ClassJ: smsCode
+						},
+						DateHash: {
+							DateA: moment().format("YYYY-MM-DDTHH:mm:ss")
+						}
+					})
+				}, (error, response, body) => {
+					if (!error && response.statusCode === 200) {
+						var mailSend = false;
+						request.post({
+							uri: URL + 'items/' + MESSAGE_SEND_TABLE + '/get',
+							headers: { "Content-type": "application/json;charset=utf-8" },
+							body: JSON.stringify({
+								ApiVersion: 1.1,
+								ApiKey: API_KEY
+							})
+						}, function(error, response, body){
+							if (!error && response.statusCode === 200) {
+								const bodyJson = JSON.parse(body);
+								if (bodyJson.Response.Data.length > 0){
+									var willsend = bodyJson.Response.Data[0];
+									mailSend = willsend.CheckHash.CheckA;
+								}
+							}
+							//認証コードを送信する
+							mail.send(data.ClassHash.ClassF, mailCode, mailSend);
+							res.sendStatus(200);
+						});
+					}
+					else{
+						res.send(response);
+					}
+				});
+			});
+			if(!count){
+				res.statusCode = 400;
+				res.json({Error, Message : 'Not record' });
+				return;
+			}
+		}
+		else{
+			res.statusCode = response.statusCode;
+			res.json({Error, Message : response.Message });
+		}
+	});
+}
+
+//メール認証コード確認
+exports.verify_auth_mail = function(res, req){
+	request.post({
+		uri: URL + 'items/' + USER_TABLE + '/get',
+		headers: { "Content-type": "application/json;charset=utf-8" },
+		body: JSON.stringify({
+			ApiVersion: 1.1,
+			ApiKey: API_KEY,
+			Offset: 0,
+			View: {
+				ColumnFilterHash: {
+					ClassG: req.body.LoginID	// ログインID
+				}
+			}
+		})
+	}, function(error, response, body){
+		if (!error && response.statusCode === 200) {
+			const bodyJson = JSON.parse(body);
+			if (bodyJson.Response.TotalCount <= 0){
+				res.statusCode = 400;
+				res.json({Error, Message : 'Not record' });
+				return;
+			}
+			var count = 0;
+			bodyJson.Response.Data.forEach(data => {
+				if(data.ClassHash.ClassG !== req.body.LoginID)
+					return;
+				count++;
+				var limit = new Date(data.DateHash.DateA);
+				limit.setMinutes(limit.getMinutes() + 30);
+				if(limit < new Date()){
+					res.statusCode = 401;
+					res.json({Error, Message : 'Authentication code expired' });
+					return;
+				}
+				var mailCode = data.ClassHash.ClassI;
+				if(mailCode !== req.body.MailCode){
+					res.sendStatus(200);
+					return;
+				}
+				else {
+					res.statusCode = 402;
+					res.json({Error, Message : 'Authentication code mismatch' });
+					return;
+				}
+			});
+			if(!count){
+				res.statusCode = 400;
+				res.json({Error, Message : 'LoginID mismatch' });
+				return;
+			}
+		}
+		else{
+			res.statusCode = response.statusCode;
+			res.json({Error, Message : response.Message });
+		}
+	});
 }
 
 async function CalcRPI(TEK, ENIN) {

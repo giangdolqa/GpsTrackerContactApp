@@ -56,16 +56,6 @@ app.patch(api_ver + 'auth/verify', (res, req) => {
 	pleasanter.verify_auth(req, res);
 });
 
-//PATCH SMS認証コード発行
-app.patch(api_ver + 'auth/request/sms', (res, req) => {
-	pleasanter.request_auth_sms(req, res);
-});
-
-//PATCH SMS認証コード確認
-app.patch(api_ver + 'auth/verify/sms', (res, req) => {
-	pleasanter.verify_auth_sms(req, res);
-});
-
 //POST デバイス情報登録
 app.post(api_ver + 'device', (res, req) => {
 	pleasanter.create_device(req, res);
@@ -134,4 +124,24 @@ app.post(api_ver + 'contact', (res, req) => {
 //GET 濃厚接触確認
 app.get(api_ver + 'contact', (res, req) => {
 	pleasanter.get_contact(req, res);
+});
+
+//PATCH SMS認証コード発行
+app.patch(api_ver + 'auth/request/sms', (res, req) => {
+	pleasanter.request_auth_sms(req, res);
+});
+
+//PATCH SMS認証コード確認
+app.patch(api_ver + 'auth/verify/sms', (res, req) => {
+	pleasanter.verify_auth_sms(req, res);
+});
+
+//PATCH メール認証コード発行
+app.patch(api_ver + 'auth/request/mail', (res, req) => {
+	pleasanter.request_auth_mail(req, res);
+});
+
+//PATCH メール認証コード確認
+app.patch(api_ver + 'auth/verify/mail', (res, req) => {
+	pleasanter.verify_auth_mail(req, res);
 });

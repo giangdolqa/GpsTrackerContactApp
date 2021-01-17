@@ -1,6 +1,6 @@
-<mxfile host="65bd71144e" modified="2021-01-11T01:59:15.851Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.52.1 Chrome/83.0.4103.122 Electron/9.3.5 Safari/537.36" etag="Jd5vbBjZEoXVaKYf-B6N" version="13.10.0" type="embed">
+<mxfile host="65bd71144e" modified="2021-01-17T02:59:31.070Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.52.1 Chrome/83.0.4103.122 Electron/9.3.5 Safari/537.36" etag="C56B83Arw5Ydh5f1QjcQ" version="13.10.0" type="embed">
     <diagram id="J0KxcsYykmodnCqyUs6D" name="ページ1">
-        <mxGraphModel dx="338" dy="779" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+        <mxGraphModel dx="1115" dy="1298" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -982,7 +982,7 @@
                 <mxCell id="491" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.left;strokeColor=#0080f0;fillColor=#FF0000;gradientColor=none;" parent="488" vertex="1">
                     <mxGeometry x="14.92999999999995" y="10" width="10" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="566" value="&lt;font color=&quot;#000000&quot; style=&quot;font-size: 17px&quot;&gt;SMSのコードを入力してください&lt;/font&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=20;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;whiteSpace=wrap;" parent="488" vertex="1">
+                <mxCell id="566" value="&lt;font color=&quot;#000000&quot; style=&quot;font-size: 17px&quot;&gt;メールのコードを入力してください&lt;/font&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=20;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;whiteSpace=wrap;" parent="488" vertex="1">
                     <mxGeometry width="290" height="20" relative="1" as="geometry">
                         <mxPoint x="20" y="280" as="offset"/>
                     </mxGeometry>
@@ -1036,7 +1036,7 @@
                 <mxCell id="518" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.left;strokeColor=#0080f0;fillColor=#FF0000;gradientColor=none;" parent="515" vertex="1">
                     <mxGeometry x="14.92999999999995" y="10" width="10" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="519" value="&lt;font color=&quot;#000000&quot; style=&quot;font-size: 17px&quot;&gt;SMSのコードを入力してください&lt;/font&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=20;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;whiteSpace=wrap;" parent="515" vertex="1">
+                <mxCell id="519" value="&lt;font color=&quot;#000000&quot; style=&quot;font-size: 17px&quot;&gt;メールのコードを入力してください&lt;/font&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=20;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;whiteSpace=wrap;" parent="515" vertex="1">
                     <mxGeometry width="290" height="20" relative="1" as="geometry">
                         <mxPoint x="20" y="280" as="offset"/>
                     </mxGeometry>
