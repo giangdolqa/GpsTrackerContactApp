@@ -12,6 +12,7 @@ class DeviceDBInfo {
   String id; // デバイスID
   String name; // 名称
   String key; // 暗号キー
+  String keyDate; // 暗号キー日付
   String userName; // ユーザー名称
   num state;  // 接続状態
   num count;  // 設定次数

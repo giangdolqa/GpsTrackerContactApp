@@ -81,7 +81,7 @@ class HomeViewState extends State<HomeView>
     Workmanager.initialize(
         callbackDispatcher, // The top level function, aka callbackDispatcher
         isInDebugMode:
-            true // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
+            false // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
         );
     Workmanager.registerPeriodicTask(
       "2",
@@ -514,37 +514,6 @@ class HomeViewState extends State<HomeView>
     switch (selectedVal) {
       case "home":
         // // ホーム画面へ遷移
-        // AlarmInfo ai = new AlarmInfo();
-        // ai.position = Position(latitude: 38.94870994, longitude: 121.59347778);
-        // ai.Age = 16;
-        // ai.Sex = 1;
-        //
-        // _addAlarmCustomMarker(ai);
-        //
-        // List<NormalInfo> niList = [];
-        // NormalInfo ni = new NormalInfo();
-        // ni.name = "テスト太郎";
-        // ni.description = "aodi/sdfs %dsdofji";
-        // ni.latitude = 38.94872994;
-        // ni.longitude = 121.59357778;
-        // _addNormalMarkers(ni);
-        //
-        // NormalInfo ni1 = new NormalInfo();
-        // ni1.name = "テスト次郎";
-        // ni1.description = "213/sdfs %dsdofji";
-        // ni1.latitude = 38.95872994;
-        // ni1.longitude = 121.55357778;
-        // _addNormalMarkers(ni1);
-        //
-        // AlarmInfo ai2 = new AlarmInfo();
-        // var json = {
-        //   "Lat": 38.67,
-        //   "Lng": 12.66,
-        //   "Sex": 1,
-        //   "Age": 16
-        // };
-        // String jsonStr = jsonEncode(json);
-        // ai.jsonStrToAlarminfo(jsonStr, null);
         break;
       case "setting":
         Navigator.of(context).pushNamed('Setting');

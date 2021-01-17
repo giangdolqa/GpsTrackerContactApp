@@ -26,8 +26,8 @@ class KeyInfo {
 
   // キーハッシュ化
   String getHashedKey() {
-    // ①	時刻のD２文字目+1文字分、時刻を切り出す。
-    String tempDatetimeStr = formatDate(DateTime.now(), [yyyy, mm, dd]);
+    // ①	時刻のDDの２文字目+1文字分、時刻を切り出す。
+    String tempDatetimeStr = formatDate(DateTime.now(), [yyyy, mm, dd, HH]);
     String hashKey = tempDatetimeStr.substring(tempDatetimeStr.length - 1);
     // ②	その切り出した文字をキーとして、SHA256ハッシュ化する。
     var bytes = utf8.encode(hashKey);

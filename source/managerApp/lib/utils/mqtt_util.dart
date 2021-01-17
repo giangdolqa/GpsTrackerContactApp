@@ -8,6 +8,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:marmo/beans/device_dbInfo.dart';
+import 'package:marmo/beans/key_info.dart';
 import 'package:marmo/beans/normal_info.dart';
 import 'package:marmo/beans/alarm_info.dart';
 import 'package:marmo/utils/sound_util.dart';
@@ -105,7 +106,7 @@ class MqttUtil {
     final connMess = MqttConnectMessage()
         .withClientIdentifier("UniqueId")
         .keepAliveFor(20) // Must agree with the keep alive set above or not set
-    // .authenticateAs(username, password)
+        // .authenticateAs(username, password)
         .startClean() // Non persistent session for testing
         .withWillQos(MqttQos.atLeastOnce);
     print('marmo::Mosquitto client connecting....');
@@ -156,11 +157,39 @@ class MqttUtil {
     print('marmo::Ping response client callback invoked');
   }
 
+  // デバイス暗号キー配信
   Future<String> getEncryptKey(String deviceName) async {
     String topic = deviceName +
         "/key/" +
         formatDate(DateTime.now(), [yyyy, mm, dd, HH, MM, ss]);
     client.subscribe(topic, MqttQos.exactlyOnce);
+    final topicFilter = MqttClientTopicFilter(topic, client.updates);
+    // Now listen on the filtered updates, not the client updates
+    // ignore: avoid_types_on_closure_parameters
+    topicFilter.updates
+        .listen((List<MqttReceivedMessage<MqttMessage>> c) async {
+      final MqttPublishMessage recMess = c[0].payload;
+      final pt =
+          MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+      KeyInfo ki = new KeyInfo();
+      final rslt = await ki.jsonToKeyInfo(pt, null);
+      if (rslt != null) {
+        String jsonKey = rslt.key;
+        String keyHeader = ki.getHashedKey();
+        if (jsonKey.startsWith(keyHeader)) {
+          // DB に保存
+          DeviceDBInfo dbInfo = new DeviceDBInfo();
+          dbInfo = await DbUtil.dbUtil.getDeviceDBInfoByDeviceName(deviceName);
+          dbInfo.key = jsonKey.substring(keyHeader.length - 1);
+          dbInfo.keyDate = formatDate(DateTime.now(), [yyyy, mm, dd]);
+          DbUtil.dbUtil.updateDeviceDBInfoByName(dbInfo);
+        } else {
+          // Do nothing
+        }
+      }
+      print(
+          'marmo:: Mqtt normal info :: topic is <${c[0].topic}>, payload is <-- $pt -->');
+    });
   }
 
   void subScribePositionByDeviceName(String deviceName) async {
@@ -182,15 +211,14 @@ class MqttUtil {
         .listen((List<MqttReceivedMessage<MqttMessage>> c) async {
       final MqttPublishMessage recMess = c[0].payload;
       final pt =
-      MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+          MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
       NormalInfo pi = new NormalInfo();
       final rslt = await pi.jsonToNormalinfo(pt, "aaa", null);
       if (rslt) {
         eventBus.fire(pi);
       }
       print(
-          'marmo:: Mqtt normal info :: topic is <${c[0]
-              .topic}>, payload is <-- $pt -->');
+          'marmo:: Mqtt normal info :: topic is <${c[0].topic}>, payload is <-- $pt -->');
     });
   }
 
@@ -203,15 +231,6 @@ class MqttUtil {
 
 // 緊急通知取得
   getSurroundingUserInfo() async {
-    // final builder = MqttClientPayloadBuilder();
-    // builder.addString('Hello from mqtt_client');
-    // try {
-    //   await client.connect();
-    // } on Exception catch (e) {
-    //   print('marmo::client exception - $e');
-    //   client.disconnect();
-    // }
-
     globalTempPos = await geolocator.getCurrentPosition();
     if (globalTempPos == null) {
       return null;
@@ -315,47 +334,15 @@ class MqttUtil {
 
     // 緊急通知処理登録
     final topicFilter = MqttClientTopicFilter('/emg/#', client.updates);
-    // Now listen on the filtered updates, not the client updates
-    // ignore: avoid_types_on_closure_parameters
-    var list = await topicFilter.updates.toList();
-    list.forEach((mqttMess) {
-      final MqttPublishMessage recMess = mqttMess[0].payload;
-      String pt =
-      MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
-      SoundUtil.playAssetSound(null);
-
-      // TODO: ローカルプッシュ & プッシュpayloadでAlarmInfoを作成＆fire (下記コメント参照
-      // AlarmInfo ai = new AlarmInfo();
-      // ai.jsonStrToAlarminfo(pt, null);
-      // eventBus.fire(ai);
-
-      print(
-          'marmo:: Mqtt alarm info :: topic is <${mqttMess[0]
-              .topic}>, payload is <-- $pt -->');
-    });
-  }
-    // var list = await topicFilter.updates.first;
-    // final MqttPublishMessage recMess = list[0].payload;
-    // String pt =
-    // MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
-    // SoundUtil.playAssetSound(null);
+    var list = await topicFilter.updates.first;
+    final MqttPublishMessage recMess = list[0].payload;
+    String pt =
+        MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+    // TODO: ローカルプッシュ & プッシュpayloadでAlarmInfoを作成＆fire (下記コメント参照
     // AlarmInfo ai = new AlarmInfo();
     // ai.jsonStrToAlarminfo(pt, null);
     // eventBus.fire(ai);
-    // print(
-    //     'marmo:: Mqtt alarm info :: topic is <${list[0]
-    //         .topic}>, payload is <-- $pt -->');
-  // }
-//   topicFilter.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
-//     final MqttPublishMessage recMess = c[0].payload;
-//     String pt =
-//         MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
-//     SoundUtil.playAssetSound(null);
-//     AlarmInfo ai = new AlarmInfo();
-//     ai.jsonStrToAlarminfo(pt, null);
-//     eventBus.fire(ai);
-//     print(
-//         'marmo:: Mqtt alarm info :: topic is <${c[0].topic}>, payload is <-- $pt -->');
-//   });
-// }
+    print(
+        'marmo:: Mqtt alarm info :: topic is <${list[0].topic}>, payload is <-- $pt -->');
+  }
 }

@@ -95,6 +95,14 @@ class DbUtil {
     return result;
   }
 
+  //Update Operation :Update a DeviceDBInfo object and save it to Database
+  Future<int> updateDeviceDBInfoByName(DeviceDBInfo deviceInfo) async {
+    var db = await this.database;
+    var result = await db.update(deviceInfoTable, deviceInfo.toMap(),
+        where: '$colDeviceName =?', whereArgs: [deviceInfo.name]);
+    return result;
+  }
+
 //Delete Operation :Delete a DeviceDBInfo object from DataBase
   Future<int> deleteDeviceDBInfo(String deviceId) async {
     var db = await this.database;

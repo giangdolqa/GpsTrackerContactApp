@@ -27,8 +27,8 @@ class NormalInfo {
       deviceInfo = await marmoDB.getDeviceDBInfoByDeviceName(deviceName);
     } catch (e) {
       print("marmo:: jsonToNormalinfo failed $e");
-      // return null;
-      deviceInfo.key = "adsfadsfadsfadsfadsfadsfadsfadsf";
+      return false;
+      // deviceInfo.key = "adsfadsfadsfadsfadsfadsfadsfadsf";
     }
 
     try {
