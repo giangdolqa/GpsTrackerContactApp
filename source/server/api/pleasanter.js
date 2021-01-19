@@ -1081,35 +1081,10 @@ exports.create_positive = function(res, req){
 			});
 		});
 	});
-	request.post({
-		uri: URL + 'items/' + CONTACT_COUNT_TABLE + '/get',
-		headers: { "Content-type": "application/json;charset=utf-8" },
-		body: JSON.stringify({
-			ApiVersion: 1.1,
-			ApiKey: API_KEY
-		})
-	}, function(error, response, body){
-		if (!error && response.statusCode === 200) {
-			const bodyJson = JSON.parse(body);
-			var data = bodyJson.Response.Data[0];
-			request.post({
-				uri: URL + 'items/' + data.ResultId +'/update',
-				headers: { "Content-type": "application/json;charset=utf-8" },
-				body: JSON.stringify({
-					ApiVersion: 1.1,
-					ApiKey: API_KEY,
-					NumHash: {
-						NumA: data.NumHash.NumA + 1	// 陽性者数
-					}
-				})
-			});
-			res.sendStatus(200);
-		}
-		else{
-			res.statusCode = response.statusCode;
-			res.json({Error, Message : response.Message });
-		}
-	});
+	// 濃厚接触数更新
+	updateContactCountTable(res, false, 0, 1);
+	updateContactCountTable(res, true, 0, 1);
+	res.sendStatus(200);
 }
 
 //陽性削除
@@ -1136,8 +1111,17 @@ exports.delete_positive = function(res, req){
 					if (!error && response.statusCode === 200) {
 						const bodyJson = JSON.parse(body);
 						bodyJson.Response.Data.forEach(data => {
-							positive |= data.CheckHash.CheckA;
-							contact |= data.CheckHash.CheckB;
+							// 濃厚接触数更新
+							if(!positive && data.CheckHash.CheckA){
+								positive = true;
+								updateContactCountTable(res, false, 0, -1);
+								updateContactCountTable(res, true, 0, -1);
+							}
+							if(!contact && data.CheckHash.CheckB){
+								contact = true;
+								updateContactCountTable(res, false, 1, -1);
+								updateContactCountTable(res, true, 1, -1);
+							}
 							request.post({
 								uri: URL + 'items/' + data.ResultId +'/delete',
 								headers: { "Content-type": "application/json;charset=utf-8" },
@@ -1152,36 +1136,7 @@ exports.delete_positive = function(res, req){
 			});
 		});
 	});
-	request.post({
-		uri: URL + 'items/' + CONTACT_COUNT_TABLE + '/get',
-		headers: { "Content-type": "application/json;charset=utf-8" },
-		body: JSON.stringify({
-			ApiVersion: 1.1,
-			ApiKey: API_KEY
-		})
-	}, function(error, response, body){
-		if (!error && response.statusCode === 200) {
-			const bodyJson = JSON.parse(body);
-			var data = bodyJson.Response.Data[0];
-			request.post({
-				uri: URL + 'items/' + data.ResultId +'/update',
-				headers: { "Content-type": "application/json;charset=utf-8" },
-				body: JSON.stringify({
-					ApiVersion: 1.1,
-					ApiKey: API_KEY,
-					NumHash: {
-						NumA: (data.NumHash.NumA - (positive) ? 1 : 0),	// 陽性者数
-						NumB: (data.NumHash.NumB - (contact) ? 1 : 0),	// 濃厚接触数
-					}
-				})
-			});
-			res.sendStatus(200);
-		}
-		else{
-			res.statusCode = response.statusCode;
-			res.json({Error, Message : response.Message });
-		}
-	});
+	res.sendStatus(200);
 }
 
 //濃厚接触登録
@@ -1247,35 +1202,9 @@ exports.create_contact = function(res, req){
 			});
 		});
 	});
-	request.post({
-		uri: URL + 'items/' + CONTACT_COUNT_TABLE + '/get',
-		headers: { "Content-type": "application/json;charset=utf-8" },
-		body: JSON.stringify({
-			ApiVersion: 1.1,
-			ApiKey: API_KEY
-		})
-	}, function(error, response, body){
-		if (!error && response.statusCode === 200) {
-			const bodyJson = JSON.parse(body);
-			var data = bodyJson.Response.Data[0];
-			request.post({
-				uri: URL + 'items/' + data.ResultId +'/update',
-				headers: { "Content-type": "application/json;charset=utf-8" },
-				body: JSON.stringify({
-					ApiVersion: 1.1,
-					ApiKey: API_KEY,
-					NumHash: {
-						NumB: data.NumHash.NumB + 1	// 濃厚接触者数
-					}
-				})
-			});
-			res.sendStatus(200);
-		}
-		else{
-			res.statusCode = response.statusCode;
-			res.json({Error, Message : response.Message });
-		}
-	});
+	updateContactCountTable(res, false, 1, 1);
+	updateContactCountTable(res, true, 1, 1);
+	res.sendStatus(200);
 }
 
 //濃厚接触確認
@@ -1687,6 +1616,105 @@ async function GetValidDays(authCode, setDays, add) {
 			}
 		}
 	});
+}
+
+// 濃厚接触数更新
+var updateContactCountTable = function(res, now, type, count){
+	var date;
+	if(now === false){
+		date = '1899-12-30T00:00:00';
+		request.post({
+			uri: URL + 'items/' + CONTACT_COUNT_TABLE + '/get',
+			headers: { "Content-type": "application/json;charset=utf-8" },
+			body: JSON.stringify({
+				ApiVersion: 1.1,
+				ApiKey: API_KEY,
+			})
+		}, function(error, response, body){
+			if (!error && response.statusCode === 200) {
+				const bodyJson = JSON.parse(body);
+				bodyJson.Response.Data.forEach(data => {
+					if(data.DateHash.DateA !== date){
+						return;
+					}
+					var positiveCount = data.NumHash.NumA;
+					var contactCount = data.NumHash.NumB;
+					if(type === 0){
+						positiveCount += count;
+					}else{
+						contactCount += count;
+					}
+					request.post({
+						uri: URL + 'items/' + data.ResultId +'/update',
+						headers: { "Content-type": "application/json;charset=utf-8" },
+						body: JSON.stringify({
+							ApiVersion: 1.1,
+							ApiKey: API_KEY,
+							NumHash: {
+								NumA: positiveCount,	// 陽性者数
+								NumB: contactCount		// 濃厚接触者数
+							}
+						})
+					});
+				});
+			}
+		});
+	}
+	else {
+		date = moment().format("YYYY-MM-DDT00:00:00");
+		request.post({
+			uri: URL + 'items/' + CONTACT_COUNT_TABLE + '/create',
+			headers: { "Content-type": "application/json;charset=utf-8" },
+			body: JSON.stringify({
+				ApiVersion: 1.1,
+				ApiKey: API_KEY,
+				NumHash: {
+					NumA: 0,	// 陽性者数
+					NumB: 0		// 濃厚接触者数
+				},
+				DateHash: {
+					DateA: date
+				}
+			})
+		}, function(error, response, body){
+			request.post({
+				uri: URL + 'items/' + CONTACT_COUNT_TABLE + '/get',
+				headers: { "Content-type": "application/json;charset=utf-8" },
+				body: JSON.stringify({
+					ApiVersion: 1.1,
+					ApiKey: API_KEY,
+				})
+			}, function(error, response, body){
+				if (!error && response.statusCode === 200) {
+					const bodyJson = JSON.parse(body);
+					bodyJson.Response.Data.forEach(data => {
+						if(data.DateHash.DateA !== date){
+							return;
+						}
+						var positiveCount = data.NumHash.NumA;
+						var contactCount = data.NumHash.NumB;
+						if(type === 0){
+							positiveCount += count;
+						}else{
+							contactCount += count;
+						}
+						request.post({
+							uri: URL + 'items/' + data.ResultId +'/update',
+							headers: { "Content-type": "application/json;charset=utf-8" },
+							body: JSON.stringify({
+								ApiVersion: 1.1,
+								ApiKey: API_KEY,
+								NumHash: {
+									NumA: positiveCount,	// 陽性者数
+									NumB: contactCount		// 濃厚接触者数
+								}
+							})
+						});
+					});
+				}
+			});
+		});
+	}
 }
 
 // 一時パスワード取得
