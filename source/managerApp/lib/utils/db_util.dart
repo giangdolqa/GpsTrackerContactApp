@@ -1,10 +1,11 @@
 //　ローカルDB
-import 'package:marmo/beans/device_dbInfo.dart';
-import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'dart:io';
-import 'package:path_provider/path_provider.dart';
+
+import 'package:marmo/beans/device_dbInfo.dart';
 import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:sqflite/sqflite.dart';
 
 final marmoDB = new DbUtil();
 
@@ -23,6 +24,8 @@ class DbUtil {
   String colCount = 'setting_count'; // 設定次数
   String colBleId = 'ble_id'; // bluetoothID
   String colPassword = 'password'; // 一時パスワード
+  String colTEKInfo = 'tek_enin'; // TEK/ENIN情報文字列
+  String colRPIInfo = 'rpi_aem'; // RPI/AEM情報文字列
 
   DbUtil._createInstance();
 
@@ -43,8 +46,12 @@ class DbUtil {
 
   Future<Database> intializeDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
-    String path = join(directory.path, 'deviceInfo.db');
-
+      String path = join(directory.path, 'deviceInfo.db');
+    //
+    // File file = File(path);
+    // if (file != null){
+    //   file.delete();
+    // }
     var deviceInfoDatabase =
         openDatabase(path, version: 1, onCreate: _createDb);
     return deviceInfoDatabase;
@@ -53,7 +60,19 @@ class DbUtil {
   void _createDb(Database db, int newVersion) async {
     await db.execute(
         'CREATE TABLE $deviceInfoTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colDeviceId TEXT, $colDeviceName TEXT, '
-        '$colDeviceKey TEXT, $colState INTEGER, $colUserName TEXT, $colCount INTEGER, $colBleId TEXT)');
+        '$colDeviceKey TEXT, $colState INTEGER, $colUserName TEXT, $colCount INTEGER, $colBleId TEXT, $colPassword TEXT, $colTEKInfo TEXT, $colRPIInfo TEXT)');
+  }
+
+  void DropDb() async {
+    Database db = await this.database;
+    await db.execute(
+        'DROP TABLE $deviceInfoTable');
+    Directory directory = await getApplicationDocumentsDirectory();
+    String path = join(directory.path, 'deviceInfo.db');
+    File file = File(path);
+    if (file != null){
+      file.delete();
+    }
   }
 
 //Fetch Operation :Get all object from database
@@ -120,11 +139,25 @@ class DbUtil {
     return result;
   }
 
-  //Get number  of objects
+  //名称でデバイスを取得
   Future<DeviceDBInfo> getDeviceDBInfoByDeviceName(String deviceName) async {
     Database db = await this.database;
     List<Map<String, dynamic>> x = await db.rawQuery(
         'SELECT * from $deviceInfoTable WHERE $colDeviceName =$deviceName');
+    if (x.length > 0) {
+      Map<String, dynamic> deviceMap = x[0];
+      DeviceDBInfo di = new DeviceDBInfo();
+      di.fromMap(deviceMap);
+      return di;
+    }
+    return null;
+  }
+
+  //IDでデバイスを取得
+  Future<DeviceDBInfo> getDeviceDBInfoByDeviceId(String deviceId) async {
+    Database db = await this.database;
+    List<Map<String, dynamic>> x = await db.rawQuery(
+        'SELECT * from $deviceInfoTable WHERE $colDeviceId =$deviceId');
     if (x.length > 0) {
       Map<String, dynamic> deviceMap = x[0];
       DeviceDBInfo di = new DeviceDBInfo();

@@ -484,9 +484,9 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
           String username = await sharedPreUtil.GetUsername();
           DeviceDBInfo temp = new DeviceDBInfo();
           temp.id = deviceID.toString();
-          temp.name = result.name;
+          temp.name = deviceInfo.name;
           temp.key = result.key;
-          temp.userName = username;
+          temp.userName = result.name;
           temp.state = 0;
           temp.bleId = deviceInfo.id.toString();
           if (deviceInfo.count == 0) {

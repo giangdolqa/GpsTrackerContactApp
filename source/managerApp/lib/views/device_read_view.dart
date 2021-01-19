@@ -2,19 +2,11 @@ import 'dart:async';
 
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:marmo/beans/device_dbInfo.dart';
 import 'package:marmo/beans/device_info.dart';
-import 'package:marmo/beans/setting_info.dart';
-import 'package:marmo/utils/ble_util.dart';
-import 'package:marmo/utils/crypt_util.dart';
-import 'package:marmo/components/my_popup_menu.dart' as mypopup;
+import 'package:marmo/utils/db_util.dart';
 import 'package:marmo/utils/shared_pre_util.dart';
-import 'package:marmo/views/device_setting_view.dart';
-
-import 'package:intl/intl.dart';
-import 'package:marquee/marquee.dart';
 
 class GpsTrackerReadingView extends StatefulWidget {
   GpsTrackerReadingView({Key key}) : super(key: key);
@@ -24,15 +16,19 @@ class GpsTrackerReadingView extends StatefulWidget {
 }
 
 class GpsTrackerReadingViewState extends State<GpsTrackerReadingView> {
-  String title = 'GPSトラッカー読み込み';
+  String title = 'marmo読み込み';
+  final String TEKENIN_UUID = '88b9d302-1d53-4743-af14-ccb68179fa75';
+  final String RPIAEM_UUID = 'b9428273-c634-491c-9e0a-f3ec17cefbc9';
   bool _blueToothFlag = false;
-  List<DeviceInfo> myDevices = [];
   List<DeviceDBInfo> myDBDevicesList = [];
   List<Widget> myDevlist = [];
   FlutterBlue flutterBlue = FlutterBlue.instance;
-  BluetoothCharacteristic mCharacteristic;
+  BluetoothCharacteristic mCharacteristic_TEK;
+  BluetoothCharacteristic mCharacteristic_RPI;
   List deviceCallbackData = [];
-  final _codeFormat = new NumberFormat("000000", "en_US");
+  Map<String, bool> connectStatusMap = {};
+  Map<String, BluetoothDevice> connectedDevice = {};
+  String tmpConnectStr = "";
 
   @override
   void initState() {
@@ -51,45 +47,79 @@ class GpsTrackerReadingViewState extends State<GpsTrackerReadingView> {
         });
       }
     });
+    // 接続済みデバイス取得
+    flutterBlue.stopScan();
+    _getDeviceListFromDB();
   }
 
-  //
-  void _getConnectDeviceFromDB() async{
+  // _initDB() async {
+  //   // await marmoDB.DropDb();
+  //   await marmoDB.intializeDatabase();
+  // }
+
+  // デバイスリストをDBから取得
+  void _getDeviceListFromDB() async {
+    List<DeviceDBInfo> tempDBList = await marmoDB.getDeviceDBInfoList();
     myDBDevicesList.clear();
-
-  }
-
-  int _getSettingCode(int deviceId) {
-    if (deviceId == null) {
-      return 123456;
-    } else {
-      int result = 1048575 - deviceId + 1;
-      return result;
+    for (DeviceDBInfo dbInfo in tempDBList) {
+      bool _flg = false;
+      for (var i = 0; i < myDBDevicesList.length; i++) {
+        if (myDBDevicesList[i].id == dbInfo.id) {
+          _flg = true;
+          break;
+        }
+      }
+      if (!_flg) {
+        myDBDevicesList.add(dbInfo);
+      }
+    }
+    for (var deviceInfo in myDBDevicesList) {
+      // 接続状態初期化
+      connectStatusMap[deviceInfo.id] = false;
     }
   }
 
+  // デバイス情報更新
   void _getDeviceInfo() async {
-    myDevices.clear();
+    setState(() {
+      connectStatusMap.forEach((key, value) {
+        value = false;
+      });
+    });
     if (_blueToothFlag) {
       flutterBlue.startScan(timeout: Duration(seconds: 30));
-      flutterBlue.scanResults.listen((event) {
-        myDevices.clear();
+      flutterBlue.scanResults.listen((event) async {
         for (ScanResult result in event) {
           if (result.device.name.isEmpty) {
             continue;
           }
-          DeviceInfo tempDi = new DeviceInfo();
-          tempDi.name = result.device.name;
-          tempDi.id = result.device.id;
-          tempDi.type = result.device.type;
-          if (!myDevices.contains(tempDi)) {
-            myDevices.add(tempDi);
+
+          // DEBUG -S-
+          // DeviceDBInfo temp = new DeviceDBInfo();
+          // temp.id = result.device.id.toString();
+          // temp.name = result.device.name;
+          // temp.key = "0123456789123456";
+          // temp.keyDate = "2020/01/18";
+          // temp.userName = "鈴谷　カモメ";
+          // temp.state = 0;
+          // temp.bleId = result.device.id.toString();
+          // temp.count = 2;
+          // temp.password = "0123456789123456";
+          // marmoDB.insertDeviceDBInfo(temp);
+          // DEBUG -E-
+          for (DeviceDBInfo dbDveice in myDBDevicesList) {
+            if (dbDveice.id == result.device.id.id) {
+              if (mounted) {
+                setState(() {
+                  connectStatusMap[result.device.id.id] = true;
+                  connectedDevice[result.device.id.id] = result.device;
+                });
+              }
+            }
           }
           _getMyDevListRow();
         }
       });
-    } else {
-      myDevices.clear();
     }
   }
 
@@ -142,7 +172,7 @@ class GpsTrackerReadingViewState extends State<GpsTrackerReadingView> {
     List<Widget> tmpDevlist = [];
     Widget myPhone = await getMyPhoneItem();
     tmpDevlist.add(myPhone);
-    myDevices.forEach((device) {
+    myDBDevicesList.forEach((device) {
       tmpDevlist.add(
         Container(
           padding: EdgeInsets.all(5),
@@ -177,7 +207,7 @@ class GpsTrackerReadingViewState extends State<GpsTrackerReadingView> {
                 child: Container(
                   padding: EdgeInsets.only(left: 10),
                   child: Text(
-                    device.name,
+                    device.userName,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(fontSize: 14),
                   ),
@@ -187,9 +217,9 @@ class GpsTrackerReadingViewState extends State<GpsTrackerReadingView> {
               Expanded(
                 flex: 1,
                 child: Container(
-                  padding: EdgeInsets.only(left: 5),
+                  padding: EdgeInsets.only(left: 10),
                   child: Text(
-                    "接続済み",
+                    connectStatusMap[device.id] ? "接続済み" : "未接続",
                     overflow: TextOverflow.ellipsis,
                     softWrap: false,
                     style: TextStyle(
@@ -204,11 +234,17 @@ class GpsTrackerReadingViewState extends State<GpsTrackerReadingView> {
                   width: 40,
                   height: 35,
                   padding: EdgeInsets.only(left: 5),
-                  child: Image(
-                      image: AssetImage("assets/icon/refresh.png"),
-                      fit: BoxFit.fill),
+                  child: connectStatusMap[device.id]
+                      ? Image(
+                          image: AssetImage("assets/icon/refresh.png"),
+                          fit: BoxFit.fill)
+                      : Container(),
                 ),
-                onTap: () {}, // TODO: BLE読み込み
+                onTap: connectStatusMap[device.id]
+                    ? () {
+                        _deviceRead(connectedDevice[device.id]);
+                      }
+                    : null,
               ),
               // 接触確認ボタン
               InkWell(
@@ -216,11 +252,15 @@ class GpsTrackerReadingViewState extends State<GpsTrackerReadingView> {
                   width: 40,
                   height: 35,
                   padding: EdgeInsets.only(left: 5),
-                  child: Image(
-                      image: AssetImage("assets/icon/confirm.png"),
-                      fit: BoxFit.fill),
+                  child: connectStatusMap[device.id]
+                      ? Image(
+                          image: AssetImage("assets/icon/confirm.png"),
+                          fit: BoxFit.fill)
+                      : Container(),
                 ),
-                onTap: () {}, // TODO: 接触確認画面へ遷移
+                onTap: connectStatusMap[device.id]
+                    ? () {} // TODO: 接触確認画面へ遷移
+                    : null,
               ),
             ],
           ),
@@ -234,41 +274,32 @@ class GpsTrackerReadingViewState extends State<GpsTrackerReadingView> {
     }
   }
 
-  void _onActionMenuSelect(Map<String, DeviceInfo> selectedVal) {
-    switch (selectedVal.keys.first) {
-      case "setting":
-        int settingCode = _getSettingCode(
-            int.parse(selectedVal.values.first.id.toString().substring(0, 5)));
-        showAlert(
-            context, selectedVal.values.first, _codeFormat.format(settingCode));
-        break;
-      case "delete":
-        // 削除処理
-        break;
-      default:
-        // do nothing
-        break;
+  // TEK/EINN情報読み込み
+  _readTEKInfo(BluetoothDevice deviceInfo) async {
+    await mCharacteristic_TEK.setNotifyValue(true);
+    List<int> tekInfoInts = await mCharacteristic_TEK.read();
+    String tekStr = String.fromCharCodes(tekInfoInts);
+    // DBを更新
+    DeviceDBInfo dbInfo =
+        await marmoDB.getDeviceDBInfoByDeviceId(deviceInfo.id.id);
+    if (dbInfo != null) {
+      dbInfo.tekInfo = tekStr;
+      marmoDB.updateDeviceDBInfo(dbInfo);
     }
-    return;
   }
 
-  dataCallbackDevice() async {
-    await mCharacteristic.setNotifyValue(true);
-    mCharacteristic.value.listen((value) {
-      if (value == null) {
-        return;
-      }
-      List data = [];
-      for (var i = 0; i < value.length; i++) {
-        String dataStr = value[i].toRadixString(16);
-        if (dataStr.length < 2) {
-          dataStr = "0" + dataStr;
-        }
-        String dataEndStr = "0x" + dataStr;
-        data.add(dataEndStr);
-      }
-      deviceCallbackData = data;
-    });
+  // RPI/AEM情報読み込み
+  _readRPIInfo(BluetoothDevice deviceInfo) async {
+    await mCharacteristic_RPI.setNotifyValue(true);
+    List<int> rpiInfoInts = await mCharacteristic_RPI.read();
+    String rpiStr = String.fromCharCodes(rpiInfoInts);
+    // DBを更新
+    DeviceDBInfo dbInfo =
+        await marmoDB.getDeviceDBInfoByDeviceId(deviceInfo.id.id);
+    if (dbInfo != null) {
+      dbInfo.rpiInfo = rpiStr;
+      marmoDB.updateDeviceDBInfo(dbInfo);
+    }
   }
 
   _onTapOtherDevice(DeviceInfo device) {
@@ -276,90 +307,97 @@ class GpsTrackerReadingViewState extends State<GpsTrackerReadingView> {
         .connect(timeout: Duration(seconds: 60), autoConnect: false);
   }
 
-  _deviceSet(DeviceInfo deviceInfo) {
-    SettingInfo temp = null;
-    deviceInfo.device.device
-        .connect(autoConnect: false, timeout: Duration(seconds: 10))
+  _outputInfo(String iTitle, String iErrInfo) {
+    Widget cancelButton = FlatButton(
+      child: Text("OK"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+    AlertDialog alert = AlertDialog(
+      title: Text(iTitle),
+      content: Text(iErrInfo),
+      actions: [
+        cancelButton,
+      ],
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  void _deviceRead(BluetoothDevice deviceInfo) {
+    // DEBUG -S-
+    // RPI test
+    // List<Map<String, dynamic>>tmpList = [
+    //   {
+    //     "time": "20210115091123",
+    //     "RPI": "a07d635658f82c3c4b8fb211f1e0634"
+    //   },
+    //   {
+    //     "time": "20210115091123",
+    //     "RPI": "a07d635658f82c3c4b8fb211f1e0634"
+    //   }
+    // ];
+    // String jsonString = json.encode(tmpList);
+    // RPIInfo rpiInfo = new RPIInfo();
+    // rpiInfo.jsonToRPIInfo(jsonString, context);
+
+    // tek test
+    // List<Map<String, dynamic>>tmpList = [
+    //   {
+    //     "time": "20210115091123",
+    //     "TEK": "a07d635658f82c3c4b8fb211f1e0634",
+    //     "ENIN":["5fe5bedc", "5fe5c1ac"]
+    //   },
+    //   {
+    //     "time": "20210115091123",
+    //     "TEK": "a07d635658f82c3c4b8fb211f1e0634",
+    //     "ENIN":["5fe5bedc", "5fe5c1ac"]
+    //   }
+    // ];
+    // String jsonString = json.encode(tmpList);
+    // TEKInfo tekInfo = new TEKInfo();
+    // tekInfo.jsonToTEKInfo(jsonString, context);
+
+    // marmoDB.DropDb();
+    // marmoDB.intializeDatabase();
+    // DEBUG -E-
+    deviceInfo
+        .connect(autoConnect: true, timeout: Duration(seconds: 10))
         .whenComplete(() async {
-      BluetoothCharacteristic mCharacteristic;
-      List<BluetoothService> services =
-          await deviceInfo.device.device.discoverServices();
+      List<BluetoothService> services = await deviceInfo.discoverServices();
       services.forEach((service) async {
         var characteristics = service.characteristics;
         characteristics.forEach((characteristic) {
-          // if (characteristic.uuid.toString() == settingUUID) {
-          //   mCharacteristic = characteristic;
-          //   const timeout = const Duration(seconds: 10);
-          //   Timer(timeout, () {
-          //     dataCallbackDevice();
-          //   });
-          // }
-        });
-      });
-      if (mCharacteristic == null) {
-        print("デバイスペアリングエラー");
-      } else {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) =>
-                DeviceSettingView(deviceInfo: deviceInfo, settingInfo: temp),
-          ),
-        ).then((result) {
-          if (result != null) {
-            mCharacteristic.write(result);
-            deviceInfo.device.device.disconnect();
+          if (characteristic.uuid.toString() == TEKENIN_UUID) {
+            mCharacteristic_TEK = characteristic;
+            const timeout = const Duration(seconds: 10);
+            Timer(timeout, () async {
+              await _readTEKInfo(deviceInfo);
+            });
+          } else if (characteristic.uuid.toString() == RPIAEM_UUID) {
+            mCharacteristic_RPI = characteristic;
+            const timeout = const Duration(seconds: 10);
+            Timer(timeout, () async {
+              await _readRPIInfo(deviceInfo);
+            });
           }
         });
+        _outputInfo("", "読み込み成功");
+        deviceInfo.disconnect();
+      });
+      if (mCharacteristic_TEK == null || mCharacteristic_RPI == null) {
+        _outputInfo("", "読み込み失敗");
+        deviceInfo.disconnect();
       }
-    }).catchError(() {
-      print("デバイスペアリングエラー");
+    }).catchError((error) {
+      _outputInfo("", "読み込み失敗");
+      deviceInfo.disconnect();
     });
-    // 設定画面へ遷移
-  }
-
-  showAlert(BuildContext context, DeviceInfo deviceInfo, String settingCode) {
-    showDialog(
-      context: context,
-      builder: (context) => new AlertDialog(
-        title: Text(deviceInfo.name + 'をペア設定しますか？'),
-        content: Container(
-          height: 80,
-          alignment: Alignment.centerLeft,
-          child: new Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Bluetoothペア設定コード'),
-                SizedBox(height: 10.0),
-                Text(
-                  settingCode,
-                  style: TextStyle(
-                    inherit: true,
-                    color: Colors.red,
-                    fontSize: 25.0,
-                    fontWeight: FontWeight.bold,
-                    textBaseline: TextBaseline.alphabetic,
-                  ),
-                ),
-              ]),
-        ),
-        actions: <Widget>[
-          new RaisedButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: new Text('キャンセル'),
-          ),
-          new RaisedButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              _deviceSet(deviceInfo);
-            },
-            child: new Text('ペア設定する'),
-          ),
-        ],
-      ),
-    );
   }
 
   @override
@@ -375,7 +413,7 @@ class GpsTrackerReadingViewState extends State<GpsTrackerReadingView> {
           Container(
             padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
             child: Text(
-              "GPSトラッカーを設定するときはBluetoothをONにしてください。",
+              "marmoからデータを詠み込む時はBluetoothをONにしてください。",
               style: TextStyle(fontSize: 14),
             ),
           ),

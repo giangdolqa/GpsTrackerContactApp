@@ -143,7 +143,7 @@ class MqttUtil {
         MqttDisconnectionOrigin.solicited) {
       print('marmo::OnDisconnected callback is solicited, this is correct');
     }
-    exit(-1);
+    // exit(-1);
   }
 
   /// The successful connect callback
@@ -179,10 +179,10 @@ class MqttUtil {
         if (jsonKey.startsWith(keyHeader)) {
           // DB に保存
           DeviceDBInfo dbInfo = new DeviceDBInfo();
-          dbInfo = await DbUtil.dbUtil.getDeviceDBInfoByDeviceName(deviceName);
+          dbInfo = await marmoDB.getDeviceDBInfoByDeviceName(deviceName);
           dbInfo.key = jsonKey.substring(keyHeader.length - 1);
           dbInfo.keyDate = formatDate(DateTime.now(), [yyyy, mm, dd]);
-          DbUtil.dbUtil.updateDeviceDBInfoByName(dbInfo);
+          marmoDB.updateDeviceDBInfoByName(dbInfo);
         } else {
           // Do nothing
         }

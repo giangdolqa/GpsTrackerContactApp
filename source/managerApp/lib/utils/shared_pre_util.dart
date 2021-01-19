@@ -61,9 +61,10 @@ class SharedPreUtil {
     return sharedPreferences.getString("ServerFCMToken");
   }
 
-  Future SaveUsername(String inputPhoneNum) async {
+  // TODO: アプリログインIdを保存する(タイミングはログイン成功？)
+  Future SaveUsername(String UserName) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    bool bRslt = await sharedPreferences.setString("UserName", inputPhoneNum);
+    bool bRslt = await sharedPreferences.setString("UserName", UserName);
   }
 
   Future GetUsername() async {
@@ -79,37 +80,6 @@ class SharedPreUtil {
   Future GetPassword() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     return sharedPreferences.getString("Password");
-  }
-
-  // 登録済みデバイス保存
-  Future AddDeviceIdList(String di) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    List<String> diList =
-        sharedPreferences.getStringList("DeviceIdentifiers");
-    if (diList != null){
-      if (!diList.contains(di)) {
-        diList.add(di);
-      }
-    }
-    else{
-      diList = [];
-      diList.add(di);
-    }
-    sharedPreferences.setStringList("DeviceIdentifiers", diList);
-  }
-
-  // 登録済みデバイス取得
-  Future GetDeviceIdList() async{
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    List<String> diList =
-    sharedPreferences.getStringList("DeviceIdentifiers");
-    return diList;
-  }
-  // 登録済みデバイスクリア
-  Future ClearDeviceIdList() async{
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    List<String> diList = [];
-    sharedPreferences.setStringList("DeviceIdentifiers", diList);
   }
 
   Future SaveAuthCode(String inputAuthCode) async {

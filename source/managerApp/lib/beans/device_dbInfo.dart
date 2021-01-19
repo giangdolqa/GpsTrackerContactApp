@@ -1,12 +1,4 @@
 // 通常情報
-import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_blue/flutter_blue.dart';
-//import 'package:flutter_blue/gen/flutterblue.pb.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:toast/toast.dart';
-
 
 class DeviceDBInfo {
   String id; // デバイスID
@@ -14,10 +6,12 @@ class DeviceDBInfo {
   String key; // 暗号キー
   String keyDate; // 暗号キー日付
   String userName; // ユーザー名称
-  num state;  // 接続状態
-  num count;  // 設定次数
+  num state; // 接続状態
+  num count; // 設定次数
   String bleId; // BLEID
   String password; // 一時パスワード
+  String tekInfo; // TEK/Enin情報
+  String rpiInfo; // RPI/AEM情報
 
   /// Map
   Map<String, dynamic> toMap() {
@@ -30,10 +24,12 @@ class DeviceDBInfo {
     data['setting_count'] = this.count;
     data['ble_id'] = this.bleId;
     data['password'] = this.password;
+    data['rpi_aem'] = this.rpiInfo;
+    data['tek_enin'] = this.tekInfo;
     return data;
   }
 
-  void fromMap(Map<String, dynamic> inputMap){
+  void fromMap(Map<String, dynamic> inputMap) {
     id = inputMap['device_id'];
     name = inputMap['name'];
     key = inputMap['key'];
