@@ -159,7 +159,6 @@ exports.get_user = function(res, req){
 					TelephoneNumber:data.ClassHash.ClassE,	// 電話番号
 					EmailAddress:	data.ClassHash.ClassF,	// メールアドレス
 					LoginID:		data.ClassHash.ClassG,	// ログインID
-					Password:		decryptBase64(data.ClassHash.ClassH),	// パスワード
 					Authentication:	data.CheckHash.CheckA
 				};
 				res.json(resData);
@@ -224,6 +223,58 @@ exports.delete_user = function(res, req){
 			if(!count){
 				res.statusCode = 400;
 				res.json({Error, Message : 'Not record' });
+				return;
+			}
+		}
+		else{
+			res.statusCode = response.statusCode;
+			res.json({Error, Message : response.Message });
+		}
+	});
+}
+
+//ユーザ情報取得
+exports.check_login = function(res, req){
+	request.post({
+		uri: URL + 'items/' + USER_TABLE + '/get',
+		headers: { "Content-type": "application/json;charset=utf-8" },
+		body: JSON.stringify({
+			ApiVersion: 1.1,
+			ApiKey: API_KEY,
+			Offset: 0,
+			View: {
+				ColumnFilterHash: {
+					ClassF: req.body.EmailAddress	// メールアドレス
+				}
+			}
+		})
+	}, function(error, response, body){
+		if (!error && response.statusCode === 200) {
+			const bodyJson = JSON.parse(body);
+			if (bodyJson.Response.TotalCount <= 0){
+				res.statusCode = 400;
+				res.json({Error, Message : 'Not record' });
+				return;
+			}
+			var count = 0;
+			var password = false;
+			bodyJson.Response.Data.forEach(data => {
+				if(data.ClassHash.ClassF !== req.body.EmailAddress)
+					return;
+				count++;
+				if(decryptBase64(data.ClassHash.ClassH) !== req.body.Password)
+					return;
+				password = true;
+				res.sendStatus(200);
+			});
+			if(!count){
+				res.statusCode = 400;
+				res.json({Error, Message : 'Not record' });
+				return;
+			}
+			else if(!password){
+				res.statusCode = 401;
+				res.json({Error, Message : 'Password mismatch' });
 				return;
 			}
 		}
