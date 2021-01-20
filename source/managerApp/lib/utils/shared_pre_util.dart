@@ -59,7 +59,7 @@ class SharedPreUtil {
     return sharedPreferences.getString("ServerFCMToken");
   }
 
-  // TODO: アプリログインIdを保存する(タイミングはログイン成功？)
+  // TODO: ログインIdを保存する(タイミングはログイン成功？)
   Future SaveUsername(String UserName) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     bool bRslt = await sharedPreferences.setString("UserName", UserName);
@@ -70,6 +70,7 @@ class SharedPreUtil {
     return sharedPreferences.getString("UserName");
   }
 
+  // TODO: パスワードをここに保存(タイミングはログイン成功？)
   Future SavePassword(String inputPhoneNum) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     bool bRslt = await sharedPreferences.setString("Password", inputPhoneNum);

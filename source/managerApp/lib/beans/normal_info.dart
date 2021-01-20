@@ -28,9 +28,14 @@ class NormalInfo {
     try {
       deviceInfo = await marmoDB.getDeviceDBInfoByDeviceName(deviceName);
       String nowDate = formatDate(DateTime.now(), [yyyy, mm, dd]);
-      if (deviceInfo.keyDate != nowDate){
-        deviceInfo.key = await mqttUtil.getEncryptKey(deviceInfo.name);
-        if (deviceInfo.key == null){
+      if (deviceInfo.keyDate != nowDate) {
+        await mqttUtil.getEncryptKey(deviceInfo.name);
+        deviceInfo = await marmoDB.getDeviceDBInfoByDeviceName(deviceName);
+        if (deviceInfo.key == null) {
+          print("marmo:: Encrypt key fetch failed");
+          return false;
+        } else if (deviceInfo.keyDate != nowDate) {
+          print("marmo:: Encrypt key fetch failed");
           return false;
         }
       }

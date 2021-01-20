@@ -18,9 +18,8 @@ import 'shared_pre_util.dart';
 final MqttUtil mqttUtil = MqttUtil();
 
 class MqttUtil {
-  // final client = MqttServerClient('test.mosquitto.org', ''); // 試験用サービス
-  final client = MqttServerClient('broker.emqx.io', ''); // 試験用サービス
-  // final client =  MqttServerClient('ik1-407-35954.vs.sakura.ne.jp', '');
+  final client = MqttServerClient('ik1-407-35954.vs.sakura.ne.jp', '');
+
   MqttUtil() {
     /// Set logging on if needed, defaults to off
     client.logging(on: false);
@@ -34,9 +33,8 @@ class MqttUtil {
 
     /// Add the successful connection callback
     client.onConnected = onConnected;
-    // client.port = 8883; // 試験用
-    // client.port = 8083 ; // 試験用
-    client.port = 1883; // 試験用
+    client.port = 8883; // 実装用
+    // client.port = 1883; // 実装用
 
     /// Add a subscribed callback, there is also an unsubscribed callback if you need it.
     /// You can add these before connection or change them dynamically after connection if
@@ -58,9 +56,8 @@ class MqttUtil {
 
     String username = await spUtil.GetUsername();
     String password = await spUtil.GetPassword();
-
-    username = "temporary";
-    password = "password";
+    // username = "temporary";
+    // password = "password";
 
     /// Create a connection message to use or use the default one. The default one sets the
     /// client identifier, any supplied username/password, the default keepalive interval(60s)
@@ -73,39 +70,14 @@ class MqttUtil {
         .withWillQos(MqttQos.atLeastOnce);
     print('marmo::Mosquitto client connecting....');
     client.secure = true;
+    client.autoReconnect = true;
     client.securityContext = context;
     client.connectionMessage = connMess;
   }
 
-  // 接続初期化(非同期
-  void _initConn_test() async {
-    String username = await spUtil.GetUsername();
-    String password = await spUtil.GetPassword();
-
-    username = "temporary";
-    password = "password";
-
-    /// Create a connection message to use or use the default one. The default one sets the
-    /// client identifier, any supplied username/password, the default keepalive interval(60s)
-    /// and clean session, an example of a specific one below.
-    final connMess = MqttConnectMessage()
-        .withClientIdentifier("UniqueId")
-        .keepAliveFor(20) // Must agree with the keep alive set above or not set
-        // .authenticateAs(username, password)
-        .startClean() // Non persistent session for testing
-        .withWillQos(MqttQos.atLeastOnce);
-    print('marmo::Mosquitto client connecting....');
-    // client.secure = true;
-    // client.securityContext = context;
-    client.connectionMessage = connMess;
-
-    // await client.connect();
-  }
-
   Future connect() async {
     try {
-      // await _initConn(); // 接続初期化(非同期
-      await _initConn_test(); // 接続初期化(非同期
+      await _initConn(); // 接続初期化(非同期
       var mqttClientConnectionStatus = await client.connect();
       print(
           'marmo::Mosquitto client connect successed.... $mqttClientConnectionStatus');
@@ -143,10 +115,11 @@ class MqttUtil {
   }
 
   // デバイス暗号キー配信
-  Future<String> getEncryptKey(String deviceName) async {
-    String topic = deviceName +
-        "/key/" +
-        formatDate(DateTime.now(), [yyyy, mm, dd, HH, MM, ss]);
+  Future<void> getEncryptKey(String deviceName) async {
+    if (client.connectionStatus.state == MqttConnectionState.disconnected) {
+      await connect();
+    }
+    String topic = deviceName + "/key/#";
     client.subscribe(topic, MqttQos.exactlyOnce);
     final topicFilter = MqttClientTopicFilter(topic, client.updates);
     // Now listen on the filtered updates, not the client updates
@@ -168,7 +141,6 @@ class MqttUtil {
           dbInfo.key = jsonKey.substring(keyHeader.length - 1);
           dbInfo.keyDate = formatDate(DateTime.now(), [yyyy, mm, dd]);
           marmoDB.updateDeviceDBInfoByName(dbInfo);
-          return dbInfo.key;
         } else {
           // Do nothing
         }
@@ -182,15 +154,15 @@ class MqttUtil {
   void subScribePositionByDeviceName() async {
     connect().then((value) async {
       List<DeviceDBInfo> deviceList = await marmoDB.getDeviceDBInfoList();
-      deviceList.forEach((deviceInfo) {
-        _getPosistionByDeviceName(deviceInfo.name);
-      });
+      for (DeviceDBInfo deviceInfo in deviceList) {
+        await _getPosistionByDeviceName(deviceInfo.name);
+      }
     });
   }
 
   // 緯度経度がデバイスから配信
   _getPosistionByDeviceName(String deviceName) async {
-    String topic = "/" + deviceName + "/#";
+    String topic = deviceName + "/#";
     client.subscribe(topic, MqttQos.exactlyOnce);
 
     // 通常デバイス情報登録
@@ -203,7 +175,7 @@ class MqttUtil {
       final pt =
           MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
       NormalInfo pi = new NormalInfo();
-      final rslt = await pi.jsonToNormalinfo(pt, "aaa", null);
+      final rslt = await pi.jsonToNormalinfo(pt, deviceName, null);
       if (rslt) {
         eventBus.fire(pi);
       }

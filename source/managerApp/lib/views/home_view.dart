@@ -20,7 +20,6 @@ import 'package:marmo/utils/event_util.dart';
 import 'package:marmo/utils/mqtt_util.dart';
 import 'package:marmo/utils/nuid_util.dart';
 import 'package:marmo/utils/position_util.dart';
-import 'package:marmo/utils/sound_util.dart';
 import 'package:marquee/marquee.dart';
 import 'package:workmanager/workmanager.dart';
 
@@ -56,7 +55,6 @@ class HomeViewState extends State<HomeView>
       CameraPosition(target: LatLng(35.69, 139.69), zoom: 14);
 
   Timer myTimer;
-  Timer occupiedCheckTimer;
 
   WidgetsBinding widgetsBinding;
   Color _statusbarColor = Colors.white;
@@ -81,12 +79,10 @@ class HomeViewState extends State<HomeView>
     );
 
     mqttUtil.subScribePositionByDeviceName();
+
     // 緊急通知処理登録
     eventBus.on<AlarmInfo>().listen((event) {
       if (mounted) {
-        // List<Position> alarmList = [];
-        // alarmList.add(event.position);
-        SoundUtil.playAssetSound(null);
         _addAlarmCustomMarker(event);
       }
     });
@@ -98,19 +94,28 @@ class HomeViewState extends State<HomeView>
         _addNormalMarkers(event);
       }
     });
+
+    routeTime = DateTime.now();
+    const oneHour = const Duration(hours: 1);
+    var callback = (timer) {
+      if (DateTime.now().hour - routeTime.hour >= 24) {
+        if (mounted) {
+          setState(() {
+            polylines.clear();
+            polylineCoordinates.clear();
+          });
+        }
+      }
+    };
+    myTimer = Timer.periodic(oneHour, callback);
   }
 
   // 画面破棄
   @override
   void dispose() {
-    // tabController.dispose();
-
     positionUtil.stopListening(context);
     if (myTimer != null) {
       myTimer.cancel();
-    }
-    if (occupiedCheckTimer != null) {
-      occupiedCheckTimer.cancel();
     }
     super.dispose();
   }
@@ -128,6 +133,7 @@ class HomeViewState extends State<HomeView>
   Set<Circle> circleSet = Set();
   Map<MarkerId, String> messageMap = {};
   bool sliderVisible = false;
+  DateTime routeTime;
 
   // 緊急メッセージ＆マーカー追加
   void addAlarm(AlarmInfo ai) async {
@@ -163,9 +169,6 @@ class HomeViewState extends State<HomeView>
 
   // 緊急メッセージ＆マーカー追加
   void _addAlarmCustomMarker(AlarmInfo ai) async {
-    var bubbleWidth = 0;
-    var bubbleHeight = 0;
-
     MarkerId markerId = new MarkerId(nuid.next());
 
     // avatar
@@ -173,8 +176,6 @@ class HomeViewState extends State<HomeView>
     final codec = await ui.instantiateImageCodec(bytes.buffer.asUint8List());
     final frameInfo = await codec.getNextFrame();
     final image = frameInfo.image;
-    bubbleWidth += image.width;
-    bubbleHeight += image.height;
 
     // text
     final span = TextSpan(
@@ -189,7 +190,6 @@ class HomeViewState extends State<HomeView>
         textAlign: TextAlign.start,
         textDirection: TextDirection.ltr)
       ..layout();
-    const textMarginLeft = 4.0;
 
     final clipWidth = image.width.toDouble();
     final clipHeight = image.height.toDouble();
