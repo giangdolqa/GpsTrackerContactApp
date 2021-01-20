@@ -1,4 +1,4 @@
-<mxfile host="65bd71144e" modified="2021-01-17T02:59:01.524Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.52.1 Chrome/83.0.4103.122 Electron/9.3.5 Safari/537.36" etag="udfRuGOG7xNcGFhVsDrw" version="13.10.0" type="embed">
+<mxfile host="65bd71144e" modified="2021-01-20T12:21:30.702Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.52.1 Chrome/83.0.4103.122 Electron/9.3.5 Safari/537.36" etag="qq1TDqF1IWMOSELywAYW" version="13.10.0" type="embed">
     <diagram id="0ZzhSemCFJwRc41ak4Dr" name="ページ1">
         <mxGraphModel dx="1165" dy="779" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
@@ -461,7 +461,7 @@
                 </mxCell>
                 <mxCell id="699" value="登録" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=5;strokeColor=none;fontColor=#ffffff;fillColor=#66bbff;fontSize=16;fontStyle=1;" parent="692" vertex="1">
                     <mxGeometry y="1" width="80" height="30" relative="1" as="geometry">
-                        <mxPoint x="122.16999999999999" y="-36" as="offset"/>
+                        <mxPoint x="122.16999999999999" y="3" as="offset"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="700" value="&lt;font style=&quot;font-size: 14px&quot;&gt;パスワードを表示&lt;/font&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=0;fillColor=#eeeeee;strokeColor=#999999;gradientColor=#cccccc;align=left;spacingLeft=4;fontSize=17;fontColor=#666666;labelPosition=right;" parent="692" vertex="1">
@@ -517,6 +517,15 @@
                     <mxGeometry x="1" y="0.5" width="12" height="6" relative="1" as="geometry">
                         <mxPoint x="-20" y="-3" as="offset"/>
                     </mxGeometry>
+                </mxCell>
+                <mxCell id="879" value="学校" style="html=1;shadow=0;dashed=0;shape=mxgraph.bootstrap.radioButton2;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;gradientColor=#DEDEDE;fillColor=#EDEDED;checked=0;spacing=5;checkedFill=#0085FC;checkedStroke=#ffffff;fontSize=14;" vertex="1" parent="692">
+                    <mxGeometry x="21" y="480" width="10" height="10" as="geometry"/>
+                </mxCell>
+                <mxCell id="880" value="会社" style="html=1;shadow=0;dashed=0;shape=mxgraph.bootstrap.radioButton2;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;gradientColor=#DEDEDE;fillColor=#EDEDED;checked=0;spacing=5;checkedFill=#0085FC;checkedStroke=#ffffff;fontSize=14;" vertex="1" parent="692">
+                    <mxGeometry x="71" y="480" width="10" height="10" as="geometry"/>
+                </mxCell>
+                <mxCell id="881" value="なし" style="html=1;shadow=0;dashed=0;shape=mxgraph.bootstrap.radioButton2;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;gradientColor=#DEDEDE;fillColor=#EDEDED;checked=0;strokeColor=#D0D0D0;spacing=5;fontColor=#6C767D;checkedFill=#0085FC;checkedStroke=#ffffff;fontSize=14;" vertex="1" parent="692">
+                    <mxGeometry x="121" y="480" width="10" height="10" as="geometry"/>
                 </mxCell>
                 <mxCell id="709" value="新規登録&lt;br&gt;SMSによる２段認証" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.text.stickyNote2;fontColor=#666666;mainText=;fontSize=17;whiteSpace=wrap;fillColor=#ffffcc;strokeColor=#F62E00;labelBackgroundColor=none;" parent="686" vertex="1">
                     <mxGeometry x="50" y="750" width="300" height="80" as="geometry"/>
@@ -653,7 +662,7 @@
                 <mxCell id="746" value="BLEでデバイスに送信する。" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.text.stickyNote2;fontColor=#666666;mainText=;fontSize=17;whiteSpace=wrap;fillColor=#ffffcc;strokeColor=#F62E00;labelBackgroundColor=none;" parent="742" vertex="1">
                     <mxGeometry x="40" y="750" width="300" height="80" as="geometry"/>
                 </mxCell>
-                <mxCell id="747" value="" style="group;imageAspect=1;editable=1;verticalAlign=top;" parent="742" vertex="1" connectable="0">
+                <mxCell id="747" value="" style="group;imageAspect=1;editable=1;verticalAlign=top;fillColor=#ffffff;" parent="742" vertex="1" connectable="0">
                     <mxGeometry x="22.5" y="130" width="347.5" height="510" as="geometry"/>
                 </mxCell>
                 <mxCell id="748" value="" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=0;strokeColor=#999999;fillColor=#ffffff;" parent="747" vertex="1">
@@ -699,7 +708,7 @@
                     <mxGeometry x="50" y="110.94" width="90" height="23.5" as="geometry"/>
                 </mxCell>
                 <mxCell id="761" value="&lt;font style=&quot;font-size: 12px&quot;&gt;男の子、女の子、答えない&lt;br&gt;年齢が13歳以上は男性、女性&lt;br&gt;&lt;/font&gt;" style="shape=note;strokeWidth=2;fontSize=14;size=20;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#666600;align=left;" parent="748" vertex="1">
-                    <mxGeometry x="180" y="99.55" width="167.5" height="40.51" as="geometry"/>
+                    <mxGeometry x="160" y="77.87" width="167.5" height="40.51" as="geometry"/>
                 </mxCell>
                 <mxCell id="762" value="&lt;font style=&quot;font-size: 14px&quot;&gt;キーを表示&lt;/font&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=0;fillColor=#eeeeee;strokeColor=#999999;gradientColor=#cccccc;align=left;spacingLeft=4;fontSize=17;fontColor=#666666;labelPosition=right;" parent="748" vertex="1">
                     <mxGeometry x="10.004500000000007" y="278.9747204968944" width="25.01175" height="25.5" as="geometry"/>
@@ -757,6 +766,18 @@
                 </mxCell>
                 <mxCell id="859" value="&lt;font style=&quot;font-size: 14px&quot;&gt;JIROU&lt;/font&gt;" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iTextInput;strokeColor=#444444;buttonText=;fontSize=8;whiteSpace=wrap;align=left;labelBackgroundColor=none;fillColor=none;opacity=30;" parent="748" vertex="1">
                     <mxGeometry x="50" y="40" width="270" height="26.55" as="geometry"/>
+                </mxCell>
+                <mxCell id="866" value="学校" style="html=1;shadow=0;dashed=0;shape=mxgraph.bootstrap.radioButton2;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;gradientColor=#DEDEDE;fillColor=#EDEDED;checked=1;spacing=5;checkedFill=#0085FC;checkedStroke=#3333FF;" vertex="1" parent="748">
+                    <mxGeometry x="223.5" y="134" width="10" height="10" as="geometry"/>
+                </mxCell>
+                <mxCell id="867" value="会社" style="html=1;shadow=0;dashed=0;shape=mxgraph.bootstrap.radioButton2;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;gradientColor=#DEDEDE;fillColor=#EDEDED;checked=0;spacing=5;checkedFill=#0085FC;checkedStroke=#ffffff;" vertex="1" parent="748">
+                    <mxGeometry x="223.5" y="154" width="10" height="10" as="geometry"/>
+                </mxCell>
+                <mxCell id="868" value="なし" style="html=1;shadow=0;dashed=0;shape=mxgraph.bootstrap.radioButton2;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;gradientColor=#DEDEDE;fillColor=#EDEDED;checked=0;spacing=5;fontColor=#6C767D;checkedFill=#0085FC;checkedStroke=#ffffff;" vertex="1" parent="748">
+                    <mxGeometry x="223.5" y="174" width="10" height="10" as="geometry"/>
+                </mxCell>
+                <mxCell id="870" value="空気質チェック" style="html=1;shadow=0;dashed=0;shape=mxgraph.atlassian.checkbox_2;fillColor=#0057D8;strokeColor=none;align=left;verticalAlign=middle;fontStyle=0;fontSize=12;labelPosition=right;verticalLabelPosition=middle;spacingLeft=10" vertex="1" parent="748">
+                    <mxGeometry x="223.5" y="202" width="12" height="12" as="geometry"/>
                 </mxCell>
                 <mxCell id="773" value="⑦デバイスの設定" style="shape=note;strokeWidth=2;fontSize=14;size=20;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#666600;" parent="1" vertex="1">
                     <mxGeometry x="410" y="1800" width="150" height="40" as="geometry"/>
