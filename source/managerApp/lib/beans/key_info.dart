@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:toast/toast.dart';
 
 class KeyInfo {
@@ -19,20 +18,32 @@ class KeyInfo {
       name = tmpMap['name'];
       key = tmpMap['key'];
     } catch (e) {
-      Toast.show("データ転換失敗: " + e.toString(), context);
+      if (context != null) {
+        Toast.show("データ転換失敗: " + e.toString(), context);
+      }
       return null;
     }
+    return this;
   }
 
   // キーハッシュ化
-  String getHashedKey() {
-    // ①	時刻のDDの２文字目+1文字分、時刻を切り出す。
-    String tempDatetimeStr = formatDate(DateTime.now(), [yyyy, mm, dd, HH]);
-    String hashKey = tempDatetimeStr.substring(tempDatetimeStr.length - 1);
-    // ②	その切り出した文字をキーとして、SHA256ハッシュ化する。
-    var bytes = utf8.encode(hashKey);
-    var hashedKeySha256 = sha256.convert(bytes);
-    String hexKeyStr = hashedKeySha256.toString();
-    return hexKeyStr;
+  String getHashedKey(String topicStr) {
+    try {
+      String dateStr = topicStr.split("/")[3];
+      // ①	時刻のDDの２文字目+1文字分、時刻を切り出す。
+      DateTime dt = DateTime.parse(dateStr);
+      num trimNum = dt.day % 10 + 1;
+      String hashKey = topicStr.substring(0, trimNum);
+      // ②	その切り出した文字をキーとして、SHA256ハッシュ化する。
+      var bytes = utf8.encode(hashKey);
+      var hashedKeySha256 = sha256.convert(bytes);
+      String hexKeyStr = hashedKeySha256.toString();
+      return hexKeyStr;
+    }
+    catch (e){
+      print("getHashedKey failed: $e");
+      return null;
+    }
+
   }
 }

@@ -1,18 +1,12 @@
 // バックグランド位置通知
 import 'dart:async';
-import 'dart:io';
 import 'dart:math';
 
 import 'package:background_location/background_location.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:marmo/utils/http_util.dart';
-import 'package:marmo/utils/mqtt_util.dart';
-import 'package:marmo/utils/shared_pre_util.dart';
-import 'package:marmo/utils/sound_util.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:popup_menu/popup_menu.dart';
 import 'package:toast/toast.dart';
 
 PositionUtil positionUtil = new PositionUtil();
@@ -28,7 +22,8 @@ StreamSubscription<Position> positionStream;
 
 class PositionUtil {
   static const MethodChannel _channel =
-  const MethodChannel('almoullim.com/background_location');
+      const MethodChannel('almoullim.com/background_location');
+
   PositionUtil() {
     const timerLength = const Duration(seconds: 60); // 分毎に位置通知
     var callback = (timer) => {_timeOut()};
@@ -66,35 +61,18 @@ class PositionUtil {
     await BackgroundLocation.setAndroidConfiguration(interval: 1000);
     await BackgroundLocation.startLocationService();
     BackgroundLocation.getLocationUpdates((location) {
-      String locString = "latitude: " + location.latitude.toString() +
-          "   longitude: " +  location.longitude.toString()  +
-          "   accuracy: " + location.accuracy.toString() +
-          "   speed: " + location.speed.toString();
+      String locString = "latitude: " +
+          location.latitude.toString() +
+          "   longitude: " +
+          location.longitude.toString() +
+          "   accuracy: " +
+          location.accuracy.toString() +
+          "   speed: " +
+          location.speed.toString();
       // Toast.show(locString , context);
       print(locString);
-      globalTempPos = Position(latitude:location.longitude, longitude:location.longitude);
-      // mqttUtil.getSurroundingUserInfo("testdeviceName");UIBackgroundModes
-      // SoundUtil.playAssetSound(null);
-           // setState(() {
-      //   this.latitude = location.latitude.toString();
-      //   this.longitude = location.longitude.toString();
-      //   this.accuracy = location.accuracy.toString();
-      //   this.altitude = location.altitude.toString();
-      //   this.bearing = location.bearing.toString();
-      //   this.speed = location.speed.toString();
-      //   this.time = DateTime.fromMillisecondsSinceEpoch(
-      //       location.time.toInt())
-      //       .toString();
-      // });
-      // print("""\n
-      //                   Latitude:  $latitude
-      //                   Longitude: $longitude
-      //                   Altitude: $altitude
-      //                   Accuracy: $accuracy
-      //                   Bearing:  $bearing
-      //                   Speed: $speed
-      //                   Time: $time
-      //                 """);
+      globalTempPos =
+          Position(latitude: location.longitude, longitude: location.longitude);
     });
   }
 
@@ -105,11 +83,10 @@ class PositionUtil {
 
   // 権限要求
   void getPermissions(BuildContext context) {
-    BackgroundLocation.checkPermissions().then((status){
-      if (status == PermissionStatus.granted){
+    BackgroundLocation.checkPermissions().then((status) {
+      if (status == PermissionStatus.granted) {
         Toast.show(status.toString(), context);
-      }
-      else {
+      } else {
         BackgroundLocation.getPermissions(
           onGranted: () {
             // Start location service here or do something else
@@ -121,7 +98,6 @@ class PositionUtil {
         );
       }
     });
-
   }
 
   getCurrentLocation() {
@@ -132,7 +108,6 @@ class PositionUtil {
 
   void _timeOut() async {
     PosFlag = false;
-//    print("Position Update Endabled.........................");
   }
 
   void dispose() {

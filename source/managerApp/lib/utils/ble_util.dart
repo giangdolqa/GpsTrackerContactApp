@@ -1,6 +1,6 @@
-import 'dart:math';
-import 'package:flutter_blue/flutter_blue.dart';
 import 'dart:async';
+
+import 'package:flutter_blue/flutter_blue.dart';
 
 class ble_data_model {
   /*

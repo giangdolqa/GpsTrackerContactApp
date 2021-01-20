@@ -5,20 +5,17 @@ import 'dart:typed_data';
 
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:marmo/beans/marmo_info.dart';
+import 'package:http/http.dart';
+import 'package:intl/intl.dart';
 import 'package:marmo/beans/device_dbInfo.dart';
 import 'package:marmo/beans/device_info.dart';
+import 'package:marmo/beans/marmo_info.dart';
 import 'package:marmo/beans/setting_info.dart';
-import 'package:marmo/utils/db_util.dart';
-import 'package:marmo/utils/crypt_util.dart';
 import 'package:marmo/components/my_popup_menu.dart' as mypopup;
+import 'package:marmo/utils/db_util.dart';
 import 'package:marmo/utils/shared_pre_util.dart';
 import 'package:marmo/views/device_setting_view.dart';
-import 'package:http/http.dart';
-
-import 'package:intl/intl.dart';
 
 class GpsTrackerSettingView extends StatefulWidget {
   GpsTrackerSettingView({Key key}) : super(key: key);
@@ -99,16 +96,6 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
         tempDi.type = result.device.type;
         tempDi.device = result;
         tempDi.count = 0;
-//          bool _flg = false;
-//          for (var i = 0; i < otherDevices.length; i++) {
-//            if (otherDevices[i].id == tempDi.id) {
-//              _flg = true;
-//              break;
-//            }
-//          }
-//          if (!_flg) {
-//            otherDevices.add(tempDi);
-//          }
         bool _flg = false;
         for (var i = 0; i < dbDevices.length; i++) {
           if (dbDevices[i].bleId == tempDi.id) {
@@ -128,12 +115,6 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
       _getOtherDevListRow();
       _getMyDevListRow();
     });
-//    DeviceInfo tempDi = new DeviceInfo();
-//    tempDi.name = "name";
-//    tempDi.id = DeviceIdentifier("123456");
-//    tempDi.type = BluetoothDeviceType.classic;
-//    myDevices.add(tempDi);
-//    _getMyDevListRow();
   }
 
   // デバイスリストアイテム作成
@@ -547,19 +528,6 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
   void _deviceDelete(DeviceInfo deviceInfo) async {
     String url = 'http://' + server + '/device/' + deviceInfo.deviceDB.id;
     Map<String, String> headers = {"Content-type": "application/json"};
-//    var pleasanterJson = {
-//      "ApiVersion": 1.1,
-//      "ApiKey": apiKey,
-//      "Offset": 0,
-//      "View": {
-//        "NearCompletionTime": true,
-//        "ColumnFilterHash": {
-//          idColumn: ''
-//        }
-//      }
-//    };
-//    Response response = await delete(url,
-//        headers: headers, body: json.encode(pleasanterJson));
     Response response = await delete(url, headers: headers);
     if (response.statusCode == 200) {
       marmoDB.deleteDeviceDBInfo(deviceInfo.deviceDB.id);

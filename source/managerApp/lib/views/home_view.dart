@@ -1,34 +1,27 @@
 // ホーム画面
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'dart:ui' as ui;
 import 'dart:ui';
 
-import 'package:background_location/background_location.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_volume_slider/flutter_volume_slider.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_controller/google_maps_controller.dart';
-import 'package:marmo/beans/device_dbInfo.dart';
-import 'package:marmo/beans/normal_info.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:marmo/beans/alarm_info.dart';
-import 'package:marmo/utils/db_util.dart';
+import 'package:marmo/beans/normal_info.dart';
+import 'package:marmo/components/my_popup_menu.dart' as mypopup;
 import 'package:marmo/utils/event_util.dart';
+import 'package:marmo/utils/mqtt_util.dart';
 import 'package:marmo/utils/nuid_util.dart';
+import 'package:marmo/utils/position_util.dart';
 import 'package:marmo/utils/sound_util.dart';
 import 'package:marquee/marquee.dart';
-import 'package:toast/toast.dart';
-
-import 'package:marmo/components/my_popup_menu.dart' as mypopup;
-import 'package:marmo/utils/position_util.dart';
-import 'package:marmo/utils/mqtt_util.dart';
 import 'package:workmanager/workmanager.dart';
 
 class HomeView extends StatefulWidget {
@@ -74,9 +67,6 @@ class HomeViewState extends State<HomeView>
   @override
   void initState() {
     super.initState();
-    // 位置情報取得開始
-    // positionUtil.getPermissions(context);
-    // positionUtil.startListen(context);
     // 常駐機能を登録
     Workmanager.initialize(
         callbackDispatcher, // The top level function, aka callbackDispatcher
@@ -90,6 +80,7 @@ class HomeViewState extends State<HomeView>
       frequency: Duration(minutes: 15),
     );
 
+    mqttUtil.subScribePositionByDeviceName();
     // 緊急通知処理登録
     eventBus.on<AlarmInfo>().listen((event) {
       if (mounted) {
@@ -107,12 +98,6 @@ class HomeViewState extends State<HomeView>
         _addNormalMarkers(event);
       }
     });
-    //
-    // mqttUtil.connect();
-    // mqttUtil.getAllDeviceAlarmInfo();
-    // mqttUtil.subScribePositionByDeviceName("device_test");
-    // MqttUtil tmpMqttUtil = new MqttUtil();
-    // tmpMqttUtil.getAllDeviceAlarmInfo();
   }
 
   // 画面破棄
@@ -127,10 +112,6 @@ class HomeViewState extends State<HomeView>
     if (occupiedCheckTimer != null) {
       occupiedCheckTimer.cancel();
     }
-//    if (positionStream != null) {
-//      positionStream.cancel();
-//    }
-
     super.dispose();
   }
 
@@ -322,46 +303,8 @@ class HomeViewState extends State<HomeView>
     });
   }
 
-  //
-  // // 緊急マーカ作成＆表示
-  // _addAlarmMarkers(List<Position> positions) async {
-  //   // alarmMarkerIds.clear();
-  //   BitmapDescriptor markerIcon = await BitmapDescriptor.fromAssetImage(
-  //       ImageConfiguration(size: Size(20, 20)), 'assets/icon/help.png');
-  //   Position currentLocation = await geolocator.getCurrentPosition();
-  //   positions.forEach((position) {
-  //     MarkerId markerId = new MarkerId("a" + alarmMarkerIds.length.toString());
-  //     Marker tmpMarker = Marker(
-  //       markerId: markerId,
-  //       // icon: Icon(Icons.location_pin),
-  //       icon: markerIcon,
-  //       anchor: Offset(0.5, 1),
-  //       onTap: () {
-  //         CameraUpdate cameraUpdate = CameraUpdate.newLatLng(
-  //             LatLng(currentLocation.latitude, currentLocation.longitude));
-  //         controller.moveCamera(cameraUpdate);
-  //         controller.zoomIn(animate: true);
-  //
-  //         _onMarkerTapped(markerId);
-  //       },
-  //       position: LatLng(position.latitude, position.longitude),
-  //     );
-  //     alarmMarkerIds.add(markerId);
-  //     markers[markerId] = tmpMarker;
-  //     this.setState(() {
-  //       markersSet = markers.values;
-  //     });
-  //   });
-  // }
-
   // 通常マーカ作成＆表示
   _addNormalMarkers(NormalInfo position) async {
-    // normalMarkerIds.clear();
-
-    // BitmapDescriptor markerIcon = await BitmapDescriptor.fromAssetImage(
-    //     ImageConfiguration(size: Size(5, 5)), 'assets/icon/position.png');
-    // BitmapDescriptor markerIcon = await BitmapDescriptor.defaultMarkerWithHue(
-    //     colorsHue[colorIndex]);
     List colors = [
       Colors.yellow,
       Colors.red,

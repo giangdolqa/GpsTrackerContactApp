@@ -52,11 +52,6 @@ class GpsTrackerReadingViewState extends State<GpsTrackerReadingView> {
     _getDeviceListFromDB();
   }
 
-  // _initDB() async {
-  //   // await marmoDB.DropDb();
-  //   await marmoDB.intializeDatabase();
-  // }
-
   // デバイスリストをDBから取得
   void _getDeviceListFromDB() async {
     List<DeviceDBInfo> tempDBList = await marmoDB.getDeviceDBInfoList();
@@ -95,17 +90,17 @@ class GpsTrackerReadingViewState extends State<GpsTrackerReadingView> {
           }
 
           // DEBUG -S-
-          // DeviceDBInfo temp = new DeviceDBInfo();
-          // temp.id = result.device.id.toString();
-          // temp.name = result.device.name;
-          // temp.key = "0123456789123456";
-          // temp.keyDate = "2020/01/18";
-          // temp.userName = "鈴谷　カモメ";
-          // temp.state = 0;
-          // temp.bleId = result.device.id.toString();
-          // temp.count = 2;
-          // temp.password = "0123456789123456";
-          // marmoDB.insertDeviceDBInfo(temp);
+          DeviceDBInfo temp = new DeviceDBInfo();
+          temp.id = result.device.id.toString();
+          temp.name = result.device.name;
+          temp.key = "0123456789123456";
+          temp.keyDate = "2020/01/18";
+          temp.userName = result.device.name;
+          temp.state = 0;
+          temp.bleId = result.device.id.toString();
+          temp.count = 2;
+          temp.password = "0123456789123456";
+          marmoDB.insertDeviceDBInfo(temp);
           // DEBUG -E-
           for (DeviceDBInfo dbDveice in myDBDevicesList) {
             if (dbDveice.id == result.device.id.id) {
@@ -276,8 +271,9 @@ class GpsTrackerReadingViewState extends State<GpsTrackerReadingView> {
 
   // TEK/EINN情報読み込み
   _readTEKInfo(BluetoothDevice deviceInfo) async {
-    await mCharacteristic_TEK.setNotifyValue(true);
+    // await mCharacteristic_TEK.setNotifyValue(true);
     List<int> tekInfoInts = await mCharacteristic_TEK.read();
+    print("_readTEKInfo=============================" + tekInfoInts.toString());
     String tekStr = String.fromCharCodes(tekInfoInts);
     // DBを更新
     DeviceDBInfo dbInfo =
@@ -290,8 +286,9 @@ class GpsTrackerReadingViewState extends State<GpsTrackerReadingView> {
 
   // RPI/AEM情報読み込み
   _readRPIInfo(BluetoothDevice deviceInfo) async {
-    await mCharacteristic_RPI.setNotifyValue(true);
+    // await mCharacteristic_RPI.setNotifyValue(true);
     List<int> rpiInfoInts = await mCharacteristic_RPI.read();
+    print("_readRPIInfo=============================" + rpiInfoInts.toString());
     String rpiStr = String.fromCharCodes(rpiInfoInts);
     // DBを更新
     DeviceDBInfo dbInfo =
@@ -363,37 +360,42 @@ class GpsTrackerReadingViewState extends State<GpsTrackerReadingView> {
     // TEKInfo tekInfo = new TEKInfo();
     // tekInfo.jsonToTEKInfo(jsonString, context);
 
-    // marmoDB.DropDb();
+    // marmoDB.ClearDBInfo();
+    // marmoDB.DropDB();
     // marmoDB.intializeDatabase();
     // DEBUG -E-
+    flutterBlue.stopScan();
     deviceInfo
-        .connect(autoConnect: true, timeout: Duration(seconds: 10))
+        .connect(autoConnect: false, timeout: Duration(seconds: 10))
         .whenComplete(() async {
       List<BluetoothService> services = await deviceInfo.discoverServices();
+      bool isTekRead = false;
+      bool isRpiRead = false;
       services.forEach((service) async {
         var characteristics = service.characteristics;
-        characteristics.forEach((characteristic) {
+        String serviceId = service.uuid.toString();
+        characteristics.forEach((characteristic) async {
+          String charId = characteristic.uuid.toString();
+          print("Bluetooth service: $serviceId + characteristics: $charId");
           if (characteristic.uuid.toString() == TEKENIN_UUID) {
             mCharacteristic_TEK = characteristic;
-            const timeout = const Duration(seconds: 10);
-            Timer(timeout, () async {
-              await _readTEKInfo(deviceInfo);
-            });
+            await _readTEKInfo(deviceInfo);
+            isTekRead = true;
           } else if (characteristic.uuid.toString() == RPIAEM_UUID) {
             mCharacteristic_RPI = characteristic;
-            const timeout = const Duration(seconds: 10);
-            Timer(timeout, () async {
-              await _readRPIInfo(deviceInfo);
-            });
+            await _readRPIInfo(deviceInfo);
+            isRpiRead = true;
           }
         });
-        _outputInfo("", "読み込み成功");
-        deviceInfo.disconnect();
+        if (isTekRead & isRpiRead) {
+          _outputInfo("", "読み込み成功");
+        }
       });
       if (mCharacteristic_TEK == null || mCharacteristic_RPI == null) {
         _outputInfo("", "読み込み失敗");
-        deviceInfo.disconnect();
+        // deviceInfo.disconnect();
       }
+      // deviceInfo.disconnect();
     }).catchError((error) {
       _outputInfo("", "読み込み失敗");
       deviceInfo.disconnect();
@@ -413,7 +415,7 @@ class GpsTrackerReadingViewState extends State<GpsTrackerReadingView> {
           Container(
             padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
             child: Text(
-              "marmoからデータを詠み込む時はBluetoothをONにしてください。",
+              "marmoからデータを読み込む時はBluetoothをONにしてください。",
               style: TextStyle(fontSize: 14),
             ),
           ),

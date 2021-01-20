@@ -3,15 +3,12 @@
 import 'package:background_location/background_location.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:marmo/utils/mqtt_util.dart';
 import 'package:marmo/views/device_read_view.dart';
-
+import 'package:marmo/views/device_setting_view.dart';
+import 'package:marmo/views/gpstracker_setting_view.dart';
+import 'package:marmo/views/home_view.dart';
 import 'package:marmo/views/login_view.dart';
 import 'package:marmo/views/register_view.dart';
-import 'package:marmo/views/home_view.dart';
-import 'package:marmo/views/gpstracker_setting_view.dart';
-import 'package:marmo/views/device_setting_view.dart';
-import 'package:workmanager/workmanager.dart';
 
 void main() {
   runApp(TrackerApp());
@@ -77,7 +74,7 @@ class TrackerAppState extends State<TrackerApp> {
     return MaterialApp(
       title: 'Marmo',
       debugShowCheckedModeBanner: true,
-      home: LoginView(),
+      home: HomeView(),
       theme: ThemeData(
         brightness: Brightness.light,
         primarySwatch: Colors.blue,

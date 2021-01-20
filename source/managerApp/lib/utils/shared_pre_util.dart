@@ -1,5 +1,4 @@
 // ローカル保存
-import 'package:flutter_blue/flutter_blue.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 SharedPreUtil spUtil = new SharedPreUtil();
@@ -19,7 +18,6 @@ class SharedPreUtil {
   Future SavePhoneNum(String inputPhoneNum) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     bool bRslt = await sharedPreferences.setString("PhoneNum", inputPhoneNum);
-//    //print("Save phoneNum : [" + inputPhoneNum+ "] Result:" + bRslt.toString());
   }
 
   Future GetPhoneNum() async {

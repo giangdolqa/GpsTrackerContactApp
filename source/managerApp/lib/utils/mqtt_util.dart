@@ -1,21 +1,14 @@
 // Mqtt通信ツール
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:date_format/date_format.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:marmo/beans/device_dbInfo.dart';
 import 'package:marmo/beans/key_info.dart';
 import 'package:marmo/beans/normal_info.dart';
-import 'package:marmo/beans/alarm_info.dart';
-import 'package:marmo/utils/sound_util.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
 
 import 'db_util.dart';
 import 'event_util.dart';
@@ -60,8 +53,6 @@ class MqttUtil {
   // 接続初期化(非同期
   void _initConn() async {
     final context = SecurityContext.defaultContext;
-    // context.setTrustedCertificates(path.join('assets', 'cert', 'cert.pem'));
-    // context.setTrustedCertificates("/assets/cert/cert.pem");
     ByteData data = await rootBundle.load('assets/cert/cert.pem');
     context.setTrustedCertificatesBytes(data.buffer.asUint8List());
 
@@ -88,12 +79,6 @@ class MqttUtil {
 
   // 接続初期化(非同期
   void _initConn_test() async {
-    // final context = SecurityContext.defaultContext;
-    // context.setTrustedCertificates(path.join('assets', 'cert', 'cert.pem'));
-    // context.setTrustedCertificates("/assets/cert/cert.pem");
-    // ByteData data = await rootBundle.load('assets/cert/cert.pem');
-    // context.setTrustedCertificatesBytes(data.buffer.asUint8List());
-
     String username = await spUtil.GetUsername();
     String password = await spUtil.GetPassword();
 
@@ -175,7 +160,7 @@ class MqttUtil {
       final rslt = await ki.jsonToKeyInfo(pt, null);
       if (rslt != null) {
         String jsonKey = rslt.key;
-        String keyHeader = ki.getHashedKey();
+        String keyHeader = ki.getHashedKey(c[0].topic);
         if (jsonKey.startsWith(keyHeader)) {
           // DB に保存
           DeviceDBInfo dbInfo = new DeviceDBInfo();
@@ -183,6 +168,7 @@ class MqttUtil {
           dbInfo.key = jsonKey.substring(keyHeader.length - 1);
           dbInfo.keyDate = formatDate(DateTime.now(), [yyyy, mm, dd]);
           marmoDB.updateDeviceDBInfoByName(dbInfo);
+          return dbInfo.key;
         } else {
           // Do nothing
         }
@@ -190,11 +176,15 @@ class MqttUtil {
       print(
           'marmo:: Mqtt normal info :: topic is <${c[0].topic}>, payload is <-- $pt -->');
     });
+    return null;
   }
 
-  void subScribePositionByDeviceName(String deviceName) async {
+  void subScribePositionByDeviceName() async {
     connect().then((value) async {
-      _getPosistionByDeviceName(deviceName);
+      List<DeviceDBInfo> deviceList = await marmoDB.getDeviceDBInfoList();
+      deviceList.forEach((deviceInfo) {
+        _getPosistionByDeviceName(deviceInfo.name);
+      });
     });
   }
 

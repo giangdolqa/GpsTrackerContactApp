@@ -46,12 +46,8 @@ class DbUtil {
 
   Future<Database> intializeDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
-      String path = join(directory.path, 'deviceInfo.db');
-    //
-    // File file = File(path);
-    // if (file != null){
-    //   file.delete();
-    // }
+    String path = join(directory.path, 'deviceInfo.db');
+
     var deviceInfoDatabase =
         openDatabase(path, version: 1, onCreate: _createDb);
     return deviceInfoDatabase;
@@ -65,12 +61,11 @@ class DbUtil {
 
   void DropDb() async {
     Database db = await this.database;
-    await db.execute(
-        'DROP TABLE $deviceInfoTable');
+    await db.execute('DROP TABLE $deviceInfoTable');
     Directory directory = await getApplicationDocumentsDirectory();
     String path = join(directory.path, 'deviceInfo.db');
     File file = File(path);
-    if (file != null){
+    if (file != null) {
       file.delete();
     }
   }
@@ -79,7 +74,6 @@ class DbUtil {
   Future<List<Map<String, dynamic>>> getDeviceDBInfoMapList() async {
     Database db = await this.database;
 
-
 //var result= db.rawQuery('SELECT * FROM $deviceInfoTable order by $colState ASC');
     var result = db.query(deviceInfoTable, orderBy: '$colId ASC');
     return result;
@@ -87,7 +81,8 @@ class DbUtil {
 
   Future<List<DeviceDBInfo>> getDeviceDBInfoList() async {
     Database db = await this.database;
-    List<Map<String, dynamic>> result = await db.query(deviceInfoTable, orderBy: '$colId ASC');
+    List<Map<String, dynamic>> result =
+        await db.query(deviceInfoTable, orderBy: '$colId ASC');
     List<DeviceDBInfo> dbInfoList = [];
     result.forEach((element) {
       DeviceDBInfo tempInfo = DeviceDBInfo();
@@ -103,6 +98,13 @@ class DbUtil {
     Database db = await this.database;
     var result = await db.insert(deviceInfoTable, di.toMap());
     return result;
+  }
+
+  // DB情報をクリアする
+  Future<bool> ClearDBInfo() async {
+    Database db = await this.database;
+    await db.rawDelete('DELETE FROM $deviceInfoTable WHERE 1=1');
+    return true;
   }
 
 //Update Operation :Update a DeviceDBInfo object and save it to Database
@@ -143,7 +145,7 @@ class DbUtil {
   Future<DeviceDBInfo> getDeviceDBInfoByDeviceName(String deviceName) async {
     Database db = await this.database;
     List<Map<String, dynamic>> x = await db.rawQuery(
-        'SELECT * from $deviceInfoTable WHERE $colDeviceName =$deviceName');
+        'SELECT * from $deviceInfoTable WHERE $colDeviceName ="$deviceName"');
     if (x.length > 0) {
       Map<String, dynamic> deviceMap = x[0];
       DeviceDBInfo di = new DeviceDBInfo();
@@ -157,7 +159,7 @@ class DbUtil {
   Future<DeviceDBInfo> getDeviceDBInfoByDeviceId(String deviceId) async {
     Database db = await this.database;
     List<Map<String, dynamic>> x = await db.rawQuery(
-        'SELECT * from $deviceInfoTable WHERE $colDeviceId =$deviceId');
+        'SELECT * from $deviceInfoTable WHERE $colDeviceId ="$deviceId"');
     if (x.length > 0) {
       Map<String, dynamic> deviceMap = x[0];
       DeviceDBInfo di = new DeviceDBInfo();

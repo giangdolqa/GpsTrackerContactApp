@@ -1,7 +1,5 @@
 //　暗号化&復号化ツール
-import 'dart:convert';
 
-import 'package:crypto/crypto.dart';
 import 'package:encrypt/encrypt.dart';
 
 class CryptUtil {
@@ -9,7 +7,7 @@ class CryptUtil {
     // 32 length key
     final key = Key.fromUtf8(aes256Key);
     final encrypter = Encrypter(AES(key, mode: AESMode.ecb));
-    final encryptBytes= encrypter.encrypt(plainText);
+    final encryptBytes = encrypter.encrypt(plainText);
     final encrypted = encryptBytes.base64;
     return encrypted;
   }

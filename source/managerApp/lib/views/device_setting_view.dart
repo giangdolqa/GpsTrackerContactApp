@@ -3,12 +3,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart';
+import 'package:intl/intl.dart';
 import 'package:marmo/beans/device_info.dart';
 import 'package:marmo/beans/setting_info.dart';
 import 'package:marmo/utils/shared_pre_util.dart';
-import 'package:http/http.dart';
-
-import 'package:intl/intl.dart';
 
 class DeviceSettingView extends StatefulWidget {
   DeviceInfo deviceInfo;
@@ -413,10 +412,7 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
                     '性別',
                     style: TextStyle(
                       inherit: true,
-//                        fontFamily: 'Arial Black',
-//                        color: Colors.black,
                       fontSize: 20.0,
-//                          wordSpacing: 10,
                       textBaseline: TextBaseline.alphabetic,
                     ),
                   ),
@@ -812,7 +808,6 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
                       inherit: true,
                       color: Colors.black,
                       fontSize: 20.0,
-//                        fontWeight: FontWeight.bold,
                       textBaseline: TextBaseline.alphabetic,
                     ),
                   ),
@@ -820,8 +815,6 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
                 SizedBox(width: 20.0),
                 Expanded(
                   child: TextField(
-//                      maxLength: 30,
-//                      inputFormatters: [InputFormatUtil.OnlyEnglishAndNumber, LengthLimitingTextInputFormatter(50)],
                     controller: codeCtrlr,
                     focusNode: _codeFocus,
                     decoration: InputDecoration(
@@ -848,7 +841,6 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
                     inherit: true,
                     color: Colors.black,
                     fontSize: 12.0,
-//                        fontWeight: FontWeight.bold,
                     textBaseline: TextBaseline.alphabetic,
                   ),
                 ),

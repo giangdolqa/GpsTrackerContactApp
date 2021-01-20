@@ -1,10 +1,12 @@
 // 通常情報
 import 'dart:convert';
 
+import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:marmo/beans/device_dbInfo.dart';
 import 'package:marmo/utils/crypt_util.dart';
 import 'package:marmo/utils/db_util.dart';
+import 'package:marmo/utils/mqtt_util.dart';
 import 'package:toast/toast.dart';
 
 class NormalInfo {
@@ -25,10 +27,16 @@ class NormalInfo {
     DeviceDBInfo deviceInfo = new DeviceDBInfo();
     try {
       deviceInfo = await marmoDB.getDeviceDBInfoByDeviceName(deviceName);
+      String nowDate = formatDate(DateTime.now(), [yyyy, mm, dd]);
+      if (deviceInfo.keyDate != nowDate){
+        deviceInfo.key = await mqttUtil.getEncryptKey(deviceInfo.name);
+        if (deviceInfo.key == null){
+          return false;
+        }
+      }
     } catch (e) {
       print("marmo:: jsonToNormalinfo failed $e");
       return false;
-      // deviceInfo.key = "adsfadsfadsfadsfadsfadsfadsfadsf";
     }
 
     try {
@@ -37,9 +45,6 @@ class NormalInfo {
       lngNoSec = tmpMap['Lng no sec'];
       temperature = tmpMap['TEMP'];
       humidity = tmpMap['HUM'];
-      // tmpMap['Lat'] = CryptUtil.encrypt(tmpMap['Lat'].toString(), deviceInfo.key);
-      // tmpMap['Lng'] = CryptUtil.encrypt(tmpMap['Lng'].toString(), deviceInfo.key);
-      // tmpMap['Step'] = CryptUtil.encrypt(tmpMap['Step'].toString(), deviceInfo.key);
       latitude = num.parse(
           CryptUtil.decrypt(tmpMap['Lat'].toString(), deviceInfo.key));
       longitude = num.parse(

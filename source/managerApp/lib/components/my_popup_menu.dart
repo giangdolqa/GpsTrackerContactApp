@@ -9,12 +9,12 @@ import 'package:flutter/widgets.dart';
 const Duration _kMenuDuration = Duration(milliseconds: 300);
 const double _kBaselineOffsetFromBottom = 20.0;
 const double _kMenuCloseIntervalEnd = 2.0 / 3.0;
-const double _kMenuHorizontalPadding = 0.0;//16.0;
+const double _kMenuHorizontalPadding = 0.0; //16.0;
 const double _kMenuItemHeight = 48.0;
 const double _kMenuDividerHeight = 16.0;
 const double _kMenuMaxWidth = 5.0 * _kMenuWidthStep;
 const double _kMenuMinWidth = 2.0 * _kMenuWidthStep;
-const double _kMenuVerticalPadding = 0.0;//8.0;
+const double _kMenuVerticalPadding = 0.0; //8.0;
 const double _kMenuWidthStep = 56.0;
 const double _kMenuScreenPadding = 8.0;
 
@@ -256,7 +256,7 @@ class PopupMenuItemState<T, W extends PopupMenuItem<T>> extends State<W> {
       child: Container(
         height: widget.height,
         padding:
-        const EdgeInsets.symmetric(horizontal: _kMenuHorizontalPadding),
+            const EdgeInsets.symmetric(horizontal: _kMenuHorizontalPadding),
         color: widget.color,
         child: item,
       ),
@@ -340,11 +340,11 @@ class CheckedPopupMenuItem<T> extends PopupMenuItem<T> {
     Widget child,
   })  : assert(checked != null),
         super(
-        key: key,
-        value: value,
-        enabled: enabled,
-        child: child,
-      );
+          key: key,
+          value: value,
+          enabled: enabled,
+          child: child,
+        );
 
   /// Whether to display a checkmark next to the menu item.
   ///
@@ -376,6 +376,7 @@ class _CheckedPopupMenuItemState<T>
     with SingleTickerProviderStateMixin {
   static const Duration _fadeDuration = Duration(milliseconds: 150);
   AnimationController _controller;
+
   Animation<double> get _opacity => _controller.view;
 
   @override
@@ -383,7 +384,9 @@ class _CheckedPopupMenuItemState<T>
     super.initState();
     _controller = AnimationController(duration: _fadeDuration, vsync: this)
       ..value = widget.checked ? 1.0 : 0.0
-      ..addListener(() => setState(() {/* animation changed */}));
+      ..addListener(() => setState(() {
+            /* animation changed */
+          }));
   }
 
   @override
@@ -448,10 +451,10 @@ class _PopupMenu<T> extends StatelessWidget {
     }
 
     final CurveTween opacity =
-    CurveTween(curve: const Interval(0.0, 1.0 / 3.0));
+        CurveTween(curve: const Interval(0.0, 1.0 / 3.0));
     final CurveTween width = CurveTween(curve: Interval(0.0, unit));
     final CurveTween height =
-    CurveTween(curve: Interval(0.0, unit * route.items.length));
+        CurveTween(curve: Interval(0.0, unit * route.items.length));
 
     final Widget child = ConstrainedBox(
       constraints: const BoxConstraints(
@@ -467,7 +470,7 @@ class _PopupMenu<T> extends StatelessWidget {
           label: semanticLabel,
           child: SingleChildScrollView(
             padding:
-            const EdgeInsets.symmetric(vertical: _kMenuVerticalPadding),
+                const EdgeInsets.symmetric(vertical: _kMenuVerticalPadding),
             child: ListBody(children: children),
           ),
         ),
@@ -743,7 +746,7 @@ Future<T> showMenu<T>({
         semanticLabel: label,
         theme: Theme.of(context, shadowThemeOnly: true),
         barrierLabel:
-        MaterialLocalizations.of(context).modalBarrierDismissLabel,
+            MaterialLocalizations.of(context).modalBarrierDismissLabel,
       ));
 }
 
@@ -838,8 +841,8 @@ class PopupMenuButton<T> extends StatefulWidget {
   })  : assert(itemBuilder != null),
         assert(offset != null),
         assert(enabled != null),
-        assert(!(child != null &&
-            icon != null)), // fails if passed both parameters
+        assert(!(child != null && icon != null)),
+        // fails if passed both parameters
         super(key: key);
 
   /// Called when the button is pressed to create the items to show in the menu.
@@ -955,15 +958,15 @@ class _PopupMenuButtonState<T> extends State<PopupMenuButton<T>> {
     assert(debugCheckHasMaterialLocalizations(context));
     return widget.child != null
         ? InkWell(
-      onTap: widget.enabled ? showButtonMenu : null,
-      child: widget.child,
-    )
+            onTap: widget.enabled ? showButtonMenu : null,
+            child: widget.child,
+          )
         : IconButton(
-      icon: widget.icon ?? _getIcon(Theme.of(context).platform),
-      padding: widget.padding,
-      tooltip: widget.tooltip ??
-          MaterialLocalizations.of(context).showMenuTooltip,
-      onPressed: widget.enabled ? showButtonMenu : null,
-    );
+            icon: widget.icon ?? _getIcon(Theme.of(context).platform),
+            padding: widget.padding,
+            tooltip: widget.tooltip ??
+                MaterialLocalizations.of(context).showMenuTooltip,
+            onPressed: widget.enabled ? showButtonMenu : null,
+          );
   }
 }
