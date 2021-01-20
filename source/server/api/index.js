@@ -46,6 +46,11 @@ app.delete(api_ver + 'user', (res, req) => {
 	pleasanter.delete_user(req, res);
 });
 
+//GET ログイン認証
+app.get(api_ver + 'login', (res, req) =>{
+	pleasanter.check_login(req, res);
+});
+
 //PATCH 認証コード発行
 app.patch(api_ver + 'auth/request', (res, req) => {
 	pleasanter.request_auth(req, res);
