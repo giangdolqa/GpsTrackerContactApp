@@ -7,7 +7,7 @@ import 'package:toast/toast.dart';
 
 class KeyInfo {
   String type; // タイプ
-  String name; // 名所
+  List name; // 名所
   String key; // キー+暗号鍵
 
   KeyInfo jsonToKeyInfo(String jsonString, BuildContext context) {
@@ -29,11 +29,10 @@ class KeyInfo {
   // キーハッシュ化
   String getHashedKey(String topicStr) {
     try {
-      String dateStr = topicStr.split("/")[3];
+      String dateStr = topicStr.split("/")[2];
       // ①	時刻のDDの２文字目+1文字分、時刻を切り出す。
-      DateTime dt = DateTime.parse(dateStr);
-      num trimNum = dt.day % 10 + 1;
-      String hashKey = topicStr.substring(0, trimNum);
+      num trimNum = num.parse(dateStr.substring(7,8)) + 1;
+      String hashKey = dateStr.substring(0, trimNum);
       // ②	その切り出した文字をキーとして、SHA256ハッシュ化する。
       var bytes = utf8.encode(hashKey);
       var hashedKeySha256 = sha256.convert(bytes);

@@ -74,7 +74,7 @@ class TrackerAppState extends State<TrackerApp> {
     return MaterialApp(
       title: 'Marmo',
       debugShowCheckedModeBanner: true,
-      home: HomeView(),
+      home: LoginView(),
       theme: ThemeData(
         brightness: Brightness.light,
         primarySwatch: Colors.blue,
