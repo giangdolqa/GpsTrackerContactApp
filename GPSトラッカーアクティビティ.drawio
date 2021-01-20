@@ -1,4 +1,4 @@
-<mxfile host="65bd71144e" modified="2021-01-20T12:50:37.505Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.52.1 Chrome/83.0.4103.122 Electron/9.3.5 Safari/537.36" etag="yIlZnpixo_nDiqn1RH4c" version="13.10.0" type="embed">
+<mxfile host="65bd71144e" modified="2021-01-20T22:40:27.733Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.52.1 Chrome/83.0.4103.122 Electron/9.3.5 Safari/537.36" etag="_H1bNCoYr3tcuAHXZ-mX" version="13.10.0" type="embed">
     <diagram id="_fCsrPICg7QsrxN3RZDT" name="ページ1">
         <mxGraphModel dx="1165" dy="779" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
@@ -22,7 +22,7 @@
                         <mxPoint x="130" y="433" as="sourcePoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="7" value="温湿度の取得" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" parent="1" vertex="1">
+                <mxCell id="7" value="温湿度、空気質の取得" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" parent="1" vertex="1">
                     <mxGeometry x="55" y="463" width="160" height="40" as="geometry"/>
                 </mxCell>
                 <mxCell id="8" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;verticalAlign=bottom;endArrow=open;endSize=8;strokeColor=#ff0000;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="7" target="12" edge="1">
@@ -206,7 +206,7 @@
                 <mxCell id="94" value="" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffc0;strokeColor=#ff0000;fontColor=#000000;" parent="1" vertex="1">
                     <mxGeometry x="96.99999999999989" y="1207" width="80" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="96" value="　topic=デバイス名/番号&lt;br&gt;　message=秒を切り捨てた緯度経度、&lt;br&gt;温湿度、緯度経度、歩数" style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=25;verticalAlign=middle;align=left;labelBackgroundColor=none;fontColor=#000000;fillColor=none;" parent="1" vertex="1">
+                <mxCell id="96" value="　topic=デバイス名/番号&lt;br&gt;　message=秒を切り捨てた緯度経度、&lt;br&gt;温湿度、空気質、緯度経度、歩数" style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=25;verticalAlign=middle;align=left;labelBackgroundColor=none;fontColor=#000000;fillColor=none;" parent="1" vertex="1">
                     <mxGeometry x="247" y="703" width="233" height="47" as="geometry"/>
                 </mxCell>
                 <mxCell id="135" value="" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;fontColor=#FFFFFF;align=left;fillColor=none;dashed=1;" parent="1" vertex="1">
@@ -320,12 +320,12 @@
                         <mxPoint x="177" y="990" as="sourcePoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="191" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#FF0000;" edge="1" target="194" parent="1">
+                <mxCell id="191" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#FF0000;" parent="1" target="194" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="612" y="642" as="sourcePoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="192" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;strokeColor=#FF0000;fontColor=#000000;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="195" target="197" parent="1">
+                <mxCell id="192" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;strokeColor=#FF0000;fontColor=#000000;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="195" target="197" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <Array as="points">
                             <mxPoint x="712" y="739"/>
@@ -333,36 +333,36 @@
                         </Array>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="193" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontColor=#000000;strokeColor=#FF0000;" edge="1" source="194" target="195" parent="1">
+                <mxCell id="193" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontColor=#000000;strokeColor=#FF0000;" parent="1" source="194" target="195" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="194" value="空気質を取得" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" vertex="1" parent="1">
+                <mxCell id="194" value="空気質を取得" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" parent="1" vertex="1">
                     <mxGeometry x="532" y="659" width="160" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="195" value="75以上" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffc0;strokeColor=#ff0000;fontColor=#000000;" vertex="1" parent="1">
+                <mxCell id="195" value="75以上" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffc0;strokeColor=#ff0000;fontColor=#000000;" parent="1" vertex="1">
                     <mxGeometry x="572" y="719" width="80" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="196" value="yes" style="edgeStyle=orthogonalEdgeStyle;html=1;align=left;verticalAlign=top;endArrow=open;endSize=8;strokeColor=#ff0000;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" target="198" parent="1">
+                <mxCell id="196" value="yes" style="edgeStyle=orthogonalEdgeStyle;html=1;align=left;verticalAlign=top;endArrow=open;endSize=8;strokeColor=#ff0000;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" target="198" edge="1">
                     <mxGeometry x="-1" y="14" relative="1" as="geometry">
                         <mxPoint x="652" y="829" as="targetPoint"/>
                         <mxPoint x="612" y="759" as="sourcePoint"/>
                         <mxPoint x="-4" y="-10" as="offset"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="197" value="" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffc0;strokeColor=#ff0000;fontColor=#000000;" vertex="1" parent="1">
+                <mxCell id="197" value="" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffc0;strokeColor=#ff0000;fontColor=#000000;" parent="1" vertex="1">
                     <mxGeometry x="572" y="872" width="80" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="198" value="LEDを黄色の点滅を入れる" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" vertex="1" parent="1">
+                <mxCell id="198" value="LEDを黄色の点滅を入れる" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" parent="1" vertex="1">
                     <mxGeometry x="532" y="797" width="160" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="199" value="no" style="edgeStyle=orthogonalEdgeStyle;html=1;align=left;verticalAlign=bottom;endArrow=open;endSize=8;strokeColor=#ff0000;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" source="198" parent="1">
+                <mxCell id="199" value="no" style="edgeStyle=orthogonalEdgeStyle;html=1;align=left;verticalAlign=bottom;endArrow=open;endSize=8;strokeColor=#ff0000;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="198" edge="1">
                     <mxGeometry x="-1" y="88" relative="1" as="geometry">
                         <mxPoint x="612" y="869" as="targetPoint"/>
                         <mxPoint x="677" y="859" as="sourcePoint"/>
                         <mxPoint x="-48" y="-78" as="offset"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="200" value="湿度がアラート湿度以下かつ&lt;br&gt;空気質が75以上の場合は、赤と黄色が&lt;br&gt;交互に点滅する" style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=25;verticalAlign=middle;align=left;labelBackgroundColor=none;fontColor=#000000;fillColor=none;" vertex="1" parent="1">
+                <mxCell id="200" value="湿度がアラート湿度以下かつ&lt;br&gt;空気質が75以上の場合は、赤と黄色が&lt;br&gt;交互に点滅する" style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=25;verticalAlign=middle;align=left;labelBackgroundColor=none;fontColor=#000000;fillColor=none;" parent="1" vertex="1">
                     <mxGeometry x="500" y="1010" width="239" height="47" as="geometry"/>
                 </mxCell>
             </root>
