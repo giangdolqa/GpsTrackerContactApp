@@ -1,5 +1,3 @@
-//import 'package:animated_splash/animated_splash.dart';
-
 import 'package:background_location/background_location.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -23,37 +21,6 @@ class TrackerApp extends StatefulWidget {
 class TrackerAppState extends State<TrackerApp> {
   WidgetsBinding widgetsBinding;
 
-  //
-  // // AuthCheck
-  // LoginService loginService = new LoginService();
-//  bool authCheckRslt = false;
-
-//  AuthCheck() async {
-//    int authRslt = await loginService.StartupAuthCheck();
-//
-//    if (authRslt == 0) {
-//      //print("Auth Checking...true");
-//      return true;
-//    } else {
-//      //print("Auth Checking...false");
-//      return false;
-//    }
-//  }
-//
-////
-//  @override
-//  void initState() {
-//    super.initState();
-//    AuthCheck().then((result) {
-//      // If we need to rebuild the widget with the resulting data,
-//      // make sure to use `setState`
-//      authCheckRslt = result;
-//    });
-//    widgetsBinding = WidgetsBinding.instance;
-//    widgetsBinding.addPostFrameCallback((callback) async {
-//      //print("Buidling done...");
-//    });
-//  }
   @override
   void initState() {
     super.initState();
