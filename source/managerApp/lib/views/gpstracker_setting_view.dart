@@ -39,11 +39,9 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
   String password = '';
   int deviceID;
 
-  final _codeFormat = new NumberFormat("000000", "en_US");
+  final _codeFormat = new NumberFormat("00000", "en_US");
 
-  SharedPreUtil sharedPreUtil = new SharedPreUtil();
-
-  final String server = "203.137.100.55/pleasanter";
+  final String server = "ik1-407-35954.vs.sakura.ne.jp:3000/api/v1";
   final String apiKey =
       "56161eb08314a9b7e5b49f85de53df6d8613f6f96da898dbecf179a8fed7243e8cb803295b6b3c36c359ee184f62f378961ee7877c8e2ae02bd8ce8187605cad";
   final String idColumn = "ID";
@@ -73,7 +71,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
     if (deviceId == null) {
       return 123456;
     } else {
-      int result = 1048575 - deviceId + 1;
+      int result = 0xFFFFF - deviceId + 1;
       return result;
     }
   }
@@ -259,10 +257,13 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
     }
   }
 
-  void _onActionMenuSelect(Map<String, DeviceInfo> selectedVal) {
+  void _onActionMenuSelect(Map<String, DeviceInfo> selectedVal) async {
     switch (selectedVal.keys.first) {
       case "setting":
-        _deviceConnect(selectedVal.values.first);
+        bool connRslt = await _deviceConnect(selectedVal.values.first);
+        if (!connRslt) {
+          return;
+        }
         int settingCode = 0;
         if (selectedVal.values.first.count < 2) {
           if (selectedVal.values.first.count == 1) {
@@ -273,7 +274,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
             settingCode = _getSettingCode(null);
           }
           showAlert(context, selectedVal.values.first,
-              _codeFormat.format(settingCode));
+              _codeFormat.format(settingCode % 100000));
         } else {
           _deviceSet(selectedVal.values.first);
         }
@@ -401,32 +402,36 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
     });
   }
 
-  void _deviceConnect(DeviceInfo deviceInfo) {
-    deviceInfo.device.device
+  Future<bool> _deviceConnect(DeviceInfo deviceInfo) async {
+    bool deviceFound = false;
+    mCharacteristic = null;
+    await deviceInfo.device.device
         .connect(autoConnect: false, timeout: Duration(seconds: 10))
         .whenComplete(() async {
       List<BluetoothService> services =
           await deviceInfo.device.device.discoverServices();
-      services.forEach((service) async {
+      for (BluetoothService service in services) {
         var characteristics = service.characteristics;
-        characteristics.forEach((characteristic) {
+        for (BluetoothCharacteristic characteristic in characteristics) {
           if (characteristic.uuid.toString() == settingUUID) {
             mCharacteristic = characteristic;
-            const timeout = const Duration(seconds: 10);
-            Timer(timeout, () {
-              dataCallbackDevice();
-            });
+            dataCallbackDevice();
           }
-        });
-      });
+        }
+      }
       if (mCharacteristic == null) {
         _outputInfo("", "デバイスペアリング失敗");
         deviceInfo.device.device.disconnect();
+        deviceFound = false;
+      } else {
+        deviceFound = true;
       }
-    }).catchError(() {
+    }).catchError((e) {
       _outputInfo("", "デバイスペアリング失敗");
       deviceInfo.device.device.disconnect();
+      deviceFound = false;
     });
+    return deviceFound;
   }
 
   void _deviceSet(DeviceInfo deviceInfo) {
@@ -462,7 +467,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
         ),
       ).then((result) async {
         if (result != null) {
-          String username = await sharedPreUtil.GetUsername();
+          String username = await spUtil.GetUsername();
           DeviceDBInfo temp = new DeviceDBInfo();
           temp.id = deviceID.toString();
           temp.name = deviceInfo.name;
@@ -474,17 +479,9 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
             String url = 'http://' + server + '/device';
             Map<String, String> headers = {"Content-type": "application/json"};
             var pleasanterJson = {
-              "ApiVersion": 1.1,
-              "ApiKey": apiKey,
-              "Offset": 0,
-              "View": {
-                "NearCompletionTime": true,
-                "ColumnFilterHash": {
-                  idColumn: deviceID,
-                  loginIDColumn: username,
-                  keyColumn: result.key
-                }
-              }
+              idColumn: deviceID,
+              loginIDColumn: username,
+              keyColumn: result.key
             };
             Response response = await post(url,
                 headers: headers, body: json.encode(pleasanterJson));
