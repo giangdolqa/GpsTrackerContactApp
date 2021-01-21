@@ -270,7 +270,6 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
     if (_countdownTime == 0) {
       unfocusAll();
       String authCode = await spUtil.GetAuthCode();
-      authCode = "T0zcZsseXDSwaui4oSmvu3U1aGuk77JEDx75";
       String url = 'http://' + server + '/device/code/apply';
       Map<String, String> headers = {"Content-type": "application/json"};
       var pleasanterJson = {
