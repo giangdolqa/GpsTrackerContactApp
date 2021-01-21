@@ -1,6 +1,6 @@
-<mxfile host="65bd71144e" modified="2021-01-17T02:59:31.070Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.52.1 Chrome/83.0.4103.122 Electron/9.3.5 Safari/537.36" etag="C56B83Arw5Ydh5f1QjcQ" version="13.10.0" type="embed">
+<mxfile host="65bd71144e" modified="2021-01-21T00:09:38.510Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.52.1 Chrome/83.0.4103.122 Electron/9.3.5 Safari/537.36" etag="p4z1yQpdjQIxgwaqe08v" version="13.10.0" type="embed">
     <diagram id="J0KxcsYykmodnCqyUs6D" name="ページ1">
-        <mxGraphModel dx="1115" dy="1298" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+        <mxGraphModel dx="544" dy="916" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -226,10 +226,10 @@
                     <mxGeometry width="110" height="40" as="geometry"/>
                 </mxCell>
                 <mxCell id="338" value="" style="group" parent="1" vertex="1" connectable="0">
-                    <mxGeometry x="1240" y="40" width="387" height="800" as="geometry"/>
+                    <mxGeometry x="1240" y="40" width="414" height="800" as="geometry"/>
                 </mxCell>
                 <mxCell id="213" value="" style="group;labelBackgroundColor=none;" parent="338" vertex="1" connectable="0">
-                    <mxGeometry y="50" width="387" height="750" as="geometry"/>
+                    <mxGeometry y="50" width="414" height="750" as="geometry"/>
                 </mxCell>
                 <mxCell id="214" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shadow=0;dashed=0;strokeWidth=1;shape=mxgraph.ios.iPhone;bgStyle=bgGreen;fillColor=#aaaaaa;" parent="213" vertex="1">
                     <mxGeometry width="375" height="750" as="geometry"/>
@@ -260,55 +260,55 @@
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="222" value="marmo" style="html=1;strokeWidth=1;shadow=0;dashed=0;shape=mxgraph.ios7ui.icon;fontSize=8;fontColor=#ffffff;buttonText=;whiteSpace=wrap;align=center;labelBackgroundColor=none;fillColor=none;" parent="219" vertex="1">
-                    <mxGeometry x="20" y="150" width="40" height="36" as="geometry"/>
+                    <mxGeometry x="20" y="200" width="40" height="36" as="geometry"/>
                 </mxCell>
                 <mxCell id="223" value="M00001　&lt;span style=&quot;color: rgb(0 , 0 , 0)&quot;&gt;&lt;font style=&quot;font-size: 13px&quot;&gt;鈴木太郎　設定済み　未接続&lt;/font&gt;&lt;/span&gt;" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="219" vertex="1">
                     <mxGeometry width="250" height="20" relative="1" as="geometry">
-                        <mxPoint x="70" y="158" as="offset"/>
+                        <mxPoint x="70" y="208" as="offset"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="224" value="marmo" style="html=1;strokeWidth=1;shadow=0;dashed=0;shape=mxgraph.ios7ui.icon;fontSize=8;fontColor=#ffffff;buttonText=;whiteSpace=wrap;align=center;labelBackgroundColor=none;fillColor=none;" parent="219" vertex="1">
-                    <mxGeometry x="20" y="250" width="40" height="36" as="geometry"/>
-                </mxCell>
-                <mxCell id="225" value="M00002" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="219" vertex="1">
-                    <mxGeometry x="70" y="258" width="240" height="20" as="geometry"/>
-                </mxCell>
-                <mxCell id="226" value="未設定" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="219" vertex="1">
-                    <mxGeometry x="70" y="308" width="240" height="20" as="geometry"/>
-                </mxCell>
-                <mxCell id="227" value="marmo" style="html=1;strokeWidth=1;shadow=0;dashed=0;shape=mxgraph.ios7ui.icon;fontSize=8;fontColor=#ffffff;buttonText=;whiteSpace=wrap;align=center;labelBackgroundColor=none;fillColor=none;" parent="219" vertex="1">
                     <mxGeometry x="20" y="300" width="40" height="36" as="geometry"/>
                 </mxCell>
+                <mxCell id="225" value="M00002" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="219" vertex="1">
+                    <mxGeometry x="70" y="308" width="240" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="226" value="未設定" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="219" vertex="1">
+                    <mxGeometry x="70" y="358" width="240" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="227" value="marmo" style="html=1;strokeWidth=1;shadow=0;dashed=0;shape=mxgraph.ios7ui.icon;fontSize=8;fontColor=#ffffff;buttonText=;whiteSpace=wrap;align=center;labelBackgroundColor=none;fillColor=none;" parent="219" vertex="1">
+                    <mxGeometry x="20" y="350" width="40" height="36" as="geometry"/>
+                </mxCell>
                 <mxCell id="228" value="ON" style="strokeWidth=1;html=1;shadow=0;dashed=0;shape=mxgraph.ios.iOnOffButton;mainText=;strokeColor=#001DBC;fontSize=9;fontColor=#ffffff;spacingRight=14;buttonState=on;labelBackgroundColor=none;fillColor=#0050ef;" parent="219" vertex="1">
-                    <mxGeometry x="100" y="85" width="43.5" height="15" as="geometry"/>
+                    <mxGeometry x="100" y="135" width="43.5" height="15" as="geometry"/>
                 </mxCell>
                 <mxCell id="229" value="Bluetooth" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="219" vertex="1">
                     <mxGeometry width="70" height="20" relative="1" as="geometry">
-                        <mxPoint x="21" y="81" as="offset"/>
+                        <mxPoint x="21" y="131" as="offset"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="230" value="marmoを設定する時はBluetoothをONにしてください。" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;resizeWidth=1;spacingLeft=0;" parent="219" vertex="1">
                     <mxGeometry width="290" height="20" relative="1" as="geometry">
-                        <mxPoint x="20" y="50" as="offset"/>
+                        <mxPoint x="20" y="100" as="offset"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="231" value="" style="shape=line;strokeColor=#ddeeff;strokeWidth=2;html=1;resizeWidth=1;" parent="219" vertex="1">
-                    <mxGeometry x="14.92999999999995" y="131.99999999999955" width="300.141" height="10" as="geometry"/>
+                    <mxGeometry x="14.92999999999995" y="181.99999999999955" width="300.141" height="10" as="geometry"/>
                 </mxCell>
                 <mxCell id="232" value="自分のデバイス" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;spacingLeft=0;resizeWidth=1;" parent="219" vertex="1">
-                    <mxGeometry x="14.929999999999964" y="111.99999999999955" width="110" height="20" as="geometry"/>
+                    <mxGeometry x="14.929999999999964" y="161.99999999999955" width="110" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="233" value="" style="shape=line;strokeColor=#ddeeff;strokeWidth=2;html=1;resizeWidth=1;" parent="219" vertex="1">
-                    <mxGeometry x="14.92999999999995" y="229.99999999999955" width="300.141" height="10" as="geometry"/>
+                    <mxGeometry x="14.92999999999995" y="279.99999999999955" width="300.141" height="10" as="geometry"/>
                 </mxCell>
                 <mxCell id="234" value="その他のデバイス" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.anchor;fontSize=12;fontColor=#666666;align=left;spacingLeft=0;resizeWidth=1;" parent="219" vertex="1">
-                    <mxGeometry x="14.92999999999995" y="209.99999999999955" width="110" height="20" as="geometry"/>
+                    <mxGeometry x="14.92999999999995" y="259.99999999999955" width="110" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="235" value="" style="html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;shadow=0;dashed=0;strokeWidth=2;shape=mxgraph.ios7.misc.left;strokeColor=#0080f0;fillColor=#FF0000;gradientColor=none;" parent="219" vertex="1">
                     <mxGeometry x="14.92999999999995" y="10" width="10" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="236" value="" style="dashed=0;align=center;fontSize=12;shape=rect;fillColor=#ffffff;strokeColor=#eeeeee;shadow=1;" parent="219" vertex="1">
-                    <mxGeometry x="20" y="190" width="130" height="90" as="geometry"/>
+                    <mxGeometry x="20" y="240" width="130" height="90" as="geometry"/>
                 </mxCell>
                 <mxCell id="237" value="　　設定" style="text;verticalAlign=middle;spacingLeft=13;fontSize=14;resizeWidth=1;fontColor=#000000;" parent="236" vertex="1">
                     <mxGeometry width="130" height="45" relative="1" as="geometry"/>
@@ -325,7 +325,13 @@
                     <mxGeometry x="-5" y="37.89795918367347" width="55.10204081632653" height="55.10204081632653" as="geometry"/>
                 </mxCell>
                 <mxCell id="291" value="タップでペアリング" style="shape=note;strokeWidth=2;fontSize=14;size=20;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#666600;" parent="219" vertex="1">
-                    <mxGeometry x="20" y="350" width="170" height="50" as="geometry"/>
+                    <mxGeometry x="20" y="400" width="170" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="603" value="変更" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=5;strokeColor=none;fontColor=#ffffff;fontSize=16;fontStyle=1;fillColor=#007FFF;" vertex="1" parent="219">
+                    <mxGeometry x="20" y="52" width="80" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="604" value="削除" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.forms.rrect;rSize=5;strokeColor=none;fontColor=#ffffff;fontSize=16;fontStyle=1;fillColor=#007FFF;" vertex="1" parent="219">
+                    <mxGeometry x="120" y="52" width="80" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="288" value="②設定" style="shape=note;strokeWidth=2;fontSize=14;size=20;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#666600;" parent="338" vertex="1">
                     <mxGeometry x="10" width="110" height="40" as="geometry"/>
@@ -1085,6 +1091,9 @@
                 </mxCell>
                 <mxCell id="587" value="濃厚接触の登録をした場合" style="whiteSpace=wrap;html=1;shape=mxgraph.basic.document;fontSize=14;" parent="1" vertex="1">
                     <mxGeometry x="1970.3999999999999" y="2669" width="177.21" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="606" value="&lt;div style=&quot;text-align: left&quot;&gt;&lt;span&gt;変更、登録画面&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;span&gt;削除、削除確認表示&lt;/span&gt;&lt;/div&gt;" style="shape=note;strokeWidth=2;fontSize=14;size=20;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#666600;" vertex="1" parent="1">
+                    <mxGeometry x="1490" y="262" width="146" height="50" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
