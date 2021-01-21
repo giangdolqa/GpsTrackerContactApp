@@ -62,7 +62,7 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
   Timer _codeTimer;
   int _countdownTime = 0;
 
-  // GenderVal
+  // SexVal
   String dropdownValue = '男の子';
 
   String validDays = '';
@@ -83,12 +83,12 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
       intervalCtrlr.text = widget.settingInfo.interval.toString();
       codeCtrlr.text = widget.settingInfo.code;
       bool temp = _isAdult(widget.settingInfo.birthday);
-      String gender = _GetGenderString(widget.settingInfo.gender, temp);
+      String sex = _GetSexString(widget.settingInfo.sex, temp);
       setState(() {
         selectedDate = widget.settingInfo.birthday;
         _trackFlag = widget.settingInfo.trackFlag;
         _isAdultFlag = temp;
-        dropdownValue = gender;
+        dropdownValue = sex;
         validDays = widget.settingInfo.validays;
       });
     }
@@ -140,8 +140,8 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
     }
   }
 
-  // Get Gender
-  int _GetGender() {
+  // Get Sex
+  int _GetSex() {
     int rlst = 0;
     switch (dropdownValue) {
       case '男の子':
@@ -162,9 +162,9 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
     return rlst;
   }
 
-  String _GetGenderString(int gender, bool isAdult) {
+  String _GetSexString(int sex, bool isAdult) {
     String rlst = "";
-    switch (gender) {
+    switch (sex) {
       case 1:
         if (isAdult) {
           rlst = '男性';
@@ -317,11 +317,11 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
       // return if input not validated
       return;
     }
-    int _gender = _GetGender();
+    int _sex = _GetSex();
 
     SettingInfo result = new SettingInfo();
     result.name = nameCtrlr.text;
-    result.gender = _gender;
+    result.sex = _sex;
     result.birthday = selectedDate;
     result.humidity = int.parse(humidityCtrlr.text);
     result.key = keyCtrlr.text;

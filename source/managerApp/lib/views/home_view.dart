@@ -30,13 +30,16 @@ class HomeView extends StatefulWidget {
   HomeViewState createState() => HomeViewState();
 }
 
-// 常駐位置更新
+// 常駐処理
 void callbackDispatcher() {
   Workmanager.executeTask((task, inputData) async {
     print(
         "WorkManager Executed !!  Native called background task: $inputData"); //simpleTask will be emitted here.
     MqttUtil tmpMqttUtil = new MqttUtil();
+    // 緊急情報購読
     await tmpMqttUtil.getAllDeviceAlarmInfo();
+
+    // TODO:
     print(
         "WorkManager Done !!  Native called background task: $inputData"); //simpleTask will be emitted here.
     return Future.value(true);
@@ -239,41 +242,41 @@ class HomeViewState extends State<HomeView>
   String _makeAlarmMessage(AlarmInfo ai) {
     String rsltString = "";
     String Age = ai.Age.toString() + "歳の";
-    String gender = "";
+    String sex = "";
 
     if (ai.Age > 17) {
       switch (ai.Sex) {
         case 0:
-          gender = "人";
+          sex = "人";
           break;
         case 1:
-          gender = "男性";
+          sex = "男性";
           break;
         case 2:
-          gender = "女性";
+          sex = "女性";
           break;
         default:
-          gender = "人";
+          sex = "人";
           break;
       }
     } else {
       switch (ai.Sex) {
         case 0:
-          gender = "子";
+          sex = "子";
           break;
         case 1:
-          gender = "男の子";
+          sex = "男の子";
           break;
         case 2:
-          gender = "女の子";
+          sex = "女の子";
           break;
         default:
-          gender = "子";
+          sex = "子";
           break;
       }
     }
 
-    rsltString = "近くで" + Age + gender + "が助けを求めています。";
+    rsltString = "近くで" + Age + sex + "が助けを求めています。";
     return rsltString;
   }
 

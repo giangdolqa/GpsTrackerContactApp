@@ -439,7 +439,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
         MarmoInfo de = _convertListToMap(deviceCallbackData);
         temp = new SettingInfo();
         temp.name = de.name;
-        temp.gender = de.sex;
+        temp.sex = de.sex;
         temp.birthday = new DateTime(
             int.parse(de.birthday.substring(0, 4)),
             int.parse(de.birthday.substring(4, 2)),
@@ -505,7 +505,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
           Map<String, dynamic> data = new Map<String, dynamic>();
           data['id'] = deviceID;
           data['name'] = result.name;
-          data['sex'] = result.gender;
+          data['sex'] = result.sex;
           data['birthday'] = DateFormat('yyyyMMdd').format(result.birthday);
           data['alert humidity'] = result.humidity;
           data['key'] = result.key;

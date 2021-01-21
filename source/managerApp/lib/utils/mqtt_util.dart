@@ -56,8 +56,8 @@ class MqttUtil {
 
     String username = await spUtil.GetUsername();
     String password = await spUtil.GetPassword();
-    // username = "temporary";
-    // password = "password";
+    // username = "テスト";
+    // password = "test";
 
     /// Create a connection message to use or use the default one. The default one sets the
     /// client identifier, any supplied username/password, the default keepalive interval(60s)

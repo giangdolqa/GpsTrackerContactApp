@@ -2,7 +2,7 @@
 
 class SettingInfo {
   String name; // 名称
-  int gender; // 性別
+  int sex; // 性別
   DateTime birthday; // 生年月日
   int humidity; // アラート湿度
   String key; // キー
