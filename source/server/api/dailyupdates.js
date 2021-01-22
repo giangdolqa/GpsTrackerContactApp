@@ -47,7 +47,7 @@ const update_contact_table = new Promise((resolve, reject) => {
 })
 
 //接触情報数更新
-const update_contact_table = new Promise((resolve, reject) => {
+const update_contact_count_table = new Promise((resolve, reject) => {
 	request.post({
 		uri: URL + 'items/' + CONTACT_COUNT_TABLE + '/get',
 		headers: { "Content-type": "application/json;charset=utf-8" },
@@ -103,7 +103,6 @@ const update_contact_table = new Promise((resolve, reject) => {
 						});
 					}
 				});
-				});
 			});
 			resolve(1);
 		}
@@ -111,7 +110,7 @@ const update_contact_table = new Promise((resolve, reject) => {
 })
 
 // 残り日数更新
-const update_contact_table = new Promise((resolve, reject) => {
+const update_auth_table = new Promise((resolve, reject) => {
 	request.post({
 		uri: URL + 'items/' + AUTH_TABLE + '/get',
 		headers: { "Content-type": "application/json;charset=utf-8" },
@@ -153,10 +152,10 @@ const update_contact_table = new Promise((resolve, reject) => {
 
 //接触情報更新
 update_contact_table.then((value) => {
-	//接触情報数更新
-	update_contact_table((value) => {
-		//残り日数更新
-		update_contact_table.then((value) => {
-		});
-	});
+});
+//接触情報数更新
+update_contact_count_table.then((value) => {
+});
+//残り日数更新
+update_auth_table.then((value) => {
 });
