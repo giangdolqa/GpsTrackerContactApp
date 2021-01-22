@@ -7,6 +7,7 @@ import 'package:marmo/views/gpstracker_setting_view.dart';
 import 'package:marmo/views/home_view.dart';
 import 'package:marmo/views/login_view.dart';
 import 'package:marmo/views/register_view.dart';
+import 'package:marmo/views/twice_view.dart';
 
 void main() {
   runApp(TrackerApp());
@@ -48,9 +49,8 @@ class TrackerAppState extends State<TrackerApp> {
       ),
       routes: <String, WidgetBuilder>{
         'Login': (BuildContext context) => LoginView(),
-        'Register': (BuildContext context) =>
-            RegisterView.nextViewPath("TwiceCheck"), // 2段階認証に値渡し
-        //'TwiceCheck': (BuildContext context) => TwiceCheckView(),  // 2段階認証
+        'Register': (BuildContext context) => TwiceCheckView(),
+        'TwiceCheck': (BuildContext context) => TwiceCheckView(),
         'Home': (BuildContext context) => HomeView(),
         'Setting': (BuildContext context) => GpsTrackerSettingView(),
         'DeviceSetting': (BuildContext context) => DeviceSettingView(),
