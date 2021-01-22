@@ -19,6 +19,7 @@ class DeviceDBInfo {
     data['device_id'] = this.id;
     data['name'] = this.name;
     data['key'] = this.key;
+    data['key_date'] = this.key;
     data['username'] = this.userName;
     data['state'] = this.state;
     data['setting_count'] = this.count;
@@ -33,10 +34,13 @@ class DeviceDBInfo {
     id = inputMap['device_id'];
     name = inputMap['name'];
     key = inputMap['key'];
+    keyDate = inputMap['key_date'];
     userName = inputMap['username'];
     state = inputMap['state'];
     count = inputMap['setting_count'];
     bleId = inputMap['ble_id'];
     password = inputMap['password'];
+    rpiInfo = inputMap['rpi_aem'];
+    tekInfo = inputMap['tek_enin'];
   }
 }
