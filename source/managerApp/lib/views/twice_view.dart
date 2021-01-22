@@ -1,74 +1,72 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'dart:io';
 import 'dart:convert';
+import 'dart:io';
 
-class LoginView extends StatefulWidget {
-  LoginView({Key key, this.title}) : super(key: key);
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class TwiceCheckView extends StatefulWidget {
+  final String loginId;
+  TwiceCheckView({Key key, this.loginId}): super(key: key);
 
   @override
-  _LoginViewState createState() => _LoginViewState();
+  _TwiceCheck createState() => _TwiceCheck(loginId);
 }
 
-class _LoginViewState extends State<LoginView> {
-  var _checkBox1 = false;
-  final loginIdController = TextEditingController();
-  final passwordController = TextEditingController();
-  final String url = "http://ik1-407-35954.vs.sakura.ne.jp/api/v1/login:3000";
+class _TwiceCheck extends State<TwiceCheckView> {
+  final mailCodeController = TextEditingController();
+  final smsCodeController = TextEditingController();
+  final String loginId;
+  final String url = "http://ik1-407-35954.vs.sakura.ne.jp:3000/api/v1/";
+  final Map<String, String> headers = {"Content-type": "application/json"};
 
-  _makePostRequest() async {
-    var lLoginId = loginIdController.text.trim();
-    var lPassword = passwordController.text.trim();
-    if (lLoginId.isEmpty) {
-      _outputInfo("入力エラー", "ログインIDを入力してください。");
+  _TwiceCheck(this.loginId);
+  _twiceCheck(String iMailCode, String iSmsCode) async {
+    if (iMailCode.trim().isEmpty) {
+      _outputInfo("入力エラー", "メールのコードを入力してください。");
       return;
-    }else if (lPassword.isEmpty) {
-      _outputInfo("入力エラー", "パスワードを入力してください。");
+    }else if (iSmsCode.trim().isEmpty) {
+      _outputInfo("入力エラー", "SMSのコードを入力してください。");
       return;
     }else{}
 
-    Map<String, String> headers = {"Content-type": "application/json"};
-    Uri uri = Uri.parse(url);
-    var params = {"LoginID": "Ichiro", "Password":"ic5.pq!r&!2(Sad"};
-    final newURI = uri.replace(queryParameters: params);
 
-    Response response = await get(newURI, headers: headers);
+
+    var pleasanterJson = {
+      "LoginID":"suzuki001",
+      "MailCode":iMailCode.trim().toString(),
+      "SmsCode":iSmsCode.trim().toString(),
+    };
+
+    Response response = await patch(url + "auth/verify", headers: headers, body: json.encode(pleasanterJson));
+    print(iMailCode.trim().toString());
+    print(iSmsCode.trim().toString());
     if (response.statusCode == 200) {
-      print("11111111111");
-      print(response.body);
-      var dbResult = json.decode(response.body);
-      print(dbResult);
-      if (dbResult['Response']['TotalCount'] == 1) {
-        loginIdController.text = "";
-        passwordController.text = "";
-        Navigator.of(context).pushNamed('Home');
-      }else{
-        _outputInfo("", "ログイン失敗");
-      }
+      _outputInfo("認証成功", "一時パスワード:"+ json.decode(response.body).toString());
+    }else if (response.statusCode == 400){
+      _outputInfo("認証失敗", "認証コード期限切れです。");
+    }else if (response.statusCode == 401){
+      _outputInfo("認証失敗", "認証コードが間違います。");
+    }else if (response.statusCode == 402){
+      _outputInfo("認証失敗", "一時パスワードなしです。");
     }else{
-      print("222222222222");
-      _outputInfo("", "サーバと接続失敗");
+      _outputInfo("認証失敗", "応答コード:" + response.statusCode.toString());
     }
   }
 
-  _outputInfo(String iTitle, String iErrInfo){
+  _reCheck() async{
+    Response res = await patch(url + "auth/request", headers: headers, body: json.encode(
+        {"LoginID":"suzuki001"}));
+  }
+
+  _outputInfo(String iTitle, String iInfo){
     Widget cancelButton = FlatButton(
       child: Text("OK"),
       onPressed:  () {Navigator.of(context).pop();},
     );
     AlertDialog alert = AlertDialog(
       title: Text(iTitle),
-      content: Text(iErrInfo),
+      content: Text(iInfo),
       actions: [
         cancelButton,
       ],
@@ -80,13 +78,15 @@ class _LoginViewState extends State<LoginView> {
       },
     );
   }
+
   @override
   // widgetの破棄時にコントローラも破棄する
   void dispose() {
-    loginIdController.dispose();
-    passwordController.dispose();
+    mailCodeController.dispose();
+    smsCodeController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -154,7 +154,7 @@ class _LoginViewState extends State<LoginView> {
                   Container(
                     width: size.width / 32 * 31,
                     height: maxHeight / 16,
-                    child: Text('marmoへようこそ', style: TextStyle(fontSize: 14),),
+                    child: Text('marmoへ登録', style: TextStyle(fontSize: 14),),
                   ),
                 ],
               ),
@@ -186,7 +186,7 @@ class _LoginViewState extends State<LoginView> {
                   Container(
                     width: size.width / 32 * 30,
                     height: maxHeight / 32,
-                    child: Text('ログインID', style: TextStyle(fontSize: 14),),
+                    child: Text('メールのコード', style: TextStyle(fontSize: 14),),
                   ),
                 ],
               ),
@@ -202,8 +202,8 @@ class _LoginViewState extends State<LoginView> {
                     width: size.width / 32 * 30,
                     height: maxHeight / 16,
                     child: TextField(
-                      controller: loginIdController,
-                      keyboardType: TextInputType.visiblePassword,  // 半角に制限のため
+                      controller: mailCodeController,
+                      keyboardType: TextInputType.visiblePassword,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -237,7 +237,7 @@ class _LoginViewState extends State<LoginView> {
                   Container(
                     width: size.width / 32 * 30,
                     height: maxHeight / 32,
-                    child: Text('パスワード', style: TextStyle(fontSize: 14),),
+                    child: Text('SMSのコード', style: TextStyle(fontSize: 14),),
                   ),
                 ],
               ),
@@ -253,8 +253,7 @@ class _LoginViewState extends State<LoginView> {
                     width: size.width / 32 * 30,
                     height: maxHeight / 16,
                     child: TextField(
-                      controller: passwordController,
-                      obscureText: !_checkBox1,
+                      controller: smsCodeController,
                       keyboardType: TextInputType.visiblePassword,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
@@ -274,46 +273,6 @@ class _LoginViewState extends State<LoginView> {
                 children: <Widget>[
                   Container( // 上下配置調整
                     width: size.width,
-                    height: maxHeight / 64,
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Container( // 左揃え用
-                    width: size.width / 32 * 1,
-                    height: maxHeight / 32,
-                  ),
-                  Container(
-                    width: size.width / 32 * 31,
-                    height: maxHeight / 32,
-                    child:
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Checkbox(
-                          value: _checkBox1,
-                          onChanged: (bool value) {
-                            this.setState((){
-                              _checkBox1 = value;
-                            });
-                          },
-                        ),
-                        Text("パスワードを表示"),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Container( // 上下配置調整
-                    width: size.width,
                     height: maxHeight / 32,
                   ),
                 ],
@@ -323,16 +282,18 @@ class _LoginViewState extends State<LoginView> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Container(
-                      width: size.width / 32 * 12,
+                      width: size.width / 32 * 10,
                       height: maxHeight / 16,
                       child: FlatButton(
-                        onPressed: _makePostRequest,
+                        onPressed: () {
+                          _reCheck();
+                        },
                         color: Colors.blue,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0)
                         ),
                         child: Text(
-                          'ログイン',
+                          '再発行',
                           style: TextStyle(
                               color:Colors.white,
                               fontSize: 20.0
@@ -340,81 +301,25 @@ class _LoginViewState extends State<LoginView> {
                         ),
                       )
                   ),
-                ],
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Container( // 上下配置調整
-                    width: size.width,
-                    height: maxHeight / 32,
+                  Container( // 左揃え用
+                    width: size.width / 32 * 1,
+                    height: maxHeight / 12,
                   ),
-                ],
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
                   Container(
-                    width: size.width,
-                    height: maxHeight / 64 *3,
-                    child: GestureDetector(
-                      onTap: () {
-                        //Navigator.pushNamed(context, "myRoute");
-                      },
-                      child: Text('ID・パスワードを忘れた方', style: TextStyle(fontSize: 14, color: Colors.blue), textAlign: TextAlign.center,),
-                    ),
-                  ),
-                ],
-              ),
-              Divider(
-                height: 0,
-                thickness: 2,
-                color: Colors.blue[50],
-                indent: size.width / 32 * 1,
-                endIndent: size.width / 32 * 1,
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Container( // 上下配置調整
-                    width: size.width,
-                    height: maxHeight / 64,
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    width: size.width,
-                    height: maxHeight / 64 *3,
-                    child: Text('新規ユーザー登録', style: TextStyle(fontSize: 14), textAlign: TextAlign.center,),
-                  ),
-                ],
-              ),
-
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                      width: size.width / 32 * 12,
+                      width: size.width / 32 * 10,
                       height: maxHeight / 16,
                       child: FlatButton(
                         onPressed: () {
-                          print( kToolbarHeight);
-                          Navigator.of(context).pushNamed('Register');
+                          _twiceCheck(
+                              mailCodeController.text,
+                              smsCodeController.text);
                         },
                         color: Colors.blue,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0)
                         ),
                         child: Text(
-                          '登録',
+                          '確認',
                           style: TextStyle(
                               color:Colors.white,
                               fontSize: 20.0
