@@ -19,7 +19,7 @@ class DeviceDBInfo {
     data['device_id'] = this.id;
     data['name'] = this.name;
     data['key'] = this.key;
-    data['key_date'] = this.key;
+    data['key_date'] = this.keyDate;
     data['username'] = this.userName;
     data['state'] = this.state;
     data['setting_count'] = this.count;
