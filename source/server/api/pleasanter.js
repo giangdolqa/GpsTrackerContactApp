@@ -176,6 +176,51 @@ exports.get_user = function(res, req){
 	});
 }
 
+//IDパスワード送信
+exports.send_idpassword = function(res, req){
+	request.post({
+		uri: URL + 'items/' + USER_TABLE + '/get',
+		headers: { "Content-type": "application/json;charset=utf-8" },
+		body: JSON.stringify({
+			ApiVersion: 1.1,
+			ApiKey: API_KEY,
+			Offset: 0,
+			View: {
+				ColumnFilterHash: {
+					ClassF: req.body.EmailAddress	// メールアドレス
+				}
+			}
+		})
+	}, function(error, response, body){
+		if (!error && response.statusCode === 200) {
+			const bodyJson = JSON.parse(body);
+			if (bodyJson.Response.TotalCount <= 0){
+				res.statusCode = 400;
+				res.json({Error, Message : 'Not record' });
+				return;
+			}
+			var count = 0;
+			bodyJson.Response.Data.forEach(data => {
+				if(data.ClassHash.ClassF !== req.body.EmailAddress)
+					return;
+				count++;
+				//IDパスワードを送信する
+				mail.send_idpassword(data.ClassHash.ClassF, data.ClassHash.ClassG, decryptBase64(data.ClassHash.ClassH));
+				res.sendStatus(200);
+			});
+			if(!count){
+				res.statusCode = 400;
+				res.json({Error, Message : 'Not record' });
+				return;
+			}
+		}
+		else{
+			res.statusCode = response.statusCode;
+			res.json({Error, Message : response.Message });
+		}
+	});
+}
+
 //ユーザ情報削除
 exports.delete_user = function(res, req){
 	request.post({

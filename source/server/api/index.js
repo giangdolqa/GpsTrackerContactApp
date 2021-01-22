@@ -41,6 +41,11 @@ app.get(api_ver + 'user', (res, req) =>{
 	pleasanter.get_user(req, res);
 });
 
+//GET IDパスワード送信
+app.get(api_ver + 'idpassword', (res, req) =>{
+	pleasanter.send_idpassword(req, res);
+});
+
 //DELETE ユーザ情報削除
 app.delete(api_ver + 'user', (res, req) => {
 	pleasanter.delete_user(req, res);

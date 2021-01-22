@@ -55,3 +55,44 @@ exports.send = (toaddress, passwd, willsend) => {
 		}
 	})();
 }
+
+//
+// メールの送信(IDパスワード送信)
+//
+exports.send_idpassword = (toaddress, loginID, passwd, willsend) => {
+	if(willsend === false)
+		return;
+
+	// メールメッセージ
+	let mailOptions = {
+		from: 'support@marmo.sakura.ne.jp', // 送信元メールアドレス
+		to: '', // 送信先メールアドレス
+		subject: '[marmo]ログインIDおよびパスワードの送信',
+		text: '',
+	};
+	mailOptions.to = toaddress;
+	mailOptions.text = 'marmoをご利用いただきありがとうございます。\n\n';
+	mailOptions.text += `ログインIDおよびパスワードを送信いたします。\n\n`;
+	mailOptions.text += `ログインID：${loginID}\n\n`;
+	mailOptions.text += `パスワード：${passwd}\n\n`;
+	mailOptions.text += '今後ともmarmoをよろしくお願いいたします。\n\n';
+	mailOptions.text += '──────────────────────────────────';
+
+	// メール送信
+	return (async () => {
+		const result = await transporter.sendMail(mailOptions).then(info => {
+			return {
+				flag: true,
+				data: info
+			};
+		}).catch(error => {
+			return {
+				flag: false,
+				data: error
+			};
+		});
+		if (!result.flag) {
+			console.log(result.data.stack);// メール送信失敗時のスタックトレース
+		}
+	})();
+}
