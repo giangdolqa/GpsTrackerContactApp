@@ -4,9 +4,10 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:app_settings/app_settings.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:marmo/beans/device_dbInfo.dart';
 import 'package:marmo/beans/device_info.dart';
@@ -42,11 +43,9 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
   final _codeFormat = new NumberFormat("00000", "en_US");
 
   final String server = "ik1-407-35954.vs.sakura.ne.jp:3000/api/v1";
-  final String apiKey =
-      "56161eb08314a9b7e5b49f85de53df6d8613f6f96da898dbecf179a8fed7243e8cb803295b6b3c36c359ee184f62f378961ee7877c8e2ae02bd8ce8187605cad";
-  final String idColumn = "ID";
-  final String loginIDColumn = "LoginID";
-  final String keyColumn = "Key";
+  final String idKey = "ID";
+  final String loginIDKey = "LoginID";
+  final String keyKey = "Key";
 
   @override
   void initState() {
@@ -478,16 +477,16 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
           if (deviceInfo.count == 0) {
             String url = 'http://' + server + '/device';
             Map<String, String> headers = {"Content-type": "application/json"};
-            var pleasanterJson = {
-              idColumn: deviceID,
-              loginIDColumn: username,
-              keyColumn: result.key
+            var apiJson = {
+              idKey: deviceID,
+              loginIDKey: username,
+              keyKey: result.key
             };
-            Response response = await post(url,
-                headers: headers, body: json.encode(pleasanterJson));
+            http.Response response = await http.post(url,
+                headers: headers, body: json.encode(apiJson));
             if (response.statusCode == 200) {
               var dbResult = json.decode(response.body);
-              password = dbResult['Response']['TemporaryPassword'];
+              password = dbResult['TemporaryPassword'];
               temp.count = 1;
               temp.password = password;
               marmoDB.insertDeviceDBInfo(temp);
@@ -523,9 +522,18 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
   }
 
   void _deviceDelete(DeviceInfo deviceInfo) async {
-    String url = 'http://' + server + '/device/' + deviceInfo.deviceDB.id;
+    String url = 'http://' + server + '/device';
     Map<String, String> headers = {"Content-type": "application/json"};
-    Response response = await delete(url, headers: headers);
+    var apiJson = {
+      idKey: deviceInfo.deviceDB.id
+    };
+    Dio dio = new Dio();
+    Response response = await dio.request(url,
+        data: json.encode(apiJson), // httpのbody
+        options: new Options(
+          method: 'delete',
+          headers: headers
+        ));
     if (response.statusCode == 200) {
       marmoDB.deleteDeviceDBInfo(deviceInfo.deviceDB.id);
       Navigator.of(context).pushNamed('Setting');

@@ -66,10 +66,8 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
 
   String validDays = '';
   final String server = "ik1-407-35954.vs.sakura.ne.jp:3000/api/v1";
-  final String apiKey =
-      "56161eb08314a9b7e5b49f85de53df6d8613f6f96da898dbecf179a8fed7243e8cb803295b6b3c36c359ee184f62f378961ee7877c8e2ae02bd8ce8187605cad";
-  final String idColumn = "ID";
-  final String authCodeColumn = "AuthCode";
+  final String idKey = "ID";
+  final String authCodeKey = "AuthCode";
 
   @override
   void initState() {
@@ -131,11 +129,18 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
 
   bool _isAdult(DateTime dateTime) {
     DateTime nowDate = DateTime.now();
-    var difference = nowDate.difference(dateTime);
-    if (difference.inDays > 4745) {
-      return true;
-    } else {
+    int birthYear = dateTime.year;
+    int nowYear = nowDate.year;
+    String birthMonthDay = NumberFormat("00", "en_US").format(dateTime.month) + NumberFormat("00", "en_US").format(dateTime.day);
+    String nowMonthDay = NumberFormat("00", "en_US").format(nowDate.month) + NumberFormat("00", "en_US").format(nowDate.day);
+    int age = nowYear - birthYear;
+    if (Comparable.compare(nowMonthDay, birthMonthDay) < 0) {
+      age = age - 1;
+    }
+    if (age < 18) {
       return false;
+    } else {
+      return true;
     }
   }
 
@@ -272,16 +277,16 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
       String authCode = await spUtil.GetAuthCode();
       String url = 'http://' + server + '/device/code/apply';
       Map<String, String> headers = {"Content-type": "application/json"};
-      var pleasanterJson = {
-        idColumn: deviceId,
-        authCodeColumn: authCode
+      var apiJson = {
+        idKey: deviceId,
+        authCodeKey: authCode
       };
 
       Response response =
-          await patch(url, headers: headers, body: json.encode(pleasanterJson));
+          await patch(url, headers: headers, body: json.encode(apiJson));
       if (response.statusCode == 200) {
         var dbResult = json.decode(response.body);
-        int validDay = int.parse(dbResult['Response']['ValidDays']);
+        int validDay = int.parse(dbResult['ValidDays']);
         String temp = DateFormat('yyyy年MM月dd日')
             .format(DateTime.now().add(new Duration(days: validDay)));
         setState(() {
