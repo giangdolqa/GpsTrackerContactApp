@@ -155,3 +155,9 @@ app.patch(api_ver + 'auth/request/mail', (res, req) => {
 app.patch(api_ver + 'auth/verify/mail', (res, req) => {
 	pleasanter.verify_auth_mail(req, res);
 });
+
+//GET テスト
+app.get(api_ver + 'test', (res, req) => {
+	pleasanter.get_test(req, res);
+});
+
