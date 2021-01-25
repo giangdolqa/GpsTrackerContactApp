@@ -286,7 +286,7 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
           await patch(url, headers: headers, body: json.encode(apiJson));
       if (response.statusCode == 200) {
         var dbResult = json.decode(response.body);
-        int validDay = int.parse(dbResult['ValidDays']);
+        int validDay = dbResult['ValidDays'];
         String temp = DateFormat('yyyy年MM月dd日')
             .format(DateTime.now().add(new Duration(days: validDay)));
         setState(() {
