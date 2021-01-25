@@ -1143,7 +1143,9 @@ exports.create_positive = function(res, req){
 									ApiVersion: 1.1,
 									ApiKey: API_KEY,
 									ClassHash: {
-										ClassA: RPI		// RPI
+										ClassA: RPI,				// RPI
+										ClassB: req.body.LoginID,	// ログインID
+										ClassC: req.body.ID			// デバイスID
 									},
 									DateHash: {
 										DateA: get_datetime_string(data.Time)		// 日時
@@ -1264,7 +1266,9 @@ exports.create_contact = function(res, req){
 									ApiVersion: 1.1,
 									ApiKey: API_KEY,
 									ClassHash: {
-										ClassA: RPI		// RPI
+										ClassA: RPI,				// RPI
+										ClassB: req.body.LoginID,	// ログインID
+										ClassC: req.body.ID			// デバイスID
 									},
 									DateHash: {
 										DateA: get_datetime_string(data.Time)		// 日時
@@ -1874,3 +1878,10 @@ var decryptBase64 = function(data) {
 	// 末端処理 ＆ バイナリを文字列に戻す
 	return Buffer.concat([decryptData, decipher.final()]).toString('utf8');
 }
+
+//テスト
+exports.get_test = function(res, req){
+	req.body['test'] = 'test';
+	res.json(req.body);
+}
+

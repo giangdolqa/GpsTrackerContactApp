@@ -1,0 +1,15 @@
+ik1-407-35954.vs.sakura.ne.jp
+
+root		y+UqTkeQWh_v
+
+gpstracker	-N%3P5gpWvQKXW#
+
+postgres	AtQMGJnZ%t2UpAc
+
+Node-RED	id:aislesoft_gpstracker	pw:d36Dxv$m8K4vbbf
+
+Pleasanter	qKZa(LS4z|a(
+
+OpenSSL		password	j.KD&XX+sCmbGNj		challenge password ic5.pq!r&!2(Sad
+
+Mail		support@marmo.sakura.ne.jp		KAvr9xREG7PbUmX
