@@ -1,12 +1,10 @@
 // 通常情報
 import 'dart:convert';
 
-import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:marmo/beans/device_dbInfo.dart';
 import 'package:marmo/utils/crypt_util.dart';
 import 'package:marmo/utils/db_util.dart';
-import 'package:marmo/utils/mqtt_util.dart';
 import 'package:toast/toast.dart';
 
 class NormalInfo {
@@ -25,25 +23,7 @@ class NormalInfo {
       String jsonString, String deviceName, BuildContext context) async {
     JsonDecoder jd = new JsonDecoder();
     DeviceDBInfo deviceInfo = new DeviceDBInfo();
-    try {
-      deviceInfo = await marmoDB.getDeviceDBInfoByDeviceName(deviceName);
-      String nowDate = formatDate(DateTime.now(), [yyyy, mm, dd]);
-      if (deviceInfo.keyDate != nowDate) {
-        await mqttUtil.getEncryptKey(deviceInfo.name);
-        deviceInfo = await marmoDB.getDeviceDBInfoByDeviceName(deviceName);
-        if (deviceInfo.key == null) {
-          print("marmo:: Encrypt key fetch failed");
-          return false;
-        } else if (deviceInfo.keyDate != nowDate) {
-          print("marmo:: Encrypt key fetch failed");
-          return false;
-        }
-      }
-    } catch (e) {
-      print("marmo:: jsonToNormalinfo failed $e");
-      return false;
-    }
-
+    deviceInfo = await marmoDB.getDeviceDBInfoByDeviceName(deviceName);
     try {
       Map<String, dynamic> tmpMap = jd.convert(jsonString);
       latNoSec = tmpMap['Lat no sec'];

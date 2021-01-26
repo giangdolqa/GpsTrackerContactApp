@@ -14,6 +14,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_controller/google_maps_controller.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:marmo/beans/alarm_info.dart';
+import 'package:marmo/beans/alarm_stop_info.dart';
 import 'package:marmo/beans/normal_info.dart';
 import 'package:marmo/components/my_popup_menu.dart' as mypopup;
 import 'package:marmo/utils/event_util.dart';
@@ -37,9 +38,12 @@ void callbackDispatcher() {
         "WorkManager Executed !!  Native called background task: $inputData"); //simpleTask will be emitted here.
     MqttUtil tmpMqttUtil = new MqttUtil();
     // 緊急情報購読
-    await tmpMqttUtil.getAllDeviceAlarmInfo();
+    await tmpMqttUtil.getSurroundingAlarmInfo();
 
-    // TODO:
+    // TODO: TEK/ENIN情報、RPI/AEM情報の生成
+
+    // TODO: セントラルのスキャン、ペリフェラルのアドバタイズが常駐処理
+
     print(
         "WorkManager Done !!  Native called background task: $inputData"); //simpleTask will be emitted here.
     return Future.value(true);
@@ -57,7 +61,8 @@ class HomeViewState extends State<HomeView>
   static final CameraPosition _kTokyo =
       CameraPosition(target: LatLng(35.69, 139.69), zoom: 14);
 
-  Timer myTimer;
+  Timer routeTimer;
+  Timer positionTimer;
 
   WidgetsBinding widgetsBinding;
   Color _statusbarColor = Colors.white;
@@ -84,9 +89,21 @@ class HomeViewState extends State<HomeView>
     mqttUtil.subScribePositionByDeviceName();
 
     // 緊急通知処理登録
-    eventBus.on<AlarmInfo>().listen((event) {
+    eventBus.on<List<AlarmInfo>>().listen((event) {
       if (mounted) {
-        _addAlarmCustomMarker(event);
+        for (var ai in event) {
+          // 通知された緊急情報を表示
+          _addAlarmCustomMarker(ai);
+          // 停止通信を購読
+        }
+        _checkAlarmInfo();
+      }
+    });
+    // 緊急通知停止処理登録
+    eventBus.on<AlarmStopInfo>().listen((event) {
+      MarkerId stopId = MarkerId(event.deviceName);
+      if (markers.containsKey(stopId)) {
+        _delMarker(stopId);
       }
     });
     // 一般通知処理登録
@@ -102,6 +119,7 @@ class HomeViewState extends State<HomeView>
     const oneHour = const Duration(hours: 1);
     var callback = (timer) {
       if (DateTime.now().hour - routeTime.hour >= 24) {
+        routeTime = DateTime.now();
         if (mounted) {
           setState(() {
             polylines.clear();
@@ -110,15 +128,15 @@ class HomeViewState extends State<HomeView>
         }
       }
     };
-    myTimer = Timer.periodic(oneHour, callback);
+    routeTimer = Timer.periodic(oneHour, callback);
   }
 
   // 画面破棄
   @override
   void dispose() {
     positionUtil.stopListening(context);
-    if (myTimer != null) {
-      myTimer.cancel();
+    if (routeTimer != null) {
+      routeTimer.cancel();
     }
     super.dispose();
   }
@@ -138,41 +156,16 @@ class HomeViewState extends State<HomeView>
   bool sliderVisible = false;
   DateTime routeTime;
 
-  // 緊急メッセージ＆マーカー追加
-  void addAlarm(AlarmInfo ai) async {
-    // マーカー更新
-    MarkerId markerId = new MarkerId(nuid.next());
-    BitmapDescriptor markerIcon = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(size: Size(20, 20)), 'assets/icon/help.png');
-    Position currentLocation = await geolocator.getCurrentPosition();
-    Marker tmpMarker = Marker(
-      markerId: markerId,
-      // icon: Icon(Icons.location_pin),
-      icon: markerIcon,
-      anchor: Offset(0.5, 1),
-      onTap: () {
-        CameraUpdate cameraUpdate = CameraUpdate.newLatLngZoom(
-            LatLng(currentLocation.latitude, currentLocation.longitude), 22);
-        googleMapController.moveCamera(cameraUpdate);
-        // _onMarkerTapped(markerId);
-      },
-      position: LatLng(ai.position.latitude, ai.position.longitude),
-    );
-    markers[markerId] = tmpMarker;
-
-    // メッセージ更新
-    String alarmMessage = _makeAlarmMessage(ai);
-    messageMap[markerId] = alarmMessage;
-
-    setState(() {
-      markersSet = markers.values;
-      alarmText = _concactAlarmMessage(messageMap.values);
-    });
+  // Mqtt通知のない緊急情報を削除
+  void _checkAlarmInfo() async {
+    for (var ai in markers.keys) {
+      mqttUtil.getAlarmStop(ai.value);
+    }
   }
 
   // 緊急メッセージ＆マーカー追加
   void _addAlarmCustomMarker(AlarmInfo ai) async {
-    MarkerId markerId = new MarkerId(nuid.next());
+    MarkerId markerId = new MarkerId(ai.deviceName);
 
     // avatar
     final bytes = await rootBundle.load('assets/icon/help.png');
@@ -294,10 +287,7 @@ class HomeViewState extends State<HomeView>
   }
 
   // 緊急メッセージ＆マーカー削除
-  void deleteAlarm(String alarmMessage, Position alarmPosition) async {}
-
-  // 押下した緊急マーカーを削除
-  _onMarkerTapped(MarkerId markerId) {
+  _delMarker(MarkerId markerId) {
     markers.remove(markerId);
     messageMap.remove(markerId);
     setState(() {

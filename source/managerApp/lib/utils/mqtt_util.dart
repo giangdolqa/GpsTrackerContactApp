@@ -4,6 +4,8 @@ import 'dart:io';
 
 import 'package:date_format/date_format.dart';
 import 'package:flutter/services.dart';
+import 'package:marmo/beans/alarm_info.dart';
+import 'package:marmo/beans/alarm_stop_info.dart';
 import 'package:marmo/beans/device_dbInfo.dart';
 import 'package:marmo/beans/key_info.dart';
 import 'package:marmo/beans/normal_info.dart';
@@ -56,8 +58,8 @@ class MqttUtil {
 
     String username = await spUtil.GetUsername();
     String password = await spUtil.GetPassword();
-    // username = "テスト";
-    // password = "test";
+    username = "TEST";
+    password = "test";
 
     /// Create a connection message to use or use the default one. The default one sets the
     /// client identifier, any supplied username/password, the default keepalive interval(60s)
@@ -114,55 +116,22 @@ class MqttUtil {
     print('marmo::Ping response client callback invoked');
   }
 
-  // デバイス暗号キー配信
-  Future<void> getEncryptKey(String deviceName) async {
+  // デバイス暗号キー配信 & 位置情報取得
+  void subScribePositionByDeviceName() async {
     if (client.connectionStatus.state == MqttConnectionState.disconnected) {
       await connect();
     }
-    String topic = deviceName + "/key/#";
-    client.subscribe(topic, MqttQos.exactlyOnce);
-    final topicFilter = MqttClientTopicFilter(topic, client.updates);
-    // Now listen on the filtered updates, not the client updates
-    // ignore: avoid_types_on_closure_parameters
-    topicFilter.updates
-        .listen((List<MqttReceivedMessage<MqttMessage>> c) async {
-      final MqttPublishMessage recMess = c[0].payload;
-      final pt =
-          MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
-      KeyInfo ki = new KeyInfo();
-      final rslt = await ki.jsonToKeyInfo(pt, null);
-      if (rslt != null) {
-        String jsonKey = rslt.key;
-        String keyHeader = ki.getHashedKey(c[0].topic);
-        if (jsonKey.startsWith(keyHeader)) {
-          // DB に保存
-          DeviceDBInfo dbInfo = new DeviceDBInfo();
-          dbInfo = await marmoDB.getDeviceDBInfoByDeviceName(deviceName);
-          dbInfo.key = jsonKey.substring(keyHeader.length - 1);
-          dbInfo.keyDate = formatDate(DateTime.now(), [yyyy, mm, dd]);
-          marmoDB.updateDeviceDBInfoByName(dbInfo);
-        } else {
-          // Do nothing
-        }
-      }
-      print(
-          'marmo:: Mqtt normal info :: topic is <${c[0].topic}>, payload is <-- $pt -->');
-    });
-    return null;
-  }
-
-  void subScribePositionByDeviceName() async {
-    connect().then((value) async {
-      List<DeviceDBInfo> deviceList = await marmoDB.getDeviceDBInfoList();
-      for (DeviceDBInfo deviceInfo in deviceList) {
-        await _getPosistionByDeviceName(deviceInfo.name);
-      }
-    });
+    List<DeviceDBInfo> deviceList = await marmoDB.getDeviceDBInfoList();
+    for (DeviceDBInfo deviceInfo in deviceList) {
+      await _getPosistionByDeviceNameAndKey(deviceInfo.name);
+    }
   }
 
   // 緯度経度がデバイスから配信
-  _getPosistionByDeviceName(String deviceName) async {
+  _getPosistionByDeviceNameAndKey(String deviceName) async {
     String topic = deviceName + "/#";
+    // client.subscribe(topic, MqttQos.atMostOnce);
+    // 0 （購読topicがデバイス暗号配信と同じため、購読側はQoS 2とする）
     client.subscribe(topic, MqttQos.exactlyOnce);
 
     // 通常デバイス情報登録
@@ -174,25 +143,46 @@ class MqttUtil {
       final MqttPublishMessage recMess = c[0].payload;
       final pt =
           MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
-      NormalInfo pi = new NormalInfo();
-      final rslt = await pi.jsonToNormalinfo(pt, deviceName, null);
-      if (rslt) {
-        eventBus.fire(pi);
+      final String topic = c[0].topic;
+      final String subTopic = topic.split("/")[1];
+      if (subTopic == "key") {
+        // デバイス暗号配信購読処理
+        KeyInfo ki = new KeyInfo();
+        final rslt = await ki.jsonToKeyInfo(pt, null);
+        if (rslt != null) {
+          String jsonKey = rslt.key;
+          String keyHeader = ki.getHashedKey(c[0].topic);
+          if (jsonKey.startsWith(keyHeader)) {
+            // DB に保存
+            DeviceDBInfo dbInfo = new DeviceDBInfo();
+            dbInfo = await marmoDB.getDeviceDBInfoByDeviceName(deviceName);
+            dbInfo.key = jsonKey.substring(keyHeader.length - 1);
+            dbInfo.keyDate = formatDate(DateTime.now(), [yyyy, mm, dd]);
+            marmoDB.updateDeviceDBInfoByName(dbInfo);
+          } else {
+            // Do nothing
+          }
+        } else {
+          //
+        }
+      } else {
+        // デバイス情報配信 購読処理
+        NormalInfo pi = new NormalInfo();
+        final rslt = await pi.jsonToNormalinfo(pt, deviceName, null);
+        if (rslt) {
+          eventBus.fire(pi);
+        }
+        print(
+            'marmo:: Mqtt normal info :: topic is <${c[0].topic}>, payload is <-- $pt -->');
       }
-      print(
-          'marmo:: Mqtt normal info :: topic is <${c[0].topic}>, payload is <-- $pt -->');
     });
   }
 
-  // デバイス毎に緊急通知購読
-  getAllDeviceAlarmInfo() async {
-    await connect();
-    await getSurroundingUserInfo();
-    // getSurroundingUserInfo();
-  }
-
 // 緊急通知取得
-  getSurroundingUserInfo() async {
+  getSurroundingAlarmInfo() async {
+    if (client.connectionStatus.state == MqttConnectionState.disconnected) {
+      await connect();
+    }
     globalTempPos = await geolocator.getCurrentPosition();
     if (globalTempPos == null) {
       return null;
@@ -287,7 +277,7 @@ class MqttUtil {
 
     // 購読実行
     latlngList.forEach((latlngMapItem) {
-      String topic = "/emg/" +
+      String topic = "+/emg/" +
           latlngMapItem["latitude"] +
           "/" +
           latlngMapItem["longitude"];
@@ -295,16 +285,52 @@ class MqttUtil {
     });
 
     // 緊急通知処理登録
-    final topicFilter = MqttClientTopicFilter('/emg/#', client.updates);
-    var list = await topicFilter.updates.first;
-    final MqttPublishMessage recMess = list[0].payload;
-    String pt =
-        MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
-    // TODO: ローカルプッシュ & プッシュpayloadでAlarmInfoを作成＆fire (下記コメント参照
-    // AlarmInfo ai = new AlarmInfo();
-    // ai.jsonStrToAlarminfo(pt, null);
-    // eventBus.fire(ai);
-    print(
-        'marmo:: Mqtt alarm info :: topic is <${list[0].topic}>, payload is <-- $pt -->');
+
+    List<AlarmInfo> alarmList = [];
+    final topicFilter = MqttClientTopicFilter('+/emg/#', client.updates);
+    var list = await topicFilter.updates.toList();
+    for (var mqttMessage in list) {
+      String deviceName = mqttMessage[0].topic.split("/")[0];
+      final MqttPublishMessage recMess = mqttMessage[0].payload;
+      String pt =
+          MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+      // TODO: ローカルプッシュ & プッシュpayloadでAlarmInfoのListを作成 (下記コメント参照
+      // DEBUG -S-
+      // AlarmInfo ai = new AlarmInfo();
+      // try {
+      //   ai.jsonStrToAlarminfo(pt, null);
+      //   ai.deviceName = deviceName;
+      //   alarmList.add(ai);
+      // } catch (e) {
+      //   print("marmo:: Mqtt alarm item unrecognized :: $e ");
+      // }
+      // DEBUG -E-
+      print(
+          'marmo:: Mqtt alarm info :: topic is <${mqttMessage[0].topic}>, payload is <-- $pt -->');
+    }
+    // TODO: ローカルプッシュ & プッシュpayloadでAlarmInfoのListをfire (下記コメント参照
+    // DEBUG -S-
+    // eventBus.fire(alarmList);
+    // DEBUG -E-
+  }
+
+  // 緊急通知停止取得
+  getAlarmStop(String deviceName) async {
+    if (client.connectionStatus.state == MqttConnectionState.disconnected) {
+      await connect();
+    }
+    String topic = deviceName + "/emg/stop";
+    client.subscribe(topic, MqttQos.exactlyOnce);
+
+    // 通常デバイス情報登録
+    final topicFilter = MqttClientTopicFilter(topic, client.updates);
+    // Now listen on the filtered updates, not the client updates
+    // ignore: avoid_types_on_closure_parameters
+    topicFilter.updates
+        .listen((List<MqttReceivedMessage<MqttMessage>> c) async {
+      AlarmStopInfo asi = new AlarmStopInfo();
+      asi.deviceName = deviceName;
+      eventBus.fire(asi);
+    });
   }
 }

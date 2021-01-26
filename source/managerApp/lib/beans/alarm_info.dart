@@ -11,8 +11,9 @@ class AlarmInfo {
   num Lat; // 経度
   num Lng; // 緯度
   Position position; //　位置
+  String deviceName;
 
-  AlarmInfo jsonStrToAlarminfo(String jsonString, BuildContext context) {
+  void jsonStrToAlarminfo(String jsonString, BuildContext context) {
     JsonDecoder jd = new JsonDecoder();
     try {
       Map<String, dynamic> tmpMap = jd.convert(jsonString);
@@ -25,7 +26,7 @@ class AlarmInfo {
       if (context != null) {
         Toast.show("データ転換失敗: " + e.toString(), context);
       }
-      return null;
+      throw e;
     }
   }
 }
