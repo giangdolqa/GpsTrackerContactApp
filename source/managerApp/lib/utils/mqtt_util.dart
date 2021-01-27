@@ -1,16 +1,18 @@
 // Mqtt通信ツール
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:date_format/date_format.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:marmo/beans/alarm_info.dart';
-import 'package:marmo/beans/alarm_stop_info.dart';
 import 'package:marmo/beans/device_dbInfo.dart';
 import 'package:marmo/beans/key_info.dart';
 import 'package:marmo/beans/normal_info.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
+import 'package:toast/toast.dart';
 
 import 'db_util.dart';
 import 'event_util.dart';
@@ -117,13 +119,18 @@ class MqttUtil {
   }
 
   // デバイス暗号キー配信 & 位置情報取得
-  void subScribePositionByDeviceName() async {
+  void subScribePositionByDeviceName(BuildContext context) async {
     if (client.connectionStatus.state == MqttConnectionState.disconnected) {
       await connect();
     }
-    List<DeviceDBInfo> deviceList = await marmoDB.getDeviceDBInfoList();
-    for (DeviceDBInfo deviceInfo in deviceList) {
-      await _getPosistionByDeviceNameAndKey(deviceInfo.name);
+    // 接続成功時のみ続行
+    if (client.connectionStatus.state == MqttConnectionState.connected) {
+      List<DeviceDBInfo> deviceList = await marmoDB.getDeviceDBInfoList();
+      for (DeviceDBInfo deviceInfo in deviceList) {
+        await _getPosistionByDeviceNameAndKey(deviceInfo.name);
+      }
+    } else {
+      Toast.show("Mqttサーバーと接続失敗しました。", context);
     }
   }
 
@@ -157,6 +164,7 @@ class MqttUtil {
             DeviceDBInfo dbInfo = new DeviceDBInfo();
             dbInfo = await marmoDB.getDeviceDBInfoByDeviceName(deviceName);
             dbInfo.key = jsonKey.substring(keyHeader.length - 1);
+            dbInfo.keyRule = json.encoder.convert(ki.name); // Serialize
             dbInfo.keyDate = formatDate(DateTime.now(), [yyyy, mm, dd]);
             marmoDB.updateDeviceDBInfoByName(dbInfo);
           } else {
@@ -179,158 +187,180 @@ class MqttUtil {
   }
 
 // 緊急通知取得
-  getSurroundingAlarmInfo() async {
+  getSurroundingAlarmInfo(BuildContext context) async {
     if (client.connectionStatus.state == MqttConnectionState.disconnected) {
       await connect();
     }
-    globalTempPos = await geolocator.getCurrentPosition();
-    if (globalTempPos == null) {
-      return null;
+
+    // 接続成功時のみ続行
+    if (client.connectionStatus.state == MqttConnectionState.connected) {
+      globalTempPos = await geolocator.getCurrentPosition();
+      if (globalTempPos == null) {
+        return null;
+      }
+      double latitudeIn10Secs = globalTempPos.latitude * 60 * 60 / 10;
+      double longitudeIn10Secs = globalTempPos.longitude * 60 * 60 / 10;
+
+      // スマートフォンでは、自分の緯度経度から前後10秒の緯度経度の配信を購読できるようにする。
+      // 	+/emg/10秒単位の緯度/10秒単位の経度
+      // TopicList作成
+      List<Map> latlngList = [];
+
+      String latitude = latitudeIn10Secs.toString();
+      String longitude = longitudeIn10Secs.toString();
+      Map latlngMap = {
+        "latitude": latitude,
+        "longitude": longitude,
+      };
+      latlngList.add(latlngMap);
+
+      // 	+/emg/10秒単位の緯度/10秒単位の経度-1
+      latitude = latitudeIn10Secs.toString();
+      longitude = (longitudeIn10Secs - 1).toString();
+      latlngMap = {
+        "latitude": latitude,
+        "longitude": longitude,
+      };
+      latlngList.add(latlngMap);
+
+      // 	+/emg/10秒単位の緯度/10秒単位の経度+1
+      latitude = latitudeIn10Secs.toString();
+      longitude = (longitudeIn10Secs + 1).toString();
+      latlngMap = {
+        "latitude": latitude,
+        "longitude": longitude,
+      };
+      latlngList.add(latlngMap);
+
+      // 	+/emg/10秒単位の緯度-1/10秒単位の経度
+      latitude = (latitudeIn10Secs - 1).toString();
+      longitude = longitudeIn10Secs.toString();
+      latlngMap = {
+        "latitude": latitude,
+        "longitude": longitude,
+      };
+      latlngList.add(latlngMap);
+
+      // 	+/emg/10秒単位の緯度-1/10秒単位の経度-1
+      latitude = (latitudeIn10Secs - 1).toString();
+      longitude = (longitudeIn10Secs - 1).toString();
+      latlngMap = {
+        "latitude": latitude,
+        "longitude": longitude,
+      };
+      latlngList.add(latlngMap);
+
+      // 	+/emg/10秒単位の緯度-1/10秒単位の経度+1
+      latitude = (latitudeIn10Secs - 1).toString();
+      longitude = (longitudeIn10Secs + 1).toString();
+      latlngMap = {
+        "latitude": latitude,
+        "longitude": longitude,
+      };
+      latlngList.add(latlngMap);
+
+      // 	+/emg/10秒単位の緯度+1/10秒単位の経度
+      latitude = (latitudeIn10Secs + 1).toString();
+      longitude = (longitudeIn10Secs).toString();
+      latlngMap = {
+        "latitude": latitude,
+        "longitude": longitude,
+      };
+      latlngList.add(latlngMap);
+
+      // 	+/emg/10秒単位の緯度+1/10秒単位の経度-1
+      latitude = (latitudeIn10Secs + 1).toString();
+      longitude = (longitudeIn10Secs - 1).toString();
+      latlngMap = {
+        "latitude": latitude,
+        "longitude": longitude,
+      };
+      latlngList.add(latlngMap);
+
+      // 	+/emg/10秒単位の緯度+1/10秒単位の経度+1
+      latitude = (latitudeIn10Secs + 1).toString();
+      longitude = (longitudeIn10Secs + 1).toString();
+      latlngMap = {
+        "latitude": latitude,
+        "longitude": longitude,
+      };
+      latlngList.add(latlngMap);
+
+      // 購読実行
+      latlngList.forEach((latlngMapItem) {
+        String topic = "+/emg/" +
+            latlngMapItem["latitude"] +
+            "/" +
+            latlngMapItem["longitude"];
+        client.subscribe(topic, MqttQos.exactlyOnce);
+      });
+
+      // 緊急通知処理登録
+
+      final topicFilter = MqttClientTopicFilter('+/emg/#', client.updates);
+      topicFilter.updates.listen((mqttMessage) {
+        String deviceName = mqttMessage[0].topic.split("/")[0];
+        final MqttPublishMessage recMess = mqttMessage[0].payload;
+        String pt =
+            MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+        // TODO: ローカルプッシュ & プッシュpayloadでAlarmInfoのListを作成 (下記コメント参照
+        // DEBUG -S-
+        // List<AlarmInfo> alarmList = [];
+        // AlarmInfo ai = new AlarmInfo();
+        // try {
+        //   ai.jsonStrToAlarminfo(pt, null);
+        //   ai.deviceName = deviceName;
+        //   alarmList.add(ai);
+        // } catch (e) {
+        //   print("marmo:: Mqtt alarm item unrecognized :: $e ");
+        // }
+        // print(
+        //     'marmo:: Mqtt alarm info :: topic is <${mqttMessage[0].topic}>, payload is <-- $pt -->');
+        // eventBus.fire(alarmList);
+        // DEBUG -E-
+      });
+    } else {
+      if (context != null) {
+        Toast.show("Mqttサーバーと接続失敗しました。", context);
+      }
     }
-    double latitudeIn10Secs = globalTempPos.latitude * 60 * 60 / 10;
-    double longitudeIn10Secs = globalTempPos.longitude * 60 * 60 / 10;
-
-    // スマートフォンでは、自分の緯度経度から前後10秒の緯度経度の配信を購読できるようにする。
-    // 	+/emg/10秒単位の緯度/10秒単位の経度
-    // TopicList作成
-    List<Map> latlngList = [];
-
-    String latitude = latitudeIn10Secs.toString();
-    String longitude = longitudeIn10Secs.toString();
-    Map latlngMap = {
-      "latitude": latitude,
-      "longitude": longitude,
-    };
-    latlngList.add(latlngMap);
-
-    // 	+/emg/10秒単位の緯度/10秒単位の経度-1
-    latitude = latitudeIn10Secs.toString();
-    longitude = (longitudeIn10Secs - 1).toString();
-    latlngMap = {
-      "latitude": latitude,
-      "longitude": longitude,
-    };
-    latlngList.add(latlngMap);
-
-    // 	+/emg/10秒単位の緯度/10秒単位の経度+1
-    latitude = latitudeIn10Secs.toString();
-    longitude = (longitudeIn10Secs + 1).toString();
-    latlngMap = {
-      "latitude": latitude,
-      "longitude": longitude,
-    };
-    latlngList.add(latlngMap);
-
-    // 	+/emg/10秒単位の緯度-1/10秒単位の経度
-    latitude = (latitudeIn10Secs - 1).toString();
-    longitude = longitudeIn10Secs.toString();
-    latlngMap = {
-      "latitude": latitude,
-      "longitude": longitude,
-    };
-    latlngList.add(latlngMap);
-
-    // 	+/emg/10秒単位の緯度-1/10秒単位の経度-1
-    latitude = (latitudeIn10Secs - 1).toString();
-    longitude = (longitudeIn10Secs - 1).toString();
-    latlngMap = {
-      "latitude": latitude,
-      "longitude": longitude,
-    };
-    latlngList.add(latlngMap);
-
-    // 	+/emg/10秒単位の緯度-1/10秒単位の経度+1
-    latitude = (latitudeIn10Secs - 1).toString();
-    longitude = (longitudeIn10Secs + 1).toString();
-    latlngMap = {
-      "latitude": latitude,
-      "longitude": longitude,
-    };
-    latlngList.add(latlngMap);
-
-    // 	+/emg/10秒単位の緯度+1/10秒単位の経度
-    latitude = (latitudeIn10Secs + 1).toString();
-    longitude = (longitudeIn10Secs).toString();
-    latlngMap = {
-      "latitude": latitude,
-      "longitude": longitude,
-    };
-    latlngList.add(latlngMap);
-
-    // 	+/emg/10秒単位の緯度+1/10秒単位の経度-1
-    latitude = (latitudeIn10Secs + 1).toString();
-    longitude = (longitudeIn10Secs - 1).toString();
-    latlngMap = {
-      "latitude": latitude,
-      "longitude": longitude,
-    };
-    latlngList.add(latlngMap);
-
-    // 	+/emg/10秒単位の緯度+1/10秒単位の経度+1
-    latitude = (latitudeIn10Secs + 1).toString();
-    longitude = (longitudeIn10Secs + 1).toString();
-    latlngMap = {
-      "latitude": latitude,
-      "longitude": longitude,
-    };
-    latlngList.add(latlngMap);
-
-    // 購読実行
-    latlngList.forEach((latlngMapItem) {
-      String topic = "+/emg/" +
-          latlngMapItem["latitude"] +
-          "/" +
-          latlngMapItem["longitude"];
-      client.subscribe(topic, MqttQos.exactlyOnce);
-    });
-
-    // 緊急通知処理登録
-
-    List<AlarmInfo> alarmList = [];
-    final topicFilter = MqttClientTopicFilter('+/emg/#', client.updates);
-    var list = await topicFilter.updates.toList();
-    for (var mqttMessage in list) {
-      String deviceName = mqttMessage[0].topic.split("/")[0];
-      final MqttPublishMessage recMess = mqttMessage[0].payload;
-      String pt =
-          MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
-      // TODO: ローカルプッシュ & プッシュpayloadでAlarmInfoのListを作成 (下記コメント参照
-      // DEBUG -S-
-      // AlarmInfo ai = new AlarmInfo();
-      // try {
-      //   ai.jsonStrToAlarminfo(pt, null);
-      //   ai.deviceName = deviceName;
-      //   alarmList.add(ai);
-      // } catch (e) {
-      //   print("marmo:: Mqtt alarm item unrecognized :: $e ");
-      // }
-      // DEBUG -E-
-      print(
-          'marmo:: Mqtt alarm info :: topic is <${mqttMessage[0].topic}>, payload is <-- $pt -->');
-    }
-    // TODO: ローカルプッシュ & プッシュpayloadでAlarmInfoのListをfire (下記コメント参照
-    // DEBUG -S-
-    // eventBus.fire(alarmList);
-    // DEBUG -E-
   }
 
-  // 緊急通知停止取得
-  getAlarmStop(String deviceName) async {
+// 緊急通知引き続き判定
+  getAlarmInfoOn(BuildContext context, String deviceName) async {
     if (client.connectionStatus.state == MqttConnectionState.disconnected) {
       await connect();
     }
-    String topic = deviceName + "/emg/stop";
-    client.subscribe(topic, MqttQos.exactlyOnce);
+    // 接続成功時のみ続行
+    if (client.connectionStatus.state == MqttConnectionState.connected) {
+      globalTempPos = await geolocator.getCurrentPosition();
+      if (globalTempPos == null) {
+        return null;
+      }
 
-    // 通常デバイス情報登録
-    final topicFilter = MqttClientTopicFilter(topic, client.updates);
-    // Now listen on the filtered updates, not the client updates
-    // ignore: avoid_types_on_closure_parameters
-    topicFilter.updates
-        .listen((List<MqttReceivedMessage<MqttMessage>> c) async {
-      AlarmStopInfo asi = new AlarmStopInfo();
-      asi.deviceName = deviceName;
-      eventBus.fire(asi);
-    });
+      String topic = deviceName + "/emg/#";
+
+      client.subscribe(topic, MqttQos.exactlyOnce);
+
+      // 緊急通知あるかを確認
+      final topicFilter = MqttClientTopicFilter(topic, client.updates);
+      try {
+        var mqttMessage =
+            await topicFilter.updates.first.timeout(Duration(seconds: 20));
+        print('marmo:: Mqtt alarm info on');
+        if (mqttMessage[0].topic != null) {
+          return true;
+        } else {
+          return false;
+        }
+      } catch (e) {
+        print('marmo:: Mqtt alarm info off : $e');
+        return false;
+      }
+    } else {
+      if (context != null) {
+        Toast.show("Mqttサーバーと接続失敗しました。", context);
+      }
+    }
   }
 }

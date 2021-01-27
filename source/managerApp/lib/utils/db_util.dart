@@ -20,6 +20,7 @@ class DbUtil {
   String colDeviceName = 'name'; // デバイス名
   String colDeviceKey = 'key'; // 暗号キー
   String colDeviceKeyDate = 'key_date'; // 暗号キー時間
+  String colDeviceKeyRule = 'key_rule'; // 暗号キールール
   String colState = 'state'; // 設定済みステート 0:未 1:済み
   String colUserName = 'username'; // ユーザー名称
   String colCount = 'setting_count'; // 設定次数
@@ -50,14 +51,23 @@ class DbUtil {
     String path = join(directory.path, 'deviceInfo.db');
 
     var deviceInfoDatabase =
-        openDatabase(path, version: 1, onCreate: _createDb);
+        openDatabase(path, version: 3, onCreate: _createDb, onUpgrade: _upgradeDb);
     return deviceInfoDatabase;
   }
 
   void _createDb(Database db, int newVersion) async {
     await db.execute(
         'CREATE TABLE $deviceInfoTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colDeviceId TEXT, $colDeviceName TEXT, '
-        '$colDeviceKey TEXT, $colDeviceKeyDate TEXT, $colState INTEGER, $colUserName TEXT, $colCount INTEGER, $colBleId TEXT, $colPassword TEXT, $colTEKInfo TEXT, $colRPIInfo TEXT)');
+        '$colDeviceKey TEXT, $colDeviceKeyDate TEXT, $colDeviceKeyRule TEXT, $colState INTEGER, $colUserName TEXT, $colCount INTEGER, $colBleId TEXT, $colPassword TEXT, $colTEKInfo TEXT, $colRPIInfo TEXT)');
+  }
+
+
+  void _upgradeDb(Database db, int oldVersion, int newVersion) async {
+    await db.execute('DROP TABLE $deviceInfoTable');
+    String rawSql = 'CREATE TABLE $deviceInfoTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colDeviceId TEXT, $colDeviceName TEXT, '
+        '$colDeviceKey TEXT, $colDeviceKeyDate TEXT, $colDeviceKeyRule TEXT, $colState INTEGER, $colUserName TEXT, $colCount INTEGER, $colBleId TEXT, $colPassword TEXT, $colTEKInfo TEXT, $colRPIInfo TEXT)';
+    await db.execute(
+        rawSql);
   }
 
   void DropDb() async {

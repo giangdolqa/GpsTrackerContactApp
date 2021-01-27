@@ -7,6 +7,7 @@ import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:marmo/beans/device_info.dart';
 import 'package:marmo/beans/setting_info.dart';
+import 'package:marmo/utils/inputformat_util.dart';
 import 'package:marmo/utils/shared_pre_util.dart';
 
 class DeviceSettingView extends StatefulWidget {
@@ -37,6 +38,7 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
   DateTime selectedDate = DateTime.now();
 
   //Controller
+  final idCtrlr = TextEditingController();
   final nameCtrlr = TextEditingController();
   final humidityCtrlr = TextEditingController();
   final keyCtrlr = TextEditingController();
@@ -44,6 +46,7 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
   final codeCtrlr = TextEditingController();
 
   // FocusNode
+  FocusNode _idFocus = FocusNode();
   FocusNode _nameFocus = FocusNode();
   FocusNode _humidityFocus = FocusNode();
   FocusNode _keyFocus = FocusNode();
@@ -51,6 +54,7 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
   FocusNode _codeFocus = FocusNode();
 
   // Validators
+  bool _idVld = false;
   bool _nameVld = false;
   bool _humidityVld = false;
   bool _keyVld = false;
@@ -74,6 +78,7 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
 //    deviceId = widget.deviceInfo.id;
     deviceName = widget.deviceInfo.name;
     if (widget.settingInfo != null) {
+      idCtrlr.text = widget.settingInfo.id;
       nameCtrlr.text = widget.settingInfo.name;
       humidityCtrlr.text = widget.settingInfo.humidity.toString();
       keyCtrlr.text = widget.settingInfo.key;
@@ -94,6 +99,7 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
+    idCtrlr.dispose();
     nameCtrlr.dispose();
     humidityCtrlr.dispose();
     keyCtrlr.dispose();
@@ -106,6 +112,7 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
   }
 
   void unfocusAll() {
+    _idFocus.unfocus();
     _nameFocus.unfocus();
     _humidityFocus.unfocus();
     _keyFocus.unfocus();
@@ -131,8 +138,10 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
     DateTime nowDate = DateTime.now();
     int birthYear = dateTime.year;
     int nowYear = nowDate.year;
-    String birthMonthDay = NumberFormat("00", "en_US").format(dateTime.month) + NumberFormat("00", "en_US").format(dateTime.day);
-    String nowMonthDay = NumberFormat("00", "en_US").format(nowDate.month) + NumberFormat("00", "en_US").format(nowDate.day);
+    String birthMonthDay = NumberFormat("00", "en_US").format(dateTime.month) +
+        NumberFormat("00", "en_US").format(dateTime.day);
+    String nowMonthDay = NumberFormat("00", "en_US").format(nowDate.month) +
+        NumberFormat("00", "en_US").format(nowDate.day);
     int age = nowYear - birthYear;
     if (Comparable.compare(nowMonthDay, birthMonthDay) < 0) {
       age = age - 1;
@@ -277,10 +286,7 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
       String authCode = await spUtil.GetAuthCode();
       String url = 'http://' + server + '/device/code/apply';
       Map<String, String> headers = {"Content-type": "application/json"};
-      var apiJson = {
-        idKey: deviceId,
-        authCodeKey: authCode
-      };
+      var apiJson = {idKey: deviceId, authCodeKey: authCode};
 
       Response response =
           await patch(url, headers: headers, body: json.encode(apiJson));
@@ -305,6 +311,7 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
   void _settingSubmit() {
     unfocusAll();
     setState(() {
+      idCtrlr.text.isEmpty ? _idVld = true : _idVld = false;
       nameCtrlr.text.isEmpty ? _nameVld = true : _nameVld = false;
       humidityCtrlr.text.isEmpty ? _humidityVld = true : _humidityVld = false;
       keyCtrlr.text.isEmpty ? _keyVld = true : _keyVld = false;
@@ -312,13 +319,19 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
       codeCtrlr.text.isEmpty ? _codeVld = true : _codeVld = false;
     });
     // Validate
-    if (_nameVld || _humidityVld || _keyVld || _intervalVld || _codeVld) {
+    if (_idVld ||
+        _nameVld ||
+        _humidityVld ||
+        _keyVld ||
+        _intervalVld ||
+        _codeVld) {
       // return if input not validated
       return;
     }
     int _sex = _GetSex();
 
     SettingInfo result = new SettingInfo();
+    result.id = idCtrlr.text;
     result.name = nameCtrlr.text;
     result.sex = _sex;
     result.birthday = selectedDate;
@@ -362,6 +375,43 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 24.0),
         children: <Widget>[
+          // ID
+          Container(
+            padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  child: Text(
+                    'ID',
+                    style: TextStyle(
+                      inherit: true,
+                      color: Colors.black,
+                      fontSize: 20.0,
+//                        fontWeight: FontWeight.bold,
+                      textBaseline: TextBaseline.alphabetic,
+                    ),
+                  ),
+                ),
+                SizedBox(width: 20.0),
+                Expanded(
+                  child: TextField(
+                    inputFormatters: [InputFormatUtil.OnlyEnglishAndNumber],
+                    controller: idCtrlr,
+                    focusNode: _idFocus,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 0.0, horizontal: 15.0),
+                      border: OutlineInputBorder(),
+                      helperText: "半角英数字のみ",
+                      errorText: _idVld ? 'IDを入力してください' : null,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
           // 名前
           Container(
             padding: EdgeInsets.only(top: 5.0, bottom: 5.0),

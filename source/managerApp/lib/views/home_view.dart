@@ -14,9 +14,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_controller/google_maps_controller.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:marmo/beans/alarm_info.dart';
-import 'package:marmo/beans/alarm_stop_info.dart';
 import 'package:marmo/beans/normal_info.dart';
 import 'package:marmo/components/my_popup_menu.dart' as mypopup;
+import 'package:marmo/utils/db_util.dart';
 import 'package:marmo/utils/event_util.dart';
 import 'package:marmo/utils/mqtt_util.dart';
 import 'package:marmo/utils/nuid_util.dart';
@@ -38,7 +38,7 @@ void callbackDispatcher() {
         "WorkManager Executed !!  Native called background task: $inputData"); //simpleTask will be emitted here.
     MqttUtil tmpMqttUtil = new MqttUtil();
     // 緊急情報購読
-    await tmpMqttUtil.getSurroundingAlarmInfo();
+    await tmpMqttUtil.getSurroundingAlarmInfo(null);
 
     // TODO: TEK/ENIN情報、RPI/AEM情報の生成
 
@@ -63,6 +63,7 @@ class HomeViewState extends State<HomeView>
 
   Timer routeTimer;
   Timer positionTimer;
+  Timer alarmTimer;
 
   WidgetsBinding widgetsBinding;
   Color _statusbarColor = Colors.white;
@@ -86,26 +87,16 @@ class HomeViewState extends State<HomeView>
       frequency: Duration(minutes: 15),
     );
 
-    mqttUtil.subScribePositionByDeviceName();
-
     // 緊急通知処理登録
     eventBus.on<List<AlarmInfo>>().listen((event) {
       if (mounted) {
         for (var ai in event) {
           // 通知された緊急情報を表示
           _addAlarmCustomMarker(ai);
-          // 停止通信を購読
         }
-        _checkAlarmInfo();
       }
     });
-    // 緊急通知停止処理登録
-    eventBus.on<AlarmStopInfo>().listen((event) {
-      MarkerId stopId = MarkerId(event.deviceName);
-      if (markers.containsKey(stopId)) {
-        _delMarker(stopId);
-      }
-    });
+
     // 一般通知処理登録
     eventBus.on<NormalInfo>().listen((event) {
       if (mounted) {
@@ -129,6 +120,23 @@ class HomeViewState extends State<HomeView>
       }
     };
     routeTimer = Timer.periodic(oneHour, callback);
+
+    // デバイス情報取得
+    var positionCallback = (timer) async {
+      mqttUtil.subScribePositionByDeviceName(context);
+    };
+    positionTimer = Timer.periodic(Duration(seconds: 30), positionCallback);
+
+    // 緊急通知停止チェック
+    var alarmCallback = (timer) async {
+      for (var am in alarmMarkerIds) {
+        bool isAlarmOn = await mqttUtil.getAlarmInfoOn(context, am.value);
+        if (!isAlarmOn) {
+          _delMarker(am);
+        }
+      }
+    };
+    alarmTimer = Timer.periodic(Duration(seconds: 15), alarmCallback);
   }
 
   // 画面破棄
@@ -137,6 +145,12 @@ class HomeViewState extends State<HomeView>
     positionUtil.stopListening(context);
     if (routeTimer != null) {
       routeTimer.cancel();
+    }
+    if (positionTimer != null) {
+      positionTimer.cancel();
+    }
+    if (alarmTimer != null) {
+      alarmTimer.cancel();
     }
     super.dispose();
   }
@@ -155,13 +169,6 @@ class HomeViewState extends State<HomeView>
   Map<MarkerId, String> messageMap = {};
   bool sliderVisible = false;
   DateTime routeTime;
-
-  // Mqtt通知のない緊急情報を削除
-  void _checkAlarmInfo() async {
-    for (var ai in markers.keys) {
-      mqttUtil.getAlarmStop(ai.value);
-    }
-  }
 
   // 緊急メッセージ＆マーカー追加
   void _addAlarmCustomMarker(AlarmInfo ai) async {
@@ -221,6 +228,7 @@ class HomeViewState extends State<HomeView>
         position: position);
 
     markers[markerId] = tmpMarker;
+    alarmMarkerIds.add(markerId);
 
     // メッセージ更新
     String alarmMessage = _makeAlarmMessage(ai);
@@ -290,6 +298,7 @@ class HomeViewState extends State<HomeView>
   _delMarker(MarkerId markerId) {
     markers.remove(markerId);
     messageMap.remove(markerId);
+    alarmMarkerIds.remove(markerId);
     setState(() {
       markersSet = markers.values.toSet();
       alarmText = _concactAlarmMessage(messageMap.values.toList());

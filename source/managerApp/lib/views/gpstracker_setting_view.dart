@@ -38,7 +38,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
   BluetoothCharacteristic mCharacteristic;
   List deviceCallbackData = [];
   String password = '';
-  int deviceID;
+  String deviceID;
 
   final _codeFormat = new NumberFormat("00000", "en_US");
 
@@ -62,7 +62,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
           otherDevList = [];
           myDevlist = [];
         });
-  }
+      }
     });
   }
 
@@ -452,10 +452,16 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
         temp.key = de.key;
         temp.interval = de.interval;
         temp.validays = de.validays;
-        deviceID = int.parse(de.id);
+        deviceID = de.id;
+        if (deviceID.length > 5) {
+          temp.id = deviceID.substring(0, deviceID.length - 5);
+        } else {
+          // 来ないはず
+          temp.id = deviceID;
+        }
         password = de.password;
       } else {
-        deviceID = _newID();
+        // deviceID = _newID();
       }
       // 設定画面へ遷移
       Navigator.push(
@@ -468,7 +474,8 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
         if (result != null) {
           String username = await spUtil.GetUsername();
           DeviceDBInfo temp = new DeviceDBInfo();
-          temp.id = deviceID.toString();
+          deviceID = result.id + _newID().toString();
+          temp.id = deviceID;
           temp.name = deviceInfo.name;
           temp.key = result.key;
           temp.userName = result.name;
@@ -524,16 +531,11 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
   void _deviceDelete(DeviceInfo deviceInfo) async {
     String url = 'http://' + server + '/device';
     Map<String, String> headers = {"Content-type": "application/json"};
-    var apiJson = {
-      idKey: deviceInfo.deviceDB.id
-    };
+    var apiJson = {idKey: deviceInfo.deviceDB.id};
     Dio dio = new Dio();
     Response response = await dio.request(url,
         data: apiJson, // httpのbody
-        options: new Options(
-          method: 'delete',
-          headers: headers
-        ));
+        options: new Options(method: 'delete', headers: headers));
     if (response.statusCode == 200) {
       marmoDB.deleteDeviceDBInfo(deviceInfo.deviceDB.id);
       Navigator.of(context).pushNamed('Setting');

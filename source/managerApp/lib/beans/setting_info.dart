@@ -1,6 +1,7 @@
 // 設定情報
 
 class SettingInfo {
+  String id; // ID
   String name; // 名称
   int sex; // 性別
   DateTime birthday; // 生年月日

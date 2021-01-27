@@ -26,22 +26,87 @@ class NormalInfo {
     deviceInfo = await marmoDB.getDeviceDBInfoByDeviceName(deviceName);
     try {
       Map<String, dynamic> tmpMap = jd.convert(jsonString);
-      latNoSec = tmpMap['Lat no sec'];
-      lngNoSec = tmpMap['Lng no sec'];
-      temperature = tmpMap['TEMP'];
-      humidity = tmpMap['HUM'];
-      latitude = num.parse(
-          CryptUtil.decrypt(tmpMap['Lat'].toString(), deviceInfo.key));
-      longitude = num.parse(
-          CryptUtil.decrypt(tmpMap['Lng'].toString(), deviceInfo.key));
-      step = num.parse(
-          CryptUtil.decrypt(tmpMap['Step'].toString(), deviceInfo.key));
+
+      List<String> ruleList = [];
+      try {
+        List tempList =  json.decoder.convert(deviceInfo.keyRule); // Deserialize
+        for (var tempItem in tempList){
+          ruleList.add(tempItem.toString());
+        }
+      } catch (e) {
+        print("marmo:: jsonToNormalinfo rule convert failed : $e");
+      }
+
+      // Lat no sec
+      if (ruleList.contains('Lat no sec')) {
+        latNoSec = num.parse(
+            CryptUtil.decrypt(tmpMap['Lat no sec'].toString(), deviceInfo.key));
+      } else {
+        latNoSec = tmpMap['Lat no sec'];
+      }
+
+      // Lng no sec
+      if (ruleList.contains('Lng no sec')) {
+        lngNoSec = num.parse(
+            CryptUtil.decrypt(tmpMap['Lng no sec'].toString(), deviceInfo.key));
+      } else {
+        lngNoSec = tmpMap['Lng no sec'];
+      }
+
+      // TEMP
+      if (ruleList.contains('TEMP')) {
+        temperature = num.parse(
+            CryptUtil.decrypt(tmpMap['TEMP'].toString(), deviceInfo.key));
+      } else {
+        temperature = tmpMap['TEMP'];
+      }
+
+      // HUM
+      if (ruleList.contains('HUM')) {
+        humidity = num.parse(
+            CryptUtil.decrypt(tmpMap['HUM'].toString(), deviceInfo.key));
+      } else {
+        humidity = tmpMap['HUM'];
+      }
+
+      // Lat
+      if (ruleList.contains('Lat')) {
+        latitude = num.parse(
+            CryptUtil.decrypt(tmpMap['Lat'].toString(), deviceInfo.key));
+      } else {
+        latitude = tmpMap['Lat'];
+      }
+
+      // Lng
+      if (ruleList.contains('Lng')) {
+        longitude = num.parse(
+            CryptUtil.decrypt(tmpMap['Lng'].toString(), deviceInfo.key));
+      } else {
+        longitude = tmpMap['Lng'];
+      }
+
+      // Lng
+      if (ruleList.contains('Lng')) {
+        longitude = num.parse(
+            CryptUtil.decrypt(tmpMap['Lng'].toString(), deviceInfo.key));
+      } else {
+        longitude = tmpMap['Lng'];
+      }
+
+      // Step
+      if (ruleList.contains('Step')) {
+        step = num.parse(
+            CryptUtil.decrypt(tmpMap['Step'].toString(), deviceInfo.key));
+      } else {
+        step = tmpMap['Step'];
+      }
+
       return true;
     } catch (e) {
-      print("緊急通知データ転換失敗: $e ");
+      print("デバイス配信データ転換失敗: $e ");
 
       if (context != null) {
-        Toast.show("緊急通知データ転換失敗: " + e.toString(), context);
+        Toast.show("デバイス配信データ転換失敗: " + e.toString(), context);
       }
     }
     return false;

@@ -5,6 +5,7 @@ class DeviceDBInfo {
   String name; // 名称
   String key; // 暗号キー
   String keyDate; // 暗号キー日付
+  String keyRule; // 暗号キールール
   String userName; // ユーザー名称
   num state; // 接続状態
   num count; // 設定次数
@@ -20,6 +21,7 @@ class DeviceDBInfo {
     data['name'] = this.name;
     data['key'] = this.key;
     data['key_date'] = this.keyDate;
+    data['key_rule'] = this.keyRule;
     data['username'] = this.userName;
     data['state'] = this.state;
     data['setting_count'] = this.count;
@@ -35,6 +37,7 @@ class DeviceDBInfo {
     name = inputMap['name'];
     key = inputMap['key'];
     keyDate = inputMap['key_date'];
+    keyRule = inputMap['key_rule'];
     userName = inputMap['username'];
     state = inputMap['state'];
     count = inputMap['setting_count'];
