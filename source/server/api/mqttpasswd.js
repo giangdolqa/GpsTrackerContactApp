@@ -126,7 +126,7 @@ const get_device_passwd = new Promise((resolve, reject) => {
 		if (!error && response.statusCode === 200) {
 			const bodyJson = JSON.parse(body);
 			bodyJson.Response.Data.forEach(data => {
-				passwdArray.push(data.ClassHash.ClassB + ':' + decryptBase64(data.ClassHash.ClassC));
+				passwdArray.push(data.ClassHash.ClassA + ':' + decryptBase64(data.ClassHash.ClassC));
 			});
 			resolve(1);
 		}
