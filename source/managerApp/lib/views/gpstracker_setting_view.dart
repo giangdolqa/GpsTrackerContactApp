@@ -499,7 +499,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
               marmoDB.insertDeviceDBInfo(temp);
             } else {
               _outputInfo("", "サーバと接続失敗");
-    }
+            }
           } else {
             temp.count = 2;
             temp.password = password;
