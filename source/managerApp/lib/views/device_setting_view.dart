@@ -9,6 +9,7 @@ import 'package:marmo/beans/device_info.dart';
 import 'package:marmo/beans/setting_info.dart';
 import 'package:marmo/utils/inputformat_util.dart';
 import 'package:marmo/utils/shared_pre_util.dart';
+import  'package:flutter_localizations/flutter_localizations.dart';
 
 class DeviceSettingView extends StatefulWidget {
   DeviceInfo deviceInfo;
@@ -205,6 +206,7 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
     final DateTime date = await showDatePicker(
       context: context,
       initialDate: selectedDate,
+      locale: Locale("ja", ),
       firstDate: nowDate.subtract(new Duration(days: 7300)),
       lastDate: nowDate,
     );
