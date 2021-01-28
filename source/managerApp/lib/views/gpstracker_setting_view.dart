@@ -40,7 +40,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
   String password = '';
   String deviceID;
 
-  final _codeFormat = new NumberFormat("00000", "en_US");
+  final _codeFormat = new NumberFormat("000000", "en_US");
 
   final String server = "ik1-407-35954.vs.sakura.ne.jp:3000/api/v1";
   final String idKey = "ID";
@@ -273,7 +273,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
             settingCode = _getSettingCode(null);
           }
           showAlert(context, selectedVal.values.first,
-              _codeFormat.format(settingCode % 100000));
+              _codeFormat.format(settingCode % 1000000));
         } else {
           _deviceSet(selectedVal.values.first);
         }
