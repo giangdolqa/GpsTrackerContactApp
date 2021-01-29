@@ -125,7 +125,7 @@ class HomeViewState extends State<HomeView>
     var positionCallback = (timer) async {
       mqttUtil.subScribeAllPositionInfoAndKey(context);
     };
-    positionTimer = Timer.periodic(Duration(seconds: 30), positionCallback);
+    positionTimer = Timer.periodic(Duration(seconds: 5), positionCallback);
 
     // 緊急通知停止チェック
     var alarmCallback = (timer) async {
@@ -136,7 +136,9 @@ class HomeViewState extends State<HomeView>
         }
       }
     };
-    alarmTimer = Timer.periodic(Duration(seconds: 15), alarmCallback);
+
+    // 緊急情報がある場合は１秒間隔で確認を行い、１秒を超えてメッセージが配信されていなければ、削除する
+    alarmTimer = Timer.periodic(Duration(seconds: 1), alarmCallback);
   }
 
   // 画面破棄

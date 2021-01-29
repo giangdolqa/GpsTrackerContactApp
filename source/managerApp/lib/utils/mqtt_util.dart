@@ -344,8 +344,9 @@ class MqttUtil {
       // 緊急通知あるかを確認
       final topicFilter = MqttClientTopicFilter(topic, client.updates);
       try {
+        // 緊急情報がある場合は１秒間隔で確認を行い、１秒を超えてメッセージが配信されていなければ、削除する
         var mqttMessage =
-            await topicFilter.updates.first.timeout(Duration(seconds: 20));
+            await topicFilter.updates.first.timeout(Duration(seconds: 1));
         print('marmo:: Mqtt alarm info on');
         if (mqttMessage[0].topic != null) {
           return true;
