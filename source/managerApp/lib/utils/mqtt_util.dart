@@ -6,7 +6,6 @@ import 'dart:io';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:marmo/beans/alarm_info.dart';
 import 'package:marmo/beans/device_dbInfo.dart';
 import 'package:marmo/beans/key_info.dart';
 import 'package:marmo/beans/normal_info.dart';
@@ -118,8 +117,8 @@ class MqttUtil {
     print('marmo::Ping response client callback invoked');
   }
 
-  // デバイス暗号キー配信 & 位置情報取得
-  void subScribePositionByDeviceName(BuildContext context) async {
+  // 登録済みデバイス暗号キー配信 & 位置情報取得
+  void subScribeAllPositionInfoAndKey(BuildContext context) async {
     if (client.connectionStatus.state == MqttConnectionState.disconnected) {
       await connect();
     }
@@ -134,7 +133,7 @@ class MqttUtil {
     }
   }
 
-  // 緯度経度がデバイスから配信
+  // deviceNameでデバイス暗号キー配信 & 位置情報取得
   _getPosistionByDeviceNameAndKey(String deviceName) async {
     String topic = deviceName + "/#";
     // client.subscribe(topic, MqttQos.atMostOnce);

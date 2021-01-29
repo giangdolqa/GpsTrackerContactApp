@@ -123,7 +123,7 @@ class HomeViewState extends State<HomeView>
 
     // デバイス情報取得
     var positionCallback = (timer) async {
-      mqttUtil.subScribePositionByDeviceName(context);
+      mqttUtil.subScribeAllPositionInfoAndKey(context);
     };
     positionTimer = Timer.periodic(Duration(seconds: 30), positionCallback);
 
