@@ -69,7 +69,7 @@ class GpsTrackerReadingViewState extends State<GpsTrackerReadingView> {
     }
     for (var deviceInfo in myDBDevicesList) {
       // 接続状態初期化
-      connectStatusMap[deviceInfo.id] = false;
+      connectStatusMap[deviceInfo.bleId] = false;
     }
   }
 
@@ -88,7 +88,7 @@ class GpsTrackerReadingViewState extends State<GpsTrackerReadingView> {
             continue;
           }
           for (DeviceDBInfo dbDveice in myDBDevicesList) {
-            if (dbDveice.id == result.device.id.id) {
+            if (dbDveice.bleId == result.device.id.id) {
               if (mounted) {
                 setState(() {
                   connectStatusMap[result.device.id.id] = true;
@@ -199,7 +199,7 @@ class GpsTrackerReadingViewState extends State<GpsTrackerReadingView> {
                 child: Container(
                   padding: EdgeInsets.only(left: 10),
                   child: Text(
-                    connectStatusMap[device.id] ? "接続済み" : "未接続",
+                    connectStatusMap[device.bleId] ? "接続済み" : "未接続",
                     overflow: TextOverflow.ellipsis,
                     softWrap: false,
                     style: TextStyle(
@@ -214,15 +214,15 @@ class GpsTrackerReadingViewState extends State<GpsTrackerReadingView> {
                   width: 40,
                   height: 35,
                   padding: EdgeInsets.only(left: 5),
-                  child: connectStatusMap[device.id]
+                  child: connectStatusMap[device.bleId]
                       ? Image(
                           image: AssetImage("assets/icon/refresh.png"),
                           fit: BoxFit.fill)
                       : Container(),
                 ),
-                onTap: connectStatusMap[device.id]
+                onTap: connectStatusMap[device.bleId]
                     ? () {
-                        _deviceRead(connectedDevice[device.id]);
+                        _deviceRead(connectedDevice[device.bleId]);
                       }
                     : null,
               ),
@@ -232,13 +232,13 @@ class GpsTrackerReadingViewState extends State<GpsTrackerReadingView> {
                   width: 40,
                   height: 35,
                   padding: EdgeInsets.only(left: 5),
-                  child: connectStatusMap[device.id]
+                  child: connectStatusMap[device.bleId]
                       ? Image(
                           image: AssetImage("assets/icon/confirm.png"),
                           fit: BoxFit.fill)
                       : Container(),
                 ),
-                onTap: connectStatusMap[device.id]
+                onTap: connectStatusMap[device.bleId]
                     ? () {} // TODO: 接触確認画面へ遷移
                     : null,
               ),
@@ -309,39 +309,58 @@ class GpsTrackerReadingViewState extends State<GpsTrackerReadingView> {
   void _deviceRead(BluetoothDevice deviceInfo) async {
     flutterBlue.stopScan();
     await deviceInfo.disconnect();
-    deviceInfo
-        .connect(autoConnect: false, timeout: Duration(seconds: 10))
-        .whenComplete(() async {
-      List<BluetoothService> services = await deviceInfo.discoverServices();
-      bool isTekRead = false;
-      bool isRpiRead = false;
-      for (BluetoothService service in services) {
-        var characteristics = service.characteristics;
-        String serviceId = service.uuid.toString();
-        for (BluetoothCharacteristic characteristic in characteristics) {
-          String charId = characteristic.uuid.toString();
-          print("Bluetooth service: $serviceId + characteristics: $charId");
-          if (characteristic.uuid.toString() == TEKENIN_UUID) {
-            mCharacteristic_TEK = characteristic;
-            await _readTEKInfo(deviceInfo);
-            isTekRead = true;
-          } else if (characteristic.uuid.toString() == RPIAEM_UUID) {
-            mCharacteristic_RPI = characteristic;
-            await _readRPIInfo(deviceInfo);
-            isRpiRead = true;
+    try {
+      deviceInfo
+          .connect(autoConnect: false)
+          .timeout(Duration(seconds: 10))
+          .whenComplete(() async {
+        List<BluetoothService> services = await deviceInfo.discoverServices();
+        bool isTekRead = false;
+        bool isRpiRead = false;
+        for (BluetoothService service in services) {
+          var characteristics = service.characteristics;
+          String serviceId = service.uuid.toString();
+          for (BluetoothCharacteristic characteristic in characteristics) {
+            String charId = characteristic.uuid.toString();
+            print("Bluetooth service: $serviceId + characteristics: $charId");
+            if (characteristic.uuid.toString() == TEKENIN_UUID) {
+              mCharacteristic_TEK = characteristic;
+              await _readTEKInfo(deviceInfo);
+              isTekRead = true;
+            } else if (characteristic.uuid.toString() == RPIAEM_UUID) {
+              mCharacteristic_RPI = characteristic;
+              await _readRPIInfo(deviceInfo);
+              isRpiRead = true;
+            }
           }
         }
-      }
-      if (isTekRead & isRpiRead) {
-        _outputInfo("", "読み込み成功");
-      } else {
+        if (isTekRead & isRpiRead) {
+          _outputInfo("", "読み込み成功");
+        } else {
+          setState(() {
+            connectStatusMap[deviceInfo.id.id] = false;
+          });
+          _outputInfo("", "読み込み失敗");
+          _getMyDevListRow();
+        }
+        deviceInfo.disconnect();
+      }).catchError((error) {
         _outputInfo("", "読み込み失敗");
-      }
-      deviceInfo.disconnect();
-    }).catchError((error) {
+        setState(() {
+          connectStatusMap[deviceInfo.id.id] = false;
+        });
+        _getMyDevListRow();
+        deviceInfo.disconnect();
+      });
+    } catch (e) {
+      print("marmo :: Ble device connect failed: $e");
       _outputInfo("", "読み込み失敗");
+      setState(() {
+        connectStatusMap[deviceInfo.id.id] = false;
+      });
+      _getMyDevListRow();
       deviceInfo.disconnect();
-    });
+    }
   }
 
   @override

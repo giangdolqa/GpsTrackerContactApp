@@ -139,7 +139,7 @@ class DbUtil {
   Future<int> deleteDeviceDBInfo(String deviceId) async {
     var db = await this.database;
     var result = await db.rawDelete(
-        'DELETE FROM $deviceInfoTable WHERE $colDeviceId =$deviceId');
+        'DELETE FROM $deviceInfoTable WHERE $colDeviceId = ?', [deviceId]);
     return result;
   }
 

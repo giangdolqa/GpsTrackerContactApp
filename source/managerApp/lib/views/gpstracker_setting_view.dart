@@ -39,6 +39,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
   List deviceCallbackData = [];
   String password = '';
   String deviceID;
+  Map<String, bool> connectStatusMap = {};
 
   final _codeFormat = new NumberFormat("000000", "en_US");
 
@@ -64,6 +65,17 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
         });
       }
     });
+    _initSettingView();
+  }
+
+  // 画面非同期初期処理
+  void _initSettingView() async {
+    flutterBlue.stopScan();
+    dbDevices = await marmoDB.getDeviceDBInfoList();
+    for (var deviceInfo in dbDevices) {
+      // 接続状態初期化
+      connectStatusMap[deviceInfo.bleId] = false;
+    }
   }
 
   int _getSettingCode(int deviceId) {
@@ -78,7 +90,6 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
   void _getDeviceInfo() async {
     myDevices.clear();
     otherDevices.clear();
-    dbDevices = await marmoDB.getDeviceDBInfoList();
     flutterBlue.startScan(timeout: Duration(seconds: 60));
     flutterBlue.scanResults.listen((event) {
       myDevices.clear();
@@ -95,7 +106,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
         tempDi.count = 0;
         bool _flg = false;
         for (var i = 0; i < dbDevices.length; i++) {
-          if (dbDevices[i].bleId == tempDi.id) {
+          if (dbDevices[i].bleId == tempDi.id.id) {
             _flg = true;
             tempDi.count = dbDevices[i].count;
             tempDi.deviceDB = dbDevices[i];
@@ -105,6 +116,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
         }
         if (_flg) {
           myDevices.add(tempDi);
+          connectStatusMap[result.device.id.id] = true;
         } else if (!otherDevices.contains(tempDi)) {
           otherDevices.add(tempDi);
         }
@@ -115,9 +127,12 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
   }
 
   // デバイスリストアイテム作成
-  void _getMyDevListRow() async {
+  void _getMyDevListRow({bool forceUpdate = false}) async {
     myDevlist.clear();
-    dbDevices.forEach((db) {
+    if (forceUpdate){
+      dbDevices = await marmoDB.getDeviceDBInfoList();
+    }
+    for (DeviceDBInfo db in dbDevices) {
       bool _flg = false;
       for (var i = 0; i < myDevices.length; i++) {
         if (myDevices[i].id.toString() == db.bleId) {
@@ -133,118 +148,154 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
         tempDi.deviceDB = db;
         myDevices.add(tempDi);
       }
-    });
+    }
     List<Widget> tmpDevlist = [];
     myDevices.forEach((device) {
       tmpDevlist.add(
         Container(
           padding: EdgeInsets.all(5),
-          child: Row(
-            children: [
-              mypopup.PopupMenuButton(
-                child: Row(
-                  children: [
-                    Container(
-                      width: 35,
-                      height: 35,
-                      // margin: EdgeInsets.fromLTRB(0, 64.0, 0, 0),
-                      child: Stack(
-                        children: [
-                          Image(
-                              image: AssetImage("assets/icon/GPS_icon.png"),
-                              fit: BoxFit.fill),
-                          Container(
-                            padding: EdgeInsets.only(bottom: 5),
-                            alignment: Alignment.center,
-                            child: Text(
-                              device.name.substring(0, 3).toUpperCase(),
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                              ),
-                            ),
+          child: mypopup.PopupMenuButton(
+            child: Row(
+              children: [
+                Container(
+                  width: 35,
+                  height: 35,
+                  // margin: EdgeInsets.fromLTRB(0, 64.0, 0, 0),
+                  child: Stack(
+                    children: [
+                      Image(
+                          image: AssetImage("assets/icon/GPS_icon.png"),
+                          fit: BoxFit.fill),
+                      Container(
+                        padding: EdgeInsets.only(bottom: 5),
+                        alignment: Alignment.center,
+                        child: Text(
+                          device.name.substring(0, 3).toUpperCase(),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(left: 10),
-                      child: Text(
-                        device.name,
-                        style: TextStyle(fontSize: 14),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-                offset: Offset(0, 50),
-                itemBuilder: (_) =>
-                    <mypopup.PopupMenuItem<Map<String, DeviceInfo>>>[
-                  new mypopup.PopupMenuItem<Map<String, DeviceInfo>>(
-                    child: Container(
-                      height: double.infinity,
-                      width: 120,
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.only(left: 5, top: 5),
-                            child: Icon(
-                              Icons.settings,
-                              size: 30,
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              padding: EdgeInsets.only(left: 5, top: 5),
-                              child: Text(
-                                "設定",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                ),
-                              ),
-                              // alignment: Alignment.center,
-                            ),
-                          ),
-                        ],
+                Container(
+                  width: 80,
+                  padding: EdgeInsets.only(left: 10),
+                  child: Text(
+                    device.name,
+                    style: TextStyle(fontSize: 14),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    padding: EdgeInsets.only(left: 10),
+                    child: Text(
+                      device.deviceDB.userName,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 14),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    padding: EdgeInsets.only(left: 10),
+                    child: Text(
+                      device.deviceDB.state == 1 ? "設定済み" : "未設定",
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: false,
+                      style: TextStyle(
+                        fontSize: 14,
                       ),
                     ),
-                    color: Color(0x55c4c4c4),
-                    value: {"setting": device},
                   ),
-                  new mypopup.PopupMenuItem<Map<String, DeviceInfo>>(
-                    child: Container(
-                      height: double.infinity,
-                      width: 120,
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.only(left: 5, top: 5),
-                            child: Image.asset(
-                              "assets/icon/dust.png",
-                              width: 30,
-                              height: 30,
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              padding: EdgeInsets.only(left: 5, top: 5),
-                              child: Text(
-                                "削除",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                ),
-                              ),
-                              // alignment: Alignment.center,
-                            ),
-                          ),
-                        ],
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    padding: EdgeInsets.only(left: 10),
+                    child: Text(
+                      connectStatusMap[device.deviceDB.bleId] ? "接続済み" : "未接続",
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: false,
+                      style: TextStyle(
+                        fontSize: 14,
                       ),
                     ),
-                    value: {"delete": device},
                   ),
-                ],
-                onSelected: _onActionMenuSelect,
+                ),
+              ],
+            ),
+            offset: Offset(0, 50),
+            itemBuilder: (_) =>
+                <mypopup.PopupMenuItem<Map<String, DeviceInfo>>>[
+              new mypopup.PopupMenuItem<Map<String, DeviceInfo>>(
+                child: Container(
+                  height: double.infinity,
+                  width: 120,
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(left: 5, top: 5),
+                        child: Icon(
+                          Icons.settings,
+                          size: 30,
+                        ),
+                      ),
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.only(left: 5, top: 5),
+                          child: Text(
+                            "設定",
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
+                          // alignment: Alignment.center,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                color: Color(0x55c4c4c4),
+                value: {"setting": device},
+              ),
+              new mypopup.PopupMenuItem<Map<String, DeviceInfo>>(
+                child: Container(
+                  height: double.infinity,
+                  width: 120,
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(left: 5, top: 5),
+                        child: Image.asset(
+                          "assets/icon/dust.png",
+                          width: 30,
+                          height: 30,
+                        ),
+                      ),
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.only(left: 5, top: 5),
+                          child: Text(
+                            "削除",
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
+                          // alignment: Alignment.center,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                value: {"delete": device},
               ),
             ],
+            onSelected: _onActionMenuSelect,
           ),
         ),
       );
@@ -266,8 +317,10 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
         int settingCode = 0;
         if (selectedVal.values.first.count < 2) {
           if (selectedVal.values.first.count == 1) {
-            settingCode = _getSettingCode(
-                int.parse(selectedVal.values.first.deviceDB.id));
+            String tempId = selectedVal.values.first.deviceDB.id;
+            String randomNum =
+                tempId.substring(tempId.length - 5, tempId.length);
+            settingCode = _getSettingCode(int.parse(randomNum));
           }
           if (selectedVal.values.first.count == 0) {
             settingCode = _getSettingCode(null);
@@ -404,9 +457,20 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
   Future<bool> _deviceConnect(DeviceInfo deviceInfo) async {
     bool deviceFound = false;
     mCharacteristic = null;
+    try {
+      deviceInfo.device.device.disconnect();
+    } catch (e) {
+      // do nothing
+    }
     await deviceInfo.device.device
-        .connect(autoConnect: false, timeout: Duration(seconds: 10))
-        .whenComplete(() async {
+        .connect(autoConnect: false)
+        .timeout(Duration(seconds: 10), onTimeout: () {
+      // _outputInfo("", "デバイスペアリング失敗");
+      // setState(() {
+      //   connectStatusMap[deviceInfo.id.id] = false;
+      // });
+      // deviceInfo.device.device.disconnect();
+    }).whenComplete(() async {
       List<BluetoothService> services =
           await deviceInfo.device.device.discoverServices();
       for (BluetoothService service in services) {
@@ -420,6 +484,10 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
       }
       if (mCharacteristic == null) {
         _outputInfo("", "デバイスペアリング失敗");
+        setState(() {
+          connectStatusMap[deviceInfo.id.id] = false;
+        });
+        _getMyDevListRow();
         deviceInfo.device.device.disconnect();
         deviceFound = false;
       } else {
@@ -427,6 +495,10 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
       }
     }).catchError((e) {
       _outputInfo("", "デバイスペアリング失敗");
+      setState(() {
+        connectStatusMap[deviceInfo.id.id] = false;
+      });
+      _getMyDevListRow();
       deviceInfo.device.device.disconnect();
       deviceFound = false;
     });
@@ -437,6 +509,10 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
     SettingInfo temp = null;
     if (mCharacteristic == null) {
       _outputInfo("", "デバイスペアリング失敗");
+      setState(() {
+        connectStatusMap[deviceInfo.id.id] = false;
+      });
+      _getMyDevListRow();
       deviceInfo.device.device.disconnect();
     } else {
       if (deviceCallbackData != null && deviceCallbackData.length > 0) {
@@ -495,34 +571,43 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
               var dbResult = json.decode(response.body);
               password = dbResult['TemporaryPassword'];
               temp.count = 1;
+              temp.state = 1;
               temp.password = password;
-              marmoDB.insertDeviceDBInfo(temp);
+              await marmoDB.insertDeviceDBInfo(temp);
+              connectStatusMap[temp.bleId] = true;
+              _getMyDevListRow(forceUpdate: true);
             } else {
               _outputInfo("", "サーバと接続失敗");
             }
           } else {
             temp.count = 2;
             temp.password = password;
-            marmoDB.updateDeviceDBInfo(temp);
+            await marmoDB.updateDeviceDBInfo(temp);
+            connectStatusMap[temp.bleId] = true;
+            _getMyDevListRow(forceUpdate: true);
           }
-          Map<String, dynamic> data = new Map<String, dynamic>();
-          data['id'] = deviceID;
-          data['name'] = result.name;
-          data['sex'] = result.sex;
-          data['birthday'] = DateFormat('yyyyMMdd').format(result.birthday);
-          data['alert humidity'] = result.humidity;
-          data['key'] = result.key;
-          data['publish interval'] = result.interval;
-          data['expiration date'] = result.validays;
-          data['temporary password'] = password;
-          String jsonResult = json.encode(data);
-          List<int> listResult = jsonResult.codeUnits;
-          mCharacteristic.write(listResult);
+          try {
+            Map<String, dynamic> data = new Map<String, dynamic>();
+            data['id'] = deviceID;
+            data['name'] = result.name;
+            data['sex'] = result.sex;
+            data['birthday'] = DateFormat('yyyyMMdd').format(result.birthday);
+            data['alert humidity'] = result.humidity;
+            data['key'] = result.key;
+            data['publish interval'] = result.interval;
+            data['expiration date'] = result.validays;
+            data['temporary password'] = password;
+            String jsonResult = json.encode(data);
+            List<int> listResult = jsonResult.codeUnits;
+            mCharacteristic.write(listResult);
+          } catch (e) {
+            print("marmo :: Ble device write failed : $e");
+          }
           mCharacteristic = null;
           deviceID = null;
           password = null;
           deviceInfo.device.device.disconnect();
-          Navigator.of(context).pushNamed('Setting');
+          // Navigator.of(context).pushNamed('Setting');
         }
       });
     }
@@ -537,8 +622,10 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
         data: apiJson, // httpのbody
         options: new Options(method: 'delete', headers: headers));
     if (response.statusCode == 200) {
-      marmoDB.deleteDeviceDBInfo(deviceInfo.deviceDB.id);
-      Navigator.of(context).pushNamed('Setting');
+      await marmoDB.deleteDeviceDBInfo(deviceInfo.deviceDB.id);
+      await _getMyDevListRow(forceUpdate: true);
+      connectStatusMap.remove(deviceInfo.id.id);
+      // Navigator.of(context).pushNamed('Setting');
     } else {
       _outputInfo("", "サーバと接続失敗");
     }
@@ -697,7 +784,6 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
           Container(
             padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
             child: Column(
-              // shrinkWrap: true,
               children: myDevlist,
             ),
           ),
