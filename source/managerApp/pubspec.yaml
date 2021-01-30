@@ -14,7 +14,7 @@ description: gps tracker management app
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -36,6 +36,8 @@ dependencies:
   geolocator: ^5.3.0
   flutter_launcher_icons: ^0.8.1
   font_awesome_flutter: ^8.11.0
+  intl: ^0.16.1
+  url_launcher: ^5.7.10
   popup_menu: ^1.0.4
   mqtt_client: ^8.1.0
   background_location: ^0.3.0

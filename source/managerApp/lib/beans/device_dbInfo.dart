@@ -13,6 +13,9 @@ class DeviceDBInfo {
   String password; // 一時パスワード
   String tekInfo; // TEK/Enin情報
   String rpiInfo; // RPI/AEM情報
+  String reportId;
+  String reportKey;
+  DateTime created = DateTime.now();
 
   /// Map
   Map<String, dynamic> toMap() {
@@ -29,6 +32,9 @@ class DeviceDBInfo {
     data['password'] = this.password;
     data['rpi_aem'] = this.rpiInfo;
     data['tek_enin'] = this.tekInfo;
+    data['reportId'] = this.reportId;
+    data['reportKey'] = this.reportKey;
+    data['created'] = this.created.millisecondsSinceEpoch;
     return data;
   }
 
@@ -45,5 +51,8 @@ class DeviceDBInfo {
     password = inputMap['password'];
     rpiInfo = inputMap['rpi_aem'];
     tekInfo = inputMap['tek_enin'];
+    reportId = inputMap['reportId'];
+    reportKey = inputMap['reportKey'];
+    created = DateTime.fromMillisecondsSinceEpoch(inputMap['created']);
   }
 }

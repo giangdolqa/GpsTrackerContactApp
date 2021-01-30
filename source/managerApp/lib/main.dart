@@ -2,6 +2,7 @@ import 'package:background_location/background_location.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:marmo/views/contact_confirm_view.dart';
 import 'package:marmo/views/device_read_view.dart';
 import 'package:marmo/views/device_setting_view.dart';
 import 'package:marmo/views/gpstracker_setting_view.dart';
@@ -42,7 +43,7 @@ class TrackerAppState extends State<TrackerApp> {
     return MaterialApp(
       title: 'Marmo',
       debugShowCheckedModeBanner: true,
-      home: LoginView(),
+      home: HomeView(),
       theme: ThemeData(
         brightness: Brightness.light,
         primarySwatch: Colors.blue,
@@ -57,6 +58,7 @@ class TrackerAppState extends State<TrackerApp> {
         'Setting': (BuildContext context) => GpsTrackerSettingView(),
         'DeviceSetting': (BuildContext context) => DeviceSettingView(),
         'DeviceReading': (BuildContext context) => GpsTrackerReadingView(),
+        'Contact': (BuildContext context) => ContactConfirmView(),
       },
     );
   }

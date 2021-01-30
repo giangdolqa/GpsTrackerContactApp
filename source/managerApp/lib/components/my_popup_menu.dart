@@ -744,7 +744,7 @@ Future<T> showMenu<T>({
         initialValue: initialValue,
         elevation: elevation,
         semanticLabel: label,
-        theme: Theme.of(context, shadowThemeOnly: true),
+        theme: Theme.of(context),
         barrierLabel:
             MaterialLocalizations.of(context).modalBarrierDismissLabel,
       ));

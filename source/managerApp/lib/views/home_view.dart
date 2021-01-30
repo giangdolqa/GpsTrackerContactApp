@@ -471,7 +471,7 @@ class HomeViewState extends State<HomeView>
         Navigator.of(context).pushNamed("DeviceReading");
         break;
       case "contact":
-        // 接触確認処理
+        Navigator.of(context).pushNamed("Contact");
         break;
       default:
         // do nothing

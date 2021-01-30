@@ -28,6 +28,7 @@ class DbUtil {
   String colPassword = 'password'; // 一時パスワード
   String colTEKInfo = 'tek_enin'; // TEK/ENIN情報文字列
   String colRPIInfo = 'rpi_aem'; // RPI/AEM情報文字列
+  String colCreated = 'created';
 
   DbUtil._createInstance();
 
@@ -58,16 +59,14 @@ class DbUtil {
   void _createDb(Database db, int newVersion) async {
     await db.execute(
         'CREATE TABLE $deviceInfoTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colDeviceId TEXT, $colDeviceName TEXT, '
-        '$colDeviceKey TEXT, $colDeviceKeyDate TEXT, $colDeviceKeyRule TEXT, $colState INTEGER, $colUserName TEXT, $colCount INTEGER, $colBleId TEXT, $colPassword TEXT, $colTEKInfo TEXT, $colRPIInfo TEXT)');
+        '$colDeviceKey TEXT, $colDeviceKeyDate TEXT, $colDeviceKeyRule TEXT, $colState INTEGER, $colUserName TEXT, $colCount INTEGER, $colBleId TEXT, $colPassword TEXT, $colTEKInfo TEXT, $colRPIInfo TEXT, $colCreated INTEGER)');
   }
-
 
   void _upgradeDb(Database db, int oldVersion, int newVersion) async {
     await db.execute('DROP TABLE $deviceInfoTable');
-    String rawSql = 'CREATE TABLE $deviceInfoTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colDeviceId TEXT, $colDeviceName TEXT, '
-        '$colDeviceKey TEXT, $colDeviceKeyDate TEXT, $colDeviceKeyRule TEXT, $colState INTEGER, $colUserName TEXT, $colCount INTEGER, $colBleId TEXT, $colPassword TEXT, $colTEKInfo TEXT, $colRPIInfo TEXT)';
     await db.execute(
-        rawSql);
+        'CREATE TABLE $deviceInfoTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colDeviceId TEXT, $colDeviceName TEXT, '
+        '$colDeviceKey TEXT, $colDeviceKeyDate TEXT, $colDeviceKeyRule TEXT, $colState INTEGER, $colUserName TEXT, $colCount INTEGER, $colBleId TEXT, $colPassword TEXT, $colTEKInfo TEXT, $colRPIInfo TEXT, $colCreated INTEGER)');
   }
 
   void DropDb() async {
@@ -101,6 +100,16 @@ class DbUtil {
       dbInfoList.add(tempInfo);
     });
     return dbInfoList;
+  }
+
+  Future<List<DeviceDBInfo>> getLatestDeviceDBInfoList() async {
+    Map<String, DeviceDBInfo> result = {};
+    (await getDeviceDBInfoList()).forEach((item) {
+      if (result[item.id] == null || result[item.id].created.isBefore(item.created)) {
+        result[item.id] = item;
+      }
+    });
+    return result.values.toList();
   }
 
 //Insert Operation :Insert a DeviceDBInfoboject to database
