@@ -37,7 +37,8 @@ exports.create_user = function(res, req){
 				ClassE: req.body.TelephoneNumber,	// 電話番号
 				ClassF: req.body.EmailAddress,		// メールアドレス
 				ClassG: req.body.LoginID,			// ログインID
-				ClassH: encryptBase64(req.body.Password)	// パスワード
+				ClassH: encryptBase64(req.body.Password),	// パスワード
+				ClassK: req.body.Type				// タイプ
 			},
 			CheckHash: {
 				CheckA: false
@@ -95,7 +96,8 @@ exports.update_user = function(res, req){
 							ClassE: req.body.TelephoneNumber,	// 電話番号
 							ClassF: req.body.EmailAddress,		// メールアドレス
 							ClassG: req.body.LoginID,			// ログインID
-							ClassH: encryptBase64(req.body.Password)	// パスワード
+							ClassH: encryptBase64(req.body.Password),	// パスワード
+							ClassK: req.body.Type				// タイプ
 						},
 						CheckHash: {
 							CheckA: false
@@ -159,7 +161,8 @@ exports.get_user = function(res, req){
 					TelephoneNumber:data.ClassHash.ClassE,	// 電話番号
 					EmailAddress:	data.ClassHash.ClassF,	// メールアドレス
 					LoginID:		data.ClassHash.ClassG,	// ログインID
-					Authentication:	data.CheckHash.CheckA
+					Authentication:	data.CheckHash.CheckA,	// 認証
+					Type:			data.ClassHash.ClassK	// タイプ
 				};
 				res.json(resData);
 			});
@@ -475,7 +478,7 @@ exports.verify_auth = function(res, req){
 					})
 				}, (error, response, body) => {
 					if (!error && response.statusCode === 200) {
-						TemporaryPassword(res);
+						TemporaryPassword(res, null);
 					}
 					else{
 						res.send(response);
@@ -504,9 +507,10 @@ exports.create_device = function(res, req){
 			ApiVersion: 1.1,
 			ApiKey: API_KEY,
 			ClassHash: {
-				ClassA: req.body.ID,				// ID
-				ClassB: req.body.LoginID,			// ログインID
-				ClassC: encryptBase64(req.body.Key)	// キー
+				ClassA: req.body.ID,					// ID
+				ClassB: req.body.LoginID,				// ログインID
+				ClassC: encryptBase64(req.body.Key),	// キー
+				ClassE: req.body.Type					// タイプ
 			},
 			CheckHash: {
 				CheckA: false
@@ -514,7 +518,21 @@ exports.create_device = function(res, req){
 		})
 	}, (error, response, body) => {
 		if (!error && response.statusCode === 200) {
-			TemporaryPassword(res);
+			const bodyJson = JSON.parse(body);
+			const id = req.body.ID + ( '000' + bodyJson.Id ).slice( -5 );
+			request.post({
+				uri: URL + 'items/' + bodyJson.Id +'/update',
+				headers: { "Content-type": "application/json;charset=utf-8" },
+				body: JSON.stringify({
+					ApiVersion: 1.1,
+					ApiKey: API_KEY,
+					ClassHash: {
+						ClassA: id		// ID
+					}
+				})
+			});
+			let idJson = {id: id};
+			TemporaryPassword(res, idJson);
 		}
 		else{
 			res.status(response.statusCode).send(response.body);
@@ -557,14 +575,15 @@ exports.update_device = function(res, req){
 						ApiVersion: 1.1,
 						ApiKey: API_KEY,
 						ClassHash: {
-							ClassA: req.body.ID,				// ID
-							ClassB: req.body.LoginID,			// ログインID
-							ClassC: encryptBase64(req.body.Key)	// キー
+							ClassA: req.body.ID,					// ID
+							ClassB: req.body.LoginID,				// ログインID
+							ClassC: encryptBase64(req.body.Key),	// キー
+							ClassE: req.body.Type					// タイプ
 						}
 					})
 				}, (error, response, body) => {
 					if (!error && response.statusCode === 200) {
-						TemporaryPassword(res);
+						TemporaryPassword(res, null);
 					}
 					else{
 						res.send(response);
@@ -615,9 +634,43 @@ exports.get_device = function(res, req){
 				let resData = {
 					ID:			data.ClassHash.ClassA,	// ID
 					LoginID:	data.ClassHash.ClassB,	// ログインID
-					Key:		decryptBase64(data.ClassHash.ClassC)	// キー
+					Key:		decryptBase64(data.ClassHash.ClassC),	// キー
+					DaysLeft:	0,						// 残り日数
+					Type:		data.ClassHash.ClassE	// タイプ
 				};
-				res.json(resData);
+				if(data.ClassHash.ClassD !== ''){
+					//認証コードテーブルの残り日数を取り出す
+					request.post({
+						uri: URL + 'items/' + AUTH_TABLE + '/get',
+						headers: { "Content-type": "application/json;charset=utf-8" },
+						body: JSON.stringify({
+							ApiVersion: 1.1,
+							ApiKey: API_KEY,
+							Offset: 0,
+							View: {
+								ColumnFilterHash: {
+									ClassA: data.ClassHash.ClassD,	// 認証コード
+									CheckA: false		// 休止中でない
+								}
+							}
+						})
+					}, function(error, response, body){
+						if (!error && response.statusCode === 200) {
+							const bodyJson = JSON.parse(body);
+							if (bodyJson.Response.Data.length > 0){
+								let dataAuth = bodyJson.Response.Data[0];
+								resData.DaysLeft = dataAuth.NumHash.NumA
+							}
+							res.json(resData);
+						}
+						else{
+							res.json(resData);
+						}
+					});
+				}
+				else{
+					res.json(resData);
+				}
 			});
 			if(!count){
 				res.statusCode = 400;
@@ -943,7 +996,7 @@ exports.create_school = function(res, req){
 		})
 	}, (error, response, body) => {
 		if (!error && response.statusCode === 200) {
-			TemporaryPassword(res);
+			TemporaryPassword(res, null);
 		}
 		else{
 			res.status(response.statusCode).send(response.body);
@@ -992,7 +1045,7 @@ exports.update_school = function(res, req){
 					})
 				}, (error, response, body) => {
 					if (!error && response.statusCode === 200) {
-						TemporaryPassword(res);
+						TemporaryPassword(res, null);
 					}
 					else{
 						res.send(response);
@@ -1818,7 +1871,7 @@ var updateContactCountTable = function(res, now, type, count){
 }
 
 // 一時パスワード取得
-var TemporaryPassword = function(res) {
+var TemporaryPassword = function(res, jsonData) {
 	request.post({
 		uri: URL + 'items/' + TEMPPASSWORD_TABLE + '/get',
 		headers: { "Content-type": "application/json;charset=utf-8" },
@@ -1832,8 +1885,11 @@ var TemporaryPassword = function(res) {
 			if (bodyJson.Response.Data.length > 0){
 				var data = bodyJson.Response.Data[0];
 				let resData = {
-					TemporaryPassword:data.ClassHash.ClassA,	// パスワード
+					TemporaryPassword:data.ClassHash.ClassA		// パスワード
 				};
+				if(jsonData !== null){
+					resData = {...resData, ...jsonData}
+				}
 				res.json(resData);
 			}else{
 				res.statusCode = 402;
