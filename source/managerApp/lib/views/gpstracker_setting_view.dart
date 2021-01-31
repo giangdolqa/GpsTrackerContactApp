@@ -318,9 +318,8 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
         if (selectedVal.values.first.count < 2) {
           if (selectedVal.values.first.count == 1) {
             String tempId = selectedVal.values.first.deviceDB.id;
-            String randomNum =
-                tempId.substring(tempId.length - 5, tempId.length);
-            settingCode = _getSettingCode(int.parse(randomNum));
+            String num = tempId.substring(tempId.length - 5, tempId.length);
+            settingCode = _getSettingCode(int.parse(num));
           }
           if (selectedVal.values.first.count == 0) {
             settingCode = _getSettingCode(null);
@@ -537,7 +536,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
         }
         password = de.password;
       } else {
-        // deviceID = _newID();
+        // 何もしない
       }
       // 設定画面へ遷移
       Navigator.push(
@@ -550,8 +549,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
         if (result != null) {
           String username = await spUtil.GetUsername();
           DeviceDBInfo temp = new DeviceDBInfo();
-          deviceID = result.id + _newID().toString();
-          temp.id = deviceID;
+          temp.id = result.id;
           temp.name = deviceInfo.name;
           temp.key = result.key;
           temp.userName = result.name;
@@ -561,7 +559,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
             String url = 'http://' + server + '/device';
             Map<String, String> headers = {"Content-type": "application/json"};
             var apiJson = {
-              idKey: deviceID,
+              idKey: result.id,
               loginIDKey: username,
               keyKey: result.key
             };
@@ -569,6 +567,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
                 headers: headers, body: json.encode(apiJson));
             if (response.statusCode == 200) {
               var dbResult = json.decode(response.body);
+              deviceID = dbResult['ID'];
               password = dbResult['TemporaryPassword'];
               temp.count = 1;
               temp.state = 1;
@@ -713,15 +712,6 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
     result.interval = temp['publish interval'];
     result.validays = temp['expiration date'];
     result.password = temp['temporary password'];
-    return result;
-  }
-
-  int _newID() {
-    var rng = new Random();
-    int result = rng.nextInt(100000);
-    while (result < 10000) {
-      result = rng.nextInt(100000);
-    }
     return result;
   }
 
