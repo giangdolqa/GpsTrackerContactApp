@@ -105,11 +105,11 @@ class GpsTrackerReadingViewState extends State<GpsTrackerReadingView> {
 
   // スマホアイテム作成(ご自分）
   Future<Widget> getMyPhoneItem() async {
-    String userName = await spUtil.GetUsername();
-    if (userName == null) {
-      userName = "";
+    String loginID = await spUtil.GetLoginID();
+    if (loginID == null) {
+      loginID = "";
     }
-    userName = userName + "（ご自分）";
+    loginID = loginID + "（ご自分）";
     return Container(
       padding: EdgeInsets.all(5),
       child: Row(
@@ -126,7 +126,7 @@ class GpsTrackerReadingViewState extends State<GpsTrackerReadingView> {
             child: Container(
               padding: EdgeInsets.only(left: 10),
               child: Text(
-                userName,
+                loginID,
                 style: TextStyle(fontSize: 14),
               ),
             ),

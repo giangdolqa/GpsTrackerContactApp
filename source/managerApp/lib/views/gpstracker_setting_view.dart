@@ -129,7 +129,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
   // デバイスリストアイテム作成
   void _getMyDevListRow({bool forceUpdate = false}) async {
     myDevlist.clear();
-    if (forceUpdate){
+    if (forceUpdate) {
       dbDevices = await marmoDB.getDeviceDBInfoList();
     }
     for (DeviceDBInfo db in dbDevices) {
@@ -547,7 +547,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
         ),
       ).then((result) async {
         if (result != null) {
-          String username = await spUtil.GetUsername();
+          String loginID = await spUtil.GetLoginID();
           DeviceDBInfo temp = new DeviceDBInfo();
           temp.id = result.id;
           temp.name = deviceInfo.name;
@@ -560,7 +560,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
             Map<String, String> headers = {"Content-type": "application/json"};
             var apiJson = {
               idKey: result.id,
-              loginIDKey: username,
+              loginIDKey: loginID,
               keyKey: result.key
             };
             http.Response response = await http.post(url,
@@ -616,17 +616,21 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
     String url = 'http://' + server + '/device';
     Map<String, String> headers = {"Content-type": "application/json"};
     var apiJson = {idKey: deviceInfo.deviceDB.id};
-    Dio dio = new Dio();
-    Response response = await dio.request(url,
-        data: apiJson, // httpのbody
-        options: new Options(method: 'delete', headers: headers));
-    if (response.statusCode == 200) {
-      await marmoDB.deleteDeviceDBInfo(deviceInfo.deviceDB.id);
-      await _getMyDevListRow(forceUpdate: true);
-      connectStatusMap.remove(deviceInfo.id.id);
-      // Navigator.of(context).pushNamed('Setting');
-    } else {
-      _outputInfo("", "サーバと接続失敗");
+    try {
+      Dio dio = new Dio();
+      Response response = await dio.request(url,
+          data: apiJson, // httpのbody
+          options: new Options(method: 'delete', headers: headers));
+      if (response.statusCode == 200) {
+        await marmoDB.deleteDeviceDBInfo(deviceInfo.deviceDB.id);
+        await _getMyDevListRow(forceUpdate: true);
+        connectStatusMap.remove(deviceInfo.id.id);
+        // Navigator.of(context).pushNamed('Setting');
+      } else {
+        _outputInfo("", "サーバと接続失敗");
+      }
+    } catch (e) {
+      print("marmo :: Device delete failed : $e");
     }
   }
 

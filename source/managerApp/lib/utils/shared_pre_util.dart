@@ -60,14 +60,14 @@ class SharedPreUtil {
   }
 
   // TODO: ログインIdを保存する(タイミングはログイン成功？)
-  Future SaveUsername(String UserName) async {
+  Future SaveLoginID(String LoginID) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    bool bRslt = await sharedPreferences.setString("UserName", UserName);
+    bool bRslt = await sharedPreferences.setString("LoginID", LoginID);
   }
 
-  Future GetUsername() async {
+  Future GetLoginID() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    return sharedPreferences.getString("UserName");
+    return sharedPreferences.getString("LoginID");
   }
 
   // TODO: パスワードをここに保存(タイミングはログイン成功？)

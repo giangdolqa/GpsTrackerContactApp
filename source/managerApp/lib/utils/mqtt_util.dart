@@ -57,9 +57,9 @@ class MqttUtil {
     ByteData data = await rootBundle.load('assets/cert/cert.pem');
     context.setTrustedCertificatesBytes(data.buffer.asUint8List());
 
-    String username = await spUtil.GetUsername();
+    String loginID = await spUtil.GetLoginID();
     String password = await spUtil.GetPassword();
-    username = "TEST";
+    loginID = "TEST";
     password = "test";
 
     /// Create a connection message to use or use the default one. The default one sets the
@@ -68,7 +68,7 @@ class MqttUtil {
     final connMess = MqttConnectMessage()
         .withClientIdentifier("MarmoApp")
         .keepAliveFor(20) // Must agree with the keep alive set above or not set
-        .authenticateAs(username, password)
+        .authenticateAs(loginID, password)
         .startClean() // Non persistent session for testing
         .withWillQos(MqttQos.atLeastOnce);
     print('marmo::Mosquitto client connecting....');
