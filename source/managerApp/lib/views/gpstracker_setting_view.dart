@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:app_settings/app_settings.dart';
@@ -304,6 +303,9 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
       setState(() {
         myDevlist = tmpDevlist;
       });
+      if (forceUpdate) {
+        setState(() {});
+      }
     }
   }
 
@@ -567,11 +569,12 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
                 headers: headers, body: json.encode(apiJson));
             if (response.statusCode == 200) {
               var dbResult = json.decode(response.body);
-              deviceID = dbResult['ID'];
+              deviceID = dbResult['id'];
               password = dbResult['TemporaryPassword'];
               temp.count = 1;
               temp.state = 1;
               temp.password = password;
+              temp.id = deviceID;
               await marmoDB.insertDeviceDBInfo(temp);
               connectStatusMap[temp.bleId] = true;
               _getMyDevListRow(forceUpdate: true);
@@ -579,18 +582,35 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
               _outputInfo("", "サーバと接続失敗");
             }
           } else {
-            temp.count = 2;
-            temp.password = password;
-            await marmoDB.updateDeviceDBInfo(temp);
-            connectStatusMap[temp.bleId] = true;
-            _getMyDevListRow(forceUpdate: true);
+            String url = 'http://' + server + '/device';
+            Map<String, String> headers = {"Content-type": "application/json"};
+            var apiJson = {
+              idKey: result.id,
+              loginIDKey: loginID,
+              keyKey: result.key
+            };
+            http.Response response = await http.put(url,
+                headers: headers, body: json.encode(apiJson));
+            if (response.statusCode == 200) {
+              var dbResult = json.decode(response.body);
+              password = dbResult['TemporaryPassword'];
+              temp.count = 2;
+              temp.state = 1;
+              temp.password = password;
+              await marmoDB.updateDeviceDBInfo(temp);
+              connectStatusMap[temp.bleId] = true;
+              _getMyDevListRow(forceUpdate: true);
+            } else {
+              _outputInfo("", "サーバと接続失敗");
+            }
           }
           try {
             Map<String, dynamic> data = new Map<String, dynamic>();
             data['id'] = deviceID;
             data['name'] = result.name;
             data['sex'] = result.sex;
-            data['birthday'] = DateFormat('yyyyMMdd').format(result.birthday);
+            data['birthday'] =
+                num.parse(DateFormat('yyyyMMdd').format(result.birthday));
             data['alert humidity'] = result.humidity;
             data['key'] = result.key;
             data['publish interval'] = result.interval;
@@ -623,8 +643,14 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
           options: new Options(method: 'delete', headers: headers));
       if (response.statusCode == 200) {
         await marmoDB.deleteDeviceDBInfo(deviceInfo.deviceDB.id);
-        await _getMyDevListRow(forceUpdate: true);
-        connectStatusMap.remove(deviceInfo.id.id);
+        _deviceDeleteWrite(deviceInfo);
+        // _getMyDevListRow(forceUpdate: true);
+        setState(() {
+          myDevices.removeWhere(
+              (element) => element.deviceDB.id == deviceInfo.deviceDB.id);
+          // connectStatusMap.remove(deviceInfo.id.id);
+        });
+        _getMyDevListRow();
         // Navigator.of(context).pushNamed('Setting');
       } else {
         _outputInfo("", "サーバと接続失敗");
@@ -632,6 +658,47 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
     } catch (e) {
       print("marmo :: Device delete failed : $e");
     }
+  }
+
+  // デバイス削除通信
+  void _deviceDeleteWrite(DeviceInfo deviceInfo) async {
+    if (deviceInfo.device.device == null) {
+      _outputInfo("", "デバイスペアリング失敗");
+      return;
+    }
+    await deviceInfo.device.device
+        .connect(autoConnect: false)
+        .timeout(Duration(seconds: 10), onTimeout: () {})
+        .whenComplete(() async {
+      List<BluetoothService> services =
+          await deviceInfo.device.device.discoverServices();
+      for (BluetoothService service in services) {
+        var characteristics = service.characteristics;
+        for (BluetoothCharacteristic characteristic in characteristics) {
+          if (characteristic.uuid.toString() == settingUUID) {
+            mCharacteristic = characteristic;
+            try {
+              Map<String, dynamic> data = new Map<String, dynamic>();
+              data['id'] = "";
+              String jsonResult = json.encode(data);
+              List<int> listResult = jsonResult.codeUnits;
+              mCharacteristic.write(listResult);
+            } catch (e) {
+              print("marmo :: Ble device write failed : $e");
+              _outputInfo("エラー", "デバイス初期化失敗しました。");
+            }
+          }
+        }
+      }
+      if (mCharacteristic == null) {
+        _outputInfo("", "デバイスペアリング失敗");
+        deviceInfo.device.device.disconnect();
+      } else {}
+    }).catchError((e) {
+      _outputInfo("", "デバイスペアリング失敗");
+      deviceInfo.device.device.disconnect();
+    });
+    mCharacteristic = null;
   }
 
   void showAlert(
@@ -710,7 +777,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
     result.id = temp['id'];
     result.name = temp['name'];
     result.sex = temp['sex'];
-    result.birthday = temp['birthday'];
+    result.birthday = temp['birthday'].toString();
     result.humidity = temp['alert humidity'];
     result.key = temp['key'];
     result.interval = temp['publish interval'];
