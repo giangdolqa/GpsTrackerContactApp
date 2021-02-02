@@ -576,8 +576,10 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
               temp.password = password;
               temp.id = deviceID;
               await marmoDB.insertDeviceDBInfo(temp);
-              connectStatusMap[temp.bleId] = true;
-              _getMyDevListRow(forceUpdate: true);
+              // connectStatusMap[temp.bleId] = true;
+              // _getMyDevListRow(forceUpdate: true);
+              Navigator.pop(context);
+              Navigator.pushNamed(context, "Setting");
             } else {
               _outputInfo("", "サーバと接続失敗");
             }
@@ -598,8 +600,8 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
               temp.state = 1;
               temp.password = password;
               await marmoDB.updateDeviceDBInfo(temp);
-              connectStatusMap[temp.bleId] = true;
-              _getMyDevListRow(forceUpdate: true);
+              Navigator.pop(context);
+              Navigator.pushNamed(context, "Setting");
             } else {
               _outputInfo("", "サーバと接続失敗");
             }
@@ -643,15 +645,10 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
           options: new Options(method: 'delete', headers: headers));
       if (response.statusCode == 200) {
         await marmoDB.deleteDeviceDBInfo(deviceInfo.deviceDB.id);
-        _deviceDeleteWrite(deviceInfo);
+        await _deviceDeleteWrite(deviceInfo);
         // _getMyDevListRow(forceUpdate: true);
-        setState(() {
-          myDevices.removeWhere(
-              (element) => element.deviceDB.id == deviceInfo.deviceDB.id);
-          // connectStatusMap.remove(deviceInfo.id.id);
-        });
-        _getMyDevListRow();
-        // Navigator.of(context).pushNamed('Setting');
+        Navigator.pop(context);
+        Navigator.pushNamed(context, "Setting");
       } else {
         _outputInfo("", "サーバと接続失敗");
       }
@@ -685,7 +682,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
               mCharacteristic.write(listResult);
             } catch (e) {
               print("marmo :: Ble device write failed : $e");
-              _outputInfo("エラー", "デバイス初期化失敗しました。");
+              _outputInfo("", "デバイス初期化失敗しました。");
             }
           }
         }
