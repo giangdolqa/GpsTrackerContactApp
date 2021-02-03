@@ -8,6 +8,6 @@ class MarmoInfo {
   int humidity; // アラート湿度
   String key; // キー
   int interval; // 送信の間隔
-  String validays;
+  int expirationDate; // 有効期限
   String password;
 }

@@ -10,5 +10,5 @@ class SettingInfo {
   int interval; // 送信の間隔
   bool trackFlag; // 追跡記録
   String code; // 認証コード
-  String validays; // 有効期限
+  int expirationDate; // 有効期限
 }

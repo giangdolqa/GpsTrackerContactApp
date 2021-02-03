@@ -528,7 +528,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
         temp.humidity = de.humidity;
         temp.key = de.key;
         temp.interval = de.interval;
-        temp.validays = de.validays;
+        temp.expirationDate = de.expirationDate;
         deviceID = de.id;
         if (deviceID.length > 5) {
           temp.id = deviceID.substring(0, deviceID.length - 5);
@@ -616,7 +616,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
             data['alert humidity'] = result.humidity;
             data['key'] = result.key;
             data['publish interval'] = result.interval;
-            data['expiration date'] = result.validays;
+            data['expiration date'] = result.expirationDate;
             data['temporary password'] = password;
             String jsonResult = json.encode(data);
             List<int> listResult = jsonResult.codeUnits;
@@ -778,7 +778,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
     result.humidity = temp['alert humidity'];
     result.key = temp['key'];
     result.interval = temp['publish interval'];
-    result.validays = temp['expiration date'];
+    result.expirationDate = temp['expiration date'];
     result.password = temp['temporary password'];
     return result;
   }

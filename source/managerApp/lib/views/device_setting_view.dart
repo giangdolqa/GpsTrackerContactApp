@@ -70,6 +70,7 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
   String dropdownValue = '男の子';
 
   String validDays = '';
+  DateTime validDatetime = DateTime.now();
   final String server = "ik1-407-35954.vs.sakura.ne.jp:3000/api/v1";
   final String idKey = "ID";
   final String authCodeKey = "AuthCode";
@@ -92,7 +93,9 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
         _trackFlag = widget.settingInfo.trackFlag;
         _isAdultFlag = temp;
         dropdownValue = sex;
-        validDays = widget.settingInfo.validays;
+        validDatetime = DateTime.parse(widget.settingInfo.expirationDate.toString());
+        validDays = DateFormat('yyyy年MM月dd日')
+            .format(validDatetime);
       });
     }
   }
@@ -342,6 +345,8 @@ class DeviceSettingViewState extends State<DeviceSettingView> {
     result.interval = int.parse(intervalCtrlr.text);
     result.trackFlag = _trackFlag;
     result.code = codeCtrlr.text;
+    result.expirationDate = int.parse(DateFormat('yyyyMMdd')
+        .format(validDatetime));
     Navigator.of(context).pop(result);
   }
 
