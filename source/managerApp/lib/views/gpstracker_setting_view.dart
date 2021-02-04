@@ -587,7 +587,7 @@ class GpsTrackerSettingViewState extends State<GpsTrackerSettingView> {
             String url = 'http://' + server + '/device';
             Map<String, String> headers = {"Content-type": "application/json"};
             var apiJson = {
-              idKey: result.id,
+              idKey: deviceInfo.deviceDB.id,
               loginIDKey: loginID,
               keyKey: result.key
             };
