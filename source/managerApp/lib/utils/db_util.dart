@@ -28,6 +28,9 @@ class DbUtil {
   String colPassword = 'password'; // 一時パスワード
   String colTEKInfo = 'tek_enin'; // TEK/ENIN情報文字列
   String colRPIInfo = 'rpi_aem'; // RPI/AEM情報文字列
+  String colReportId = 'report_id';
+  String colReportKey = 'report_key';
+  String colReportKeySent = 'report_key_sent';
   String colCreated = 'created';
 
   DbUtil._createInstance();
@@ -51,22 +54,21 @@ class DbUtil {
     Directory directory = await getApplicationDocumentsDirectory();
     String path = join(directory.path, 'deviceInfo.db');
 
-    var deviceInfoDatabase =
-        openDatabase(path, version: 3, onCreate: _createDb, onUpgrade: _upgradeDb);
+    var deviceInfoDatabase = openDatabase(path, version: 3, onCreate: _createDb, onUpgrade: _upgradeDb);
     return deviceInfoDatabase;
   }
 
   void _createDb(Database db, int newVersion) async {
-    await db.execute(
-        'CREATE TABLE $deviceInfoTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colDeviceId TEXT, $colDeviceName TEXT, '
-        '$colDeviceKey TEXT, $colDeviceKeyDate TEXT, $colDeviceKeyRule TEXT, $colState INTEGER, $colUserName TEXT, $colCount INTEGER, $colBleId TEXT, $colPassword TEXT, $colTEKInfo TEXT, $colRPIInfo TEXT, $colCreated INTEGER)');
+    await db.execute('CREATE TABLE $deviceInfoTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colDeviceId TEXT, $colDeviceName TEXT, '
+        '$colDeviceKey TEXT, $colDeviceKeyDate TEXT, $colDeviceKeyRule TEXT, $colState INTEGER, $colUserName TEXT, $colCount INTEGER, '
+        '$colBleId TEXT, $colPassword TEXT, $colTEKInfo TEXT, $colRPIInfo TEXT, $colReportId TEXT, $colReportKey TEXT, $colReportKeySent INTEGER, $colCreated INTEGER)');
   }
 
   void _upgradeDb(Database db, int oldVersion, int newVersion) async {
     await db.execute('DROP TABLE $deviceInfoTable');
-    await db.execute(
-        'CREATE TABLE $deviceInfoTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colDeviceId TEXT, $colDeviceName TEXT, '
-        '$colDeviceKey TEXT, $colDeviceKeyDate TEXT, $colDeviceKeyRule TEXT, $colState INTEGER, $colUserName TEXT, $colCount INTEGER, $colBleId TEXT, $colPassword TEXT, $colTEKInfo TEXT, $colRPIInfo TEXT, $colCreated INTEGER)');
+    await db.execute('CREATE TABLE $deviceInfoTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colDeviceId TEXT, $colDeviceName TEXT, '
+        '$colDeviceKey TEXT, $colDeviceKeyDate TEXT, $colDeviceKeyRule TEXT, $colState INTEGER, $colUserName TEXT, $colCount INTEGER, '
+        '$colBleId TEXT, $colPassword TEXT, $colTEKInfo TEXT, $colRPIInfo TEXT, $colReportId TEXT, $colReportKey TEXT, $colReportKeySent INTEGER, $colCreated INTEGER)');
   }
 
   void DropDb() async {
@@ -91,8 +93,7 @@ class DbUtil {
 
   Future<List<DeviceDBInfo>> getDeviceDBInfoList() async {
     Database db = await this.database;
-    List<Map<String, dynamic>> result =
-        await db.query(deviceInfoTable, orderBy: '$colId ASC');
+    List<Map<String, dynamic>> result = await db.query(deviceInfoTable, orderBy: '$colId ASC');
     List<DeviceDBInfo> dbInfoList = [];
     result.forEach((element) {
       DeviceDBInfo tempInfo = DeviceDBInfo();
@@ -109,7 +110,21 @@ class DbUtil {
         result[item.id] = item;
       }
     });
-    return result.values.toList();
+    // return result.values.toList();
+    //GiAnG test data
+    return [
+      DeviceDBInfo()
+        ..name = "Peter"
+        ..created = DateTime.now().subtract(Duration(days: 10)),
+      DeviceDBInfo()
+        ..name = "John"
+        ..created = DateTime.now().subtract(Duration(days: 9)),
+      (DeviceDBInfo()
+        ..name = "Terry"
+        ..reportId = "terry@gmail.com"
+        ..reportKey = "terry@gmail.com")
+        ..created = DateTime.now().subtract(Duration(days: 8)),
+    ];
   }
 
 //Insert Operation :Insert a DeviceDBInfoboject to database
@@ -130,8 +145,7 @@ class DbUtil {
 //Update Operation :Update a DeviceDBInfo object and save it to Database
   Future<int> updateDeviceDBInfo(DeviceDBInfo deviceInfo) async {
     var db = await this.database;
-    var result = await db.update(deviceInfoTable, deviceInfo.toMap(),
-        where: '$colDeviceId =?', whereArgs: [deviceInfo.id]);
+    var result = await db.update(deviceInfoTable, deviceInfo.toMap(), where: '$colDeviceId =?', whereArgs: [deviceInfo.id]);
 
     return result;
   }
@@ -139,24 +153,21 @@ class DbUtil {
   //Update Operation :Update a DeviceDBInfo object and save it to Database
   Future<int> updateDeviceDBInfoByName(DeviceDBInfo deviceInfo) async {
     var db = await this.database;
-    var result = await db.update(deviceInfoTable, deviceInfo.toMap(),
-        where: '$colDeviceName =?', whereArgs: [deviceInfo.name]);
+    var result = await db.update(deviceInfoTable, deviceInfo.toMap(), where: '$colDeviceName =?', whereArgs: [deviceInfo.name]);
     return result;
   }
 
 //Delete Operation :Delete a DeviceDBInfo object from DataBase
   Future<int> deleteDeviceDBInfo(String deviceId) async {
     var db = await this.database;
-    var result = await db.rawDelete(
-        'DELETE FROM $deviceInfoTable WHERE $colDeviceId = ?', [deviceId]);
+    var result = await db.rawDelete('DELETE FROM $deviceInfoTable WHERE $colDeviceId = ?', [deviceId]);
     return result;
   }
 
   //Get number  of objects
   Future<int> getCount() async {
     Database db = await this.database;
-    List<Map<String, dynamic>> x =
-        await db.rawQuery('SELECT COUNT (*) from $deviceInfoTable');
+    List<Map<String, dynamic>> x = await db.rawQuery('SELECT COUNT (*) from $deviceInfoTable');
     int result = Sqflite.firstIntValue(x);
     return result;
   }
@@ -164,8 +175,7 @@ class DbUtil {
   //名称でデバイスを取得
   Future<DeviceDBInfo> getDeviceDBInfoByDeviceName(String deviceName) async {
     Database db = await this.database;
-    List<Map<String, dynamic>> x = await db.rawQuery(
-        'SELECT * from $deviceInfoTable WHERE $colDeviceName ="$deviceName"');
+    List<Map<String, dynamic>> x = await db.rawQuery('SELECT * from $deviceInfoTable WHERE $colDeviceName ="$deviceName"');
     if (x.length > 0) {
       Map<String, dynamic> deviceMap = x[0];
       DeviceDBInfo di = new DeviceDBInfo();
@@ -178,8 +188,7 @@ class DbUtil {
   //IDでデバイスを取得
   Future<DeviceDBInfo> getDeviceDBInfoByDeviceId(String deviceId) async {
     Database db = await this.database;
-    List<Map<String, dynamic>> x = await db.rawQuery(
-        'SELECT * from $deviceInfoTable WHERE $colDeviceId ="$deviceId"');
+    List<Map<String, dynamic>> x = await db.rawQuery('SELECT * from $deviceInfoTable WHERE $colDeviceId ="$deviceId"');
     if (x.length > 0) {
       Map<String, dynamic> deviceMap = x[0];
       DeviceDBInfo di = new DeviceDBInfo();

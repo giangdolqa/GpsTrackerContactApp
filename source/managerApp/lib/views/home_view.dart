@@ -5,6 +5,7 @@ import 'dart:math';
 import 'dart:ui' as ui;
 import 'dart:ui';
 
+import 'package:dart_date/dart_date.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -34,6 +35,7 @@ class HomeView extends StatefulWidget {
 // 常駐処理
 void callbackDispatcher() {
   Workmanager.executeTask((task, inputData) async {
+    sendDeviceKey();
     print(
         "WorkManager Executed !!  Native called background task: $inputData"); //simpleTask will be emitted here.
     MqttUtil tmpMqttUtil = new MqttUtil();
@@ -48,6 +50,24 @@ void callbackDispatcher() {
         "WorkManager Done !!  Native called background task: $inputData"); //simpleTask will be emitted here.
     return Future.value(true);
   });
+}
+
+Future<void> sendDeviceKey() async {
+  var latestDeviceDBInfoList = await marmoDB.getLatestDeviceDBInfoList();
+  for (var device in latestDeviceDBInfoList) {
+    try {
+      var now = DateTime.now();
+      if (!device.reportKeySent.isSameDay(now) && now.diff(now.startOfDay).inMinutes > 0) {
+        if (device.reportId != null && device.reportKey != null) {
+          mqttUtil.sendDeviceKey(device.reportId, device.reportKey);
+          device.reportKeySent = now;
+          marmoDB.updateDeviceDBInfo(device);
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 }
 
 class HomeViewState extends State<HomeView>

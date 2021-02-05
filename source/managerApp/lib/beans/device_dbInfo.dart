@@ -1,5 +1,7 @@
 // 通常情報
 
+import 'dart:convert';
+
 class DeviceDBInfo {
   String id; // デバイスID
   String name; // 名称
@@ -15,11 +17,14 @@ class DeviceDBInfo {
   String rpiInfo; // RPI/AEM情報
   String reportId;
   String reportKey;
+  DateTime reportKeySent;
   DateTime created = DateTime.now();
 
-  /// Map
+  List<RPIItem> rpiList = [];
+  List<TEKItem> tekList = [];
+
   Map<String, dynamic> toMap() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['device_id'] = this.id;
     data['name'] = this.name;
     data['key'] = this.key;
@@ -34,6 +39,7 @@ class DeviceDBInfo {
     data['tek_enin'] = this.tekInfo;
     data['reportId'] = this.reportId;
     data['reportKey'] = this.reportKey;
+    data['reportKeySent'] = this.reportKeySent;
     data['created'] = this.created.millisecondsSinceEpoch;
     return data;
   }
@@ -53,6 +59,29 @@ class DeviceDBInfo {
     tekInfo = inputMap['tek_enin'];
     reportId = inputMap['reportId'];
     reportKey = inputMap['reportKey'];
+    reportKeySent = DateTime.fromMillisecondsSinceEpoch(inputMap['reportKeySent']);
     created = DateTime.fromMillisecondsSinceEpoch(inputMap['created']);
+
+    try {
+      rpiList = json.decode(rpiInfo).map((map) => RPIItem(map["time"], map["RPI"])).toList();
+      tekInfo = json.decode(tekInfo).map((map) => TEKItem(map["time"], map["TEK"], map["ENIN"])).toList();
+    } catch (e) {
+      print('Invalid rpi & tek: $rpiInfo, $tekInfo');
+    }
   }
+}
+
+class RPIItem {
+  final String time;
+  final String rpi;
+
+  RPIItem(this.time, this.rpi);
+}
+
+class TEKItem {
+  String time;
+  String tek;
+  List<String> eninList;
+
+  TEKItem(this.time, this.tek, this.eninList);
 }

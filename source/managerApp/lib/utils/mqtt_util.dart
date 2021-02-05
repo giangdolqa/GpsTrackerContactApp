@@ -2,7 +2,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:crypto/crypto.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -17,7 +19,7 @@ import 'db_util.dart';
 import 'event_util.dart';
 import 'position_util.dart';
 import 'shared_pre_util.dart';
-
+import 'package:typed_data/typed_data.dart';
 final MqttUtil mqttUtil = MqttUtil();
 
 class MqttUtil {
@@ -362,5 +364,20 @@ class MqttUtil {
         Toast.show("Mqttサーバーと接続失敗しました。", context);
       }
     }
+  }
+
+  Future<void> sendDeviceKey(String reportId, String reportKey){
+
+  }
+
+  void publishMessage(String topic, String data) {
+    var uint8buffer = Uint8Buffer()..addAll(Uint8List.fromList(data.codeUnits));
+    client.publishMessage(topic, MqttQos.exactlyOnce, uint8buffer);
+  }
+
+  String createKey(String dateTime) {
+    var hashKey = dateTime.substring(0, int.parse(dateTime[7]) + 1);
+    var bytes = utf8.encode(hashKey);
+    return sha256.convert(bytes).toString();
   }
 }

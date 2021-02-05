@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:marmo/beans/device_dbInfo.dart';
 import 'package:marmo/components/my_view_utils.dart';
+import 'package:marmo/utils/db_util.dart';
+import 'package:marmo/utils/mqtt_util.dart';
 
 class ContactReportView extends StatefulWidget {
   const ContactReportView(this.device, {Key key}) : super(key: key);
@@ -12,9 +14,20 @@ class ContactReportView extends StatefulWidget {
 
 class _ContactReportViewState extends State<ContactReportView> {
   final DeviceDBInfo device;
+  TextEditingController _idController;
+  TextEditingController _keyController;
   bool _showKey = false;
 
   _ContactReportViewState(this.device);
+
+  @override
+  void initState() {
+    super.initState();
+    _idController = TextEditingController();
+    _keyController = TextEditingController();
+    _idController.text = device.reportId;
+    _keyController.text = device.reportKey;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +45,7 @@ class _ContactReportViewState extends State<ContactReportView> {
               child: MyText('学校ID'),
             ),
             TextField(
+              controller: _idController,
               decoration: InputDecoration(
                 isDense: true,
                 border: OutlineInputBorder(),
@@ -42,6 +56,7 @@ class _ContactReportViewState extends State<ContactReportView> {
               child: MyText('キー'),
             ),
             TextField(
+              controller: _keyController,
               obscureText: !_showKey,
               decoration: InputDecoration(
                 isDense: true,
@@ -64,11 +79,29 @@ class _ContactReportViewState extends State<ContactReportView> {
               ],
             ),
             Center(
-              child: MyButton('送信'),
+              child: MyButton(
+                '送信',
+                onPressed: _send,
+              ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  _send() async {
+    _updateReportAccount(_idController.text, _keyController.text);
+    await mqttUtil.sendDeviceKey(_idController.text, _keyController.text);
+    Navigator.pop(context);
+  }
+
+  _updateReportAccount(String reportId, String reportKey) async {
+    DeviceDBInfo dbInfo = await marmoDB.getDeviceDBInfoByDeviceId(device.id);
+    if (dbInfo != null) {
+      dbInfo.reportId = reportId;
+      dbInfo.reportKey = reportKey;
+      marmoDB.updateDeviceDBInfo(dbInfo);
+    }
   }
 }

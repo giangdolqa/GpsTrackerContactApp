@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:marmo/beans/device_dbInfo.dart';
 import 'package:marmo/components/my_view_utils.dart';
-import 'package:marmo/others/test_data_utils.dart';
+import 'package:marmo/utils/db_util.dart';
 
 import 'contact_details_view.dart';
 
@@ -22,7 +23,7 @@ class ContactConfirmView extends StatelessWidget {
               child: Text('陽性者との接触の記録は１４日間保存されます。'),
             ),
             FutureBuilder<List<DeviceDBInfo>>(
-              future: TestDataUtils.devicesFuture,
+              future: marmoDB.getLatestDeviceDBInfoList(),
               builder: (context, snapshot) {
                 Widget mainChild;
                 if (snapshot.hasData) {
@@ -36,14 +37,15 @@ class ContactConfirmView extends StatelessWidget {
                         children: <Widget>[
                           Container(
                             width: double.infinity,
-                            padding: EdgeInsets.symmetric(
-                                vertical: 4.0, horizontal: 16.0),
-                            child: Text('${snapshot.data[index].name}' +
-                                (index == 0 ? ' (ご自分)' : '')),
+                            padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+                            child: Text('${snapshot.data[index].name}' + (index == 0 ? ' (ご自分)' : '')),
                           ),
                           Container(
                             padding: EdgeInsets.all(4.0),
-                            child: Text('２０２０年１１月１０日から４０日間使用中'),
+                            child: MyText(
+                              DateFormat('yyyy年MM月dd日から４０日間使用中').format(snapshot.data[index].created),
+                              small: true,
+                            ),
                           ),
                           MyButton(
                             "陽性者との接触を確認する",
@@ -54,7 +56,7 @@ class ContactConfirmView extends StatelessWidget {
                     },
                   );
                 } else if (snapshot.hasError) {
-                  mainChild = MyLoadError();
+                  mainChild = MyLoadError(snapshot.error.toString());
                 } else {
                   mainChild = MyLoading();
                 }
